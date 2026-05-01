@@ -1,0 +1,829 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "eslint.config.js",
+      "file_type": "code",
+      "source_file": "eslint.config.js",
+      "source_location": "L1",
+      "id": "eslint_config_js",
+      "community": 17,
+      "norm_label": "eslint.config.js"
+    },
+    {
+      "label": "vite.config.js",
+      "file_type": "code",
+      "source_file": "vite.config.js",
+      "source_location": "L1",
+      "id": "vite_config_js",
+      "community": 18,
+      "norm_label": "vite.config.js"
+    },
+    {
+      "label": "createAdmin.mjs",
+      "file_type": "code",
+      "source_file": "scripts\\createAdmin.mjs",
+      "source_location": "L1",
+      "id": "scripts_createadmin_mjs",
+      "community": 2,
+      "norm_label": "createadmin.mjs"
+    },
+    {
+      "label": "createStaffAccount()",
+      "file_type": "code",
+      "source_file": "scripts\\createAdmin.mjs",
+      "source_location": "L41",
+      "id": "scripts_createadmin_createstaffaccount",
+      "community": 2,
+      "norm_label": "createstaffaccount()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scripts\\createAdmin.mjs",
+      "source_location": "L66",
+      "id": "scripts_createadmin_main",
+      "community": 2,
+      "norm_label": "main()"
+    },
+    {
+      "label": "App.jsx",
+      "file_type": "code",
+      "source_file": "src\\App.jsx",
+      "source_location": "L1",
+      "id": "src_app_jsx",
+      "community": 8,
+      "norm_label": "app.jsx"
+    },
+    {
+      "label": "App()",
+      "file_type": "code",
+      "source_file": "src\\App.jsx",
+      "source_location": "L20",
+      "id": "src_app_app",
+      "community": 8,
+      "norm_label": "app()"
+    },
+    {
+      "label": "firebase.js",
+      "file_type": "code",
+      "source_file": "src\\firebase.js",
+      "source_location": "L1",
+      "id": "src_firebase_js",
+      "community": 19,
+      "norm_label": "firebase.js"
+    },
+    {
+      "label": "main.jsx",
+      "file_type": "code",
+      "source_file": "src\\main.jsx",
+      "source_location": "L1",
+      "id": "src_main_jsx",
+      "community": 20,
+      "norm_label": "main.jsx"
+    },
+    {
+      "label": "BottomNav.jsx",
+      "file_type": "code",
+      "source_file": "src\\components\\BottomNav.jsx",
+      "source_location": "L1",
+      "id": "src_components_bottomnav_jsx",
+      "community": 9,
+      "norm_label": "bottomnav.jsx"
+    },
+    {
+      "label": "BottomNav()",
+      "file_type": "code",
+      "source_file": "src\\components\\BottomNav.jsx",
+      "source_location": "L18",
+      "id": "components_bottomnav_bottomnav",
+      "community": 9,
+      "norm_label": "bottomnav()"
+    },
+    {
+      "label": "DrugWarning.jsx",
+      "file_type": "code",
+      "source_file": "src\\components\\DrugWarning.jsx",
+      "source_location": "L1",
+      "id": "src_components_drugwarning_jsx",
+      "community": 10,
+      "norm_label": "drugwarning.jsx"
+    },
+    {
+      "label": "DrugWarning()",
+      "file_type": "code",
+      "source_file": "src\\components\\DrugWarning.jsx",
+      "source_location": "L14",
+      "id": "components_drugwarning_drugwarning",
+      "community": 10,
+      "norm_label": "drugwarning()"
+    },
+    {
+      "label": "PageHeader.jsx",
+      "file_type": "code",
+      "source_file": "src\\components\\PageHeader.jsx",
+      "source_location": "L1",
+      "id": "src_components_pageheader_jsx",
+      "community": 11,
+      "norm_label": "pageheader.jsx"
+    },
+    {
+      "label": "PageHeader()",
+      "file_type": "code",
+      "source_file": "src\\components\\PageHeader.jsx",
+      "source_location": "L7",
+      "id": "components_pageheader_pageheader",
+      "community": 11,
+      "norm_label": "pageheader()"
+    },
+    {
+      "label": "RouteGuard.jsx",
+      "file_type": "code",
+      "source_file": "src\\components\\RouteGuard.jsx",
+      "source_location": "L1",
+      "id": "src_components_routeguard_jsx",
+      "community": 12,
+      "norm_label": "routeguard.jsx"
+    },
+    {
+      "label": "RouteGuard()",
+      "file_type": "code",
+      "source_file": "src\\components\\RouteGuard.jsx",
+      "source_location": "L9",
+      "id": "components_routeguard_routeguard",
+      "community": 12,
+      "norm_label": "routeguard()"
+    },
+    {
+      "label": "Skeleton.jsx",
+      "file_type": "code",
+      "source_file": "src\\components\\Skeleton.jsx",
+      "source_location": "L1",
+      "id": "src_components_skeleton_jsx",
+      "community": 1,
+      "norm_label": "skeleton.jsx"
+    },
+    {
+      "label": "SkeletonCard()",
+      "file_type": "code",
+      "source_file": "src\\components\\Skeleton.jsx",
+      "source_location": "L1",
+      "id": "components_skeleton_skeletoncard",
+      "community": 1,
+      "norm_label": "skeletoncard()"
+    },
+    {
+      "label": "SkeletonList()",
+      "file_type": "code",
+      "source_file": "src\\components\\Skeleton.jsx",
+      "source_location": "L19",
+      "id": "components_skeleton_skeletonlist",
+      "community": 1,
+      "norm_label": "skeletonlist()"
+    },
+    {
+      "label": "SkeletonStat()",
+      "file_type": "code",
+      "source_file": "src\\components\\Skeleton.jsx",
+      "source_location": "L29",
+      "id": "components_skeleton_skeletonstat",
+      "community": 1,
+      "norm_label": "skeletonstat()"
+    },
+    {
+      "label": "drugInteractions.js",
+      "file_type": "code",
+      "source_file": "src\\data\\drugInteractions.js",
+      "source_location": "L1",
+      "id": "src_data_druginteractions_js",
+      "community": 13,
+      "norm_label": "druginteractions.js"
+    },
+    {
+      "label": "checkDrugInteractions()",
+      "file_type": "code",
+      "source_file": "src\\data\\drugInteractions.js",
+      "source_location": "L75",
+      "id": "data_druginteractions_checkdruginteractions",
+      "community": 13,
+      "norm_label": "checkdruginteractions()"
+    },
+    {
+      "label": "AppointmentsPage.jsx",
+      "file_type": "code",
+      "source_file": "src\\pages\\AppointmentsPage.jsx",
+      "source_location": "L1",
+      "id": "src_pages_appointmentspage_jsx",
+      "community": 3,
+      "norm_label": "appointmentspage.jsx"
+    },
+    {
+      "label": "AddApptModal()",
+      "file_type": "code",
+      "source_file": "src\\pages\\AppointmentsPage.jsx",
+      "source_location": "L14",
+      "id": "pages_appointmentspage_addapptmodal",
+      "community": 3,
+      "norm_label": "addapptmodal()"
+    },
+    {
+      "label": "AppointmentsPage()",
+      "file_type": "code",
+      "source_file": "src\\pages\\AppointmentsPage.jsx",
+      "source_location": "L65",
+      "id": "pages_appointmentspage_appointmentspage",
+      "community": 3,
+      "norm_label": "appointmentspage()"
+    },
+    {
+      "label": "BillingPage.jsx",
+      "file_type": "code",
+      "source_file": "src\\pages\\BillingPage.jsx",
+      "source_location": "L1",
+      "id": "src_pages_billingpage_jsx",
+      "community": 4,
+      "norm_label": "billingpage.jsx"
+    },
+    {
+      "label": "AddBillingModal()",
+      "file_type": "code",
+      "source_file": "src\\pages\\BillingPage.jsx",
+      "source_location": "L15",
+      "id": "pages_billingpage_addbillingmodal",
+      "community": 4,
+      "norm_label": "addbillingmodal()"
+    },
+    {
+      "label": "BillingPage()",
+      "file_type": "code",
+      "source_file": "src\\pages\\BillingPage.jsx",
+      "source_location": "L82",
+      "id": "pages_billingpage_billingpage",
+      "community": 4,
+      "norm_label": "billingpage()"
+    },
+    {
+      "label": "DashboardPage.jsx",
+      "file_type": "code",
+      "source_file": "src\\pages\\DashboardPage.jsx",
+      "source_location": "L1",
+      "id": "src_pages_dashboardpage_jsx",
+      "community": 5,
+      "norm_label": "dashboardpage.jsx"
+    },
+    {
+      "label": "StatCard()",
+      "file_type": "code",
+      "source_file": "src\\pages\\DashboardPage.jsx",
+      "source_location": "L15",
+      "id": "pages_dashboardpage_statcard",
+      "community": 5,
+      "norm_label": "statcard()"
+    },
+    {
+      "label": "DashboardPage()",
+      "file_type": "code",
+      "source_file": "src\\pages\\DashboardPage.jsx",
+      "source_location": "L34",
+      "id": "pages_dashboardpage_dashboardpage",
+      "community": 5,
+      "norm_label": "dashboardpage()"
+    },
+    {
+      "label": "LaboratoryPage.jsx",
+      "file_type": "code",
+      "source_file": "src\\pages\\LaboratoryPage.jsx",
+      "source_location": "L1",
+      "id": "src_pages_laboratorypage_jsx",
+      "community": 6,
+      "norm_label": "laboratorypage.jsx"
+    },
+    {
+      "label": "AddLabModal()",
+      "file_type": "code",
+      "source_file": "src\\pages\\LaboratoryPage.jsx",
+      "source_location": "L17",
+      "id": "pages_laboratorypage_addlabmodal",
+      "community": 6,
+      "norm_label": "addlabmodal()"
+    },
+    {
+      "label": "LaboratoryPage()",
+      "file_type": "code",
+      "source_file": "src\\pages\\LaboratoryPage.jsx",
+      "source_location": "L78",
+      "id": "pages_laboratorypage_laboratorypage",
+      "community": 6,
+      "norm_label": "laboratorypage()"
+    },
+    {
+      "label": "LoginPage.jsx",
+      "file_type": "code",
+      "source_file": "src\\pages\\LoginPage.jsx",
+      "source_location": "L1",
+      "id": "src_pages_loginpage_jsx",
+      "community": 14,
+      "norm_label": "loginpage.jsx"
+    },
+    {
+      "label": "LoginPage()",
+      "file_type": "code",
+      "source_file": "src\\pages\\LoginPage.jsx",
+      "source_location": "L10",
+      "id": "pages_loginpage_loginpage",
+      "community": 14,
+      "norm_label": "loginpage()"
+    },
+    {
+      "label": "PatientDetailPage.jsx",
+      "file_type": "code",
+      "source_file": "src\\pages\\PatientDetailPage.jsx",
+      "source_location": "L1",
+      "id": "src_pages_patientdetailpage_jsx",
+      "community": 0,
+      "norm_label": "patientdetailpage.jsx"
+    },
+    {
+      "label": "VitalsTab()",
+      "file_type": "code",
+      "source_file": "src\\pages\\PatientDetailPage.jsx",
+      "source_location": "L21",
+      "id": "pages_patientdetailpage_vitalstab",
+      "community": 0,
+      "norm_label": "vitalstab()"
+    },
+    {
+      "label": "OrdersTab()",
+      "file_type": "code",
+      "source_file": "src\\pages\\PatientDetailPage.jsx",
+      "source_location": "L112",
+      "id": "pages_patientdetailpage_orderstab",
+      "community": 0,
+      "norm_label": "orderstab()"
+    },
+    {
+      "label": "PrescriptionsTab()",
+      "file_type": "code",
+      "source_file": "src\\pages\\PatientDetailPage.jsx",
+      "source_location": "L196",
+      "id": "pages_patientdetailpage_prescriptionstab",
+      "community": 0,
+      "norm_label": "prescriptionstab()"
+    },
+    {
+      "label": "ExamTab()",
+      "file_type": "code",
+      "source_file": "src\\pages\\PatientDetailPage.jsx",
+      "source_location": "L281",
+      "id": "pages_patientdetailpage_examtab",
+      "community": 0,
+      "norm_label": "examtab()"
+    },
+    {
+      "label": "PatientDetailPage()",
+      "file_type": "code",
+      "source_file": "src\\pages\\PatientDetailPage.jsx",
+      "source_location": "L361",
+      "id": "pages_patientdetailpage_patientdetailpage",
+      "community": 0,
+      "norm_label": "patientdetailpage()"
+    },
+    {
+      "label": "PatientsPage.jsx",
+      "file_type": "code",
+      "source_file": "src\\pages\\PatientsPage.jsx",
+      "source_location": "L1",
+      "id": "src_pages_patientspage_jsx",
+      "community": 7,
+      "norm_label": "patientspage.jsx"
+    },
+    {
+      "label": "AddPatientModal()",
+      "file_type": "code",
+      "source_file": "src\\pages\\PatientsPage.jsx",
+      "source_location": "L18",
+      "id": "pages_patientspage_addpatientmodal",
+      "community": 7,
+      "norm_label": "addpatientmodal()"
+    },
+    {
+      "label": "PatientsPage()",
+      "file_type": "code",
+      "source_file": "src\\pages\\PatientsPage.jsx",
+      "source_location": "L127",
+      "id": "pages_patientspage_patientspage",
+      "community": 7,
+      "norm_label": "patientspage()"
+    },
+    {
+      "label": "PharmacyPage.jsx",
+      "file_type": "code",
+      "source_file": "src\\pages\\PharmacyPage.jsx",
+      "source_location": "L1",
+      "id": "src_pages_pharmacypage_jsx",
+      "community": 15,
+      "norm_label": "pharmacypage.jsx"
+    },
+    {
+      "label": "PharmacyPage()",
+      "file_type": "code",
+      "source_file": "src\\pages\\PharmacyPage.jsx",
+      "source_location": "L12",
+      "id": "pages_pharmacypage_pharmacypage",
+      "community": 15,
+      "norm_label": "pharmacypage()"
+    },
+    {
+      "label": "SettingsPage.jsx",
+      "file_type": "code",
+      "source_file": "src\\pages\\SettingsPage.jsx",
+      "source_location": "L1",
+      "id": "src_pages_settingspage_jsx",
+      "community": 16,
+      "norm_label": "settingspage.jsx"
+    },
+    {
+      "label": "SettingsPage()",
+      "file_type": "code",
+      "source_file": "src\\pages\\SettingsPage.jsx",
+      "source_location": "L10",
+      "id": "pages_settingspage_settingspage",
+      "community": 16,
+      "norm_label": "settingspage()"
+    },
+    {
+      "label": "authStore.js",
+      "file_type": "code",
+      "source_file": "src\\store\\authStore.js",
+      "source_location": "L1",
+      "id": "src_store_authstore_js",
+      "community": 21,
+      "norm_label": "authstore.js"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts\\createAdmin.mjs",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_src": "scripts_createadmin_mjs",
+      "_tgt": "scripts_createadmin_createstaffaccount",
+      "source": "scripts_createadmin_mjs",
+      "target": "scripts_createadmin_createstaffaccount",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts\\createAdmin.mjs",
+      "source_location": "L66",
+      "weight": 1.0,
+      "_src": "scripts_createadmin_mjs",
+      "_tgt": "scripts_createadmin_main",
+      "source": "scripts_createadmin_mjs",
+      "target": "scripts_createadmin_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts\\createAdmin.mjs",
+      "source_location": "L69",
+      "weight": 1.0,
+      "_src": "scripts_createadmin_main",
+      "_tgt": "scripts_createadmin_createstaffaccount",
+      "source": "scripts_createadmin_createstaffaccount",
+      "target": "scripts_createadmin_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\App.jsx",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_src": "src_app_jsx",
+      "_tgt": "src_app_app",
+      "source": "src_app_jsx",
+      "target": "src_app_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\components\\BottomNav.jsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_src": "src_components_bottomnav_jsx",
+      "_tgt": "components_bottomnav_bottomnav",
+      "source": "src_components_bottomnav_jsx",
+      "target": "components_bottomnav_bottomnav",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\components\\DrugWarning.jsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_src": "src_components_drugwarning_jsx",
+      "_tgt": "components_drugwarning_drugwarning",
+      "source": "src_components_drugwarning_jsx",
+      "target": "components_drugwarning_drugwarning",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\components\\PageHeader.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_src": "src_components_pageheader_jsx",
+      "_tgt": "components_pageheader_pageheader",
+      "source": "src_components_pageheader_jsx",
+      "target": "components_pageheader_pageheader",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\components\\RouteGuard.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_src": "src_components_routeguard_jsx",
+      "_tgt": "components_routeguard_routeguard",
+      "source": "src_components_routeguard_jsx",
+      "target": "components_routeguard_routeguard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\components\\Skeleton.jsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_src": "src_components_skeleton_jsx",
+      "_tgt": "components_skeleton_skeletoncard",
+      "source": "src_components_skeleton_jsx",
+      "target": "components_skeleton_skeletoncard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\components\\Skeleton.jsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_src": "src_components_skeleton_jsx",
+      "_tgt": "components_skeleton_skeletonlist",
+      "source": "src_components_skeleton_jsx",
+      "target": "components_skeleton_skeletonlist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\components\\Skeleton.jsx",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_src": "src_components_skeleton_jsx",
+      "_tgt": "components_skeleton_skeletonstat",
+      "source": "src_components_skeleton_jsx",
+      "target": "components_skeleton_skeletonstat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\data\\drugInteractions.js",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_src": "src_data_druginteractions_js",
+      "_tgt": "data_druginteractions_checkdruginteractions",
+      "source": "src_data_druginteractions_js",
+      "target": "data_druginteractions_checkdruginteractions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\AppointmentsPage.jsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_src": "src_pages_appointmentspage_jsx",
+      "_tgt": "pages_appointmentspage_addapptmodal",
+      "source": "src_pages_appointmentspage_jsx",
+      "target": "pages_appointmentspage_addapptmodal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\AppointmentsPage.jsx",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_src": "src_pages_appointmentspage_jsx",
+      "_tgt": "pages_appointmentspage_appointmentspage",
+      "source": "src_pages_appointmentspage_jsx",
+      "target": "pages_appointmentspage_appointmentspage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\BillingPage.jsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_src": "src_pages_billingpage_jsx",
+      "_tgt": "pages_billingpage_addbillingmodal",
+      "source": "src_pages_billingpage_jsx",
+      "target": "pages_billingpage_addbillingmodal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\BillingPage.jsx",
+      "source_location": "L82",
+      "weight": 1.0,
+      "_src": "src_pages_billingpage_jsx",
+      "_tgt": "pages_billingpage_billingpage",
+      "source": "src_pages_billingpage_jsx",
+      "target": "pages_billingpage_billingpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\DashboardPage.jsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_src": "src_pages_dashboardpage_jsx",
+      "_tgt": "pages_dashboardpage_statcard",
+      "source": "src_pages_dashboardpage_jsx",
+      "target": "pages_dashboardpage_statcard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\DashboardPage.jsx",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_src": "src_pages_dashboardpage_jsx",
+      "_tgt": "pages_dashboardpage_dashboardpage",
+      "source": "src_pages_dashboardpage_jsx",
+      "target": "pages_dashboardpage_dashboardpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\LaboratoryPage.jsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_src": "src_pages_laboratorypage_jsx",
+      "_tgt": "pages_laboratorypage_addlabmodal",
+      "source": "src_pages_laboratorypage_jsx",
+      "target": "pages_laboratorypage_addlabmodal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\LaboratoryPage.jsx",
+      "source_location": "L78",
+      "weight": 1.0,
+      "_src": "src_pages_laboratorypage_jsx",
+      "_tgt": "pages_laboratorypage_laboratorypage",
+      "source": "src_pages_laboratorypage_jsx",
+      "target": "pages_laboratorypage_laboratorypage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\LoginPage.jsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_src": "src_pages_loginpage_jsx",
+      "_tgt": "pages_loginpage_loginpage",
+      "source": "src_pages_loginpage_jsx",
+      "target": "pages_loginpage_loginpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\PatientDetailPage.jsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_src": "src_pages_patientdetailpage_jsx",
+      "_tgt": "pages_patientdetailpage_vitalstab",
+      "source": "src_pages_patientdetailpage_jsx",
+      "target": "pages_patientdetailpage_vitalstab",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\PatientDetailPage.jsx",
+      "source_location": "L112",
+      "weight": 1.0,
+      "_src": "src_pages_patientdetailpage_jsx",
+      "_tgt": "pages_patientdetailpage_orderstab",
+      "source": "src_pages_patientdetailpage_jsx",
+      "target": "pages_patientdetailpage_orderstab",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\PatientDetailPage.jsx",
+      "source_location": "L196",
+      "weight": 1.0,
+      "_src": "src_pages_patientdetailpage_jsx",
+      "_tgt": "pages_patientdetailpage_prescriptionstab",
+      "source": "src_pages_patientdetailpage_jsx",
+      "target": "pages_patientdetailpage_prescriptionstab",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\PatientDetailPage.jsx",
+      "source_location": "L281",
+      "weight": 1.0,
+      "_src": "src_pages_patientdetailpage_jsx",
+      "_tgt": "pages_patientdetailpage_examtab",
+      "source": "src_pages_patientdetailpage_jsx",
+      "target": "pages_patientdetailpage_examtab",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\PatientDetailPage.jsx",
+      "source_location": "L361",
+      "weight": 1.0,
+      "_src": "src_pages_patientdetailpage_jsx",
+      "_tgt": "pages_patientdetailpage_patientdetailpage",
+      "source": "src_pages_patientdetailpage_jsx",
+      "target": "pages_patientdetailpage_patientdetailpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\PatientsPage.jsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_src": "src_pages_patientspage_jsx",
+      "_tgt": "pages_patientspage_addpatientmodal",
+      "source": "src_pages_patientspage_jsx",
+      "target": "pages_patientspage_addpatientmodal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\PatientsPage.jsx",
+      "source_location": "L127",
+      "weight": 1.0,
+      "_src": "src_pages_patientspage_jsx",
+      "_tgt": "pages_patientspage_patientspage",
+      "source": "src_pages_patientspage_jsx",
+      "target": "pages_patientspage_patientspage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\PharmacyPage.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_src": "src_pages_pharmacypage_jsx",
+      "_tgt": "pages_pharmacypage_pharmacypage",
+      "source": "src_pages_pharmacypage_jsx",
+      "target": "pages_pharmacypage_pharmacypage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\pages\\SettingsPage.jsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_src": "src_pages_settingspage_jsx",
+      "_tgt": "pages_settingspage_settingspage",
+      "source": "src_pages_settingspage_jsx",
+      "target": "pages_settingspage_settingspage",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": []
+}
