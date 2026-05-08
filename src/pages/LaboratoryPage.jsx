@@ -184,34 +184,36 @@ function AddLabModal({ onClose }) {
           {LAB_TEMPLATES[form.testName] ? (
             <div style={{ marginBottom: '1rem' }}>
               <label className="input-label" style={{ marginBottom: '0.5rem', display: 'block' }}>Panel Results</label>
-              <table className="lab-panel-table">
-                <thead>
-                  <tr>
-                    <th>Metric</th>
-                    <th>Result</th>
-                    <th>Unit</th>
-                    <th>Ref Range</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {LAB_TEMPLATES[form.testName].map(m => (
-                    <tr key={m.key}>
-                      <td style={{ fontWeight: 600 }}>{m.label}</td>
-                      <td style={{ padding: '4px 8px' }}>
-                        <input 
-                          className="input-field" 
-                          style={{ minHeight: '30px', padding: '4px 8px' }}
-                          value={form.panelData[m.key] || ''} 
-                          onChange={(e) => handlePanelChange(m.key, e.target.value)} 
-                          placeholder="—"
-                        />
-                      </td>
-                      <td style={{ color: 'var(--color-text-sub)', fontWeight: 600 }}>{m.unit}</td>
-                      <td style={{ color: 'var(--color-amber)', fontSize: '0.78rem', fontWeight: 700 }}>{m.ref}</td>
+              <div className="table-responsive">
+                <table className="lab-panel-table">
+                  <thead>
+                    <tr>
+                      <th>Metric</th>
+                      <th>Result</th>
+                      <th>Unit</th>
+                      <th>Ref Range</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {LAB_TEMPLATES[form.testName].map(m => (
+                      <tr key={m.key}>
+                        <td style={{ fontWeight: 600 }}>{m.label}</td>
+                        <td style={{ padding: '4px 8px' }}>
+                          <input 
+                            className="input-field" 
+                            style={{ minHeight: '30px', padding: '4px 8px' }}
+                            value={form.panelData[m.key] || ''} 
+                            onChange={(e) => handlePanelChange(m.key, e.target.value)} 
+                            placeholder="—"
+                          />
+                        </td>
+                        <td style={{ color: 'var(--color-text-sub)', fontWeight: 600 }}>{m.unit}</td>
+                        <td style={{ color: 'var(--color-amber)', fontSize: '0.78rem', fontWeight: 700 }}>{m.ref}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           ) : (
             <>
@@ -300,18 +302,20 @@ export default function LaboratoryPage() {
                   </span>
                 </div>
                 {r.panelData && Object.keys(r.panelData).length > 0 ? (
-                  <table className="lab-panel-table" style={{ margin: '10px 0' }}>
-                    <tbody>
-                      {LAB_TEMPLATES[r.testName]?.map(m => (
-                        <tr key={m.key}>
-                          <td style={{ fontWeight: 600, width: '30%' }}>{m.label}</td>
-                          <td style={{ fontWeight: 800, color: 'var(--color-amber)' }}>{r.panelData[m.key] || '—'}</td>
-                          <td style={{ color: 'var(--color-text-sub)', fontWeight: 600 }}>{m.unit}</td>
-                          <td style={{ color: 'var(--color-amber)', fontSize: '0.78rem', fontWeight: 700 }}>{m.ref}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                  <div className="table-responsive" style={{ margin: '10px 0' }}>
+                    <table className="lab-panel-table">
+                      <tbody>
+                        {LAB_TEMPLATES[r.testName]?.map(m => (
+                          <tr key={m.key}>
+                            <td style={{ fontWeight: 600, width: '30%' }}>{m.label}</td>
+                            <td style={{ fontWeight: 800, color: 'var(--color-amber)' }}>{r.panelData[m.key] || '—'}</td>
+                            <td style={{ color: 'var(--color-text-sub)', fontWeight: 600 }}>{m.unit}</td>
+                            <td style={{ color: 'var(--color-amber)', fontSize: '0.78rem', fontWeight: 700 }}>{m.ref}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 ) : (
                   <div style={{ display: 'flex', gap: 16, alignItems: 'baseline' }}>
                     <span style={{ fontSize: '1.4rem', fontWeight: 800, color: r.status === 'normal' ? 'var(--color-success)' : r.status === 'critical' ? 'var(--color-danger)' : 'var(--color-warning)' }}>

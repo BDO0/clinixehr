@@ -503,7 +503,7 @@ function PrescriptionsTab({ patientId, patient }) {
         <div className="empty-state"><Pill size={36} /><p>No prescriptions yet.</p></div>
       ) : rxList.map((rx) => (
         <div key={rx.id} className="card" style={{ padding: '1rem', marginBottom: '0.75rem', borderLeft: rx.overrideRationale ? '4px solid var(--color-danger)' : '1px solid var(--color-border)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px' }}>
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 800, fontSize: '1rem', color: 'var(--color-text-main)' }}>{rx.drug} <span style={{ fontWeight: 400, color: 'var(--color-text-sub)', fontSize: '0.85rem' }}>{rx.dose}</span></div>
               <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: 2 }}>

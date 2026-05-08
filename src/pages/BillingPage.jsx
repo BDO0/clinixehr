@@ -116,7 +116,7 @@ export default function BillingPage() {
 
       <div className="page-content">
         {/* Summary Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1rem' }}>
+        <div className="grid-2-mobile-1" style={{ marginBottom: '1rem' }}>
           <div className="stat-card">
             <div style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 4 }}>Outstanding</div>
             <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--color-danger)' }}>₱{totalDue.toLocaleString()}</div>

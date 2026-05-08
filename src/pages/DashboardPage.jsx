@@ -170,11 +170,11 @@ export default function DashboardPage() {
         {/* Stats Grid */}
         <p className="section-title">Overview</p>
         {loading ? (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1rem' }}>
+          <div className="grid-2-mobile-1" style={{ marginBottom: '1rem' }}>
             {[0,1,2,3].map((i) => <SkeletonStat key={i} />)}
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1rem' }}>
+          <div className="grid-2-mobile-1" style={{ marginBottom: '1rem' }}>
             <StatCard icon={Users}       label="Patients"    value={stats?.patients ?? 0}      color="#C48B28" bg="rgba(196,139,40,0.12)" />
             <StatCard icon={Calendar}    label="Today's Appts" value={stats?.appointments ?? 0} color="#2563EB" bg="#EFF6FF" />
             {['admin', 'doctor', 'nurse'].includes(profile?.role) && (
@@ -188,7 +188,7 @@ export default function DashboardPage() {
 
         {/* Quick Actions */}
         <p className="section-title">Quick Actions</p>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1rem' }}>
+        <div className="grid-2-mobile-1" style={{ marginBottom: '1rem' }}>
           {[
             { label: 'Add Patient',     icon: Users,         to: '/patients',     roles: ['admin', 'doctor', 'nurse', 'staff'] },
             { label: 'New Appointment', icon: Calendar,      to: '/appointments', roles: ['admin', 'doctor', 'staff'] },
