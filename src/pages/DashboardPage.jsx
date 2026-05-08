@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
-import { collection, query, where, orderBy, limit, onSnapshot, Timestamp } from 'firebase/firestore';
-import { db } from '../firebase';
+import { collection, query, where, orderBy, limit, onSnapshot, Timestamp, getCountFromServer } from 'firebase/firestore';
+import { db, auth } from '../firebase';
+import { signOut } from 'firebase/auth';
 import { useAuthStore } from '../store/authStore';
 import PageHeader from '../components/PageHeader';
 import BottomNav from '../components/BottomNav';
 import { SkeletonStat, SkeletonList } from '../components/Skeleton';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import {
   Users, Calendar, FlaskConical, AlertCircle,
-  Activity, ChevronRight, ClipboardList, Pill
+  Activity, ChevronRight, ClipboardList, Pill, LogOut
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -33,6 +35,7 @@ function StatCard({ icon: Icon, label, value, color, bg, sub }) {
 
 export default function DashboardPage() {
   const profile  = useAuthStore((s) => s.profile);
+  const logout   = useAuthStore((s) => s.logout);
   const navigate = useNavigate();
 
   const [stats,       setStats]       = useState(null);
@@ -40,15 +43,32 @@ export default function DashboardPage() {
   const [recentPts,   setRecentPts]   = useState([]);
   const [loading,     setLoading]     = useState(true);
 
+  async function handleLogout() {
+    if (!window.confirm('Are you sure you want to sign out?')) return;
+    try {
+      await signOut(auth);
+      logout();
+      toast.success('Logged out successfully.');
+      navigate('/login', { replace: true });
+    } catch {
+      toast.error('Logout failed.');
+    }
+  }
+
   useEffect(() => {
-    const now = Timestamp.now();
     const unsubs = [];
 
-    // Total patients
-    const patientsQ = query(collection(db, 'patients'), where('deleted', '!=', true));
-    unsubs.push(onSnapshot(patientsQ, (snap) => {
-      setStats((s) => ({ ...s, patients: snap.size }));
-    }));
+    // Total patients - securely and efficiently via server count
+    const fetchPatientCount = async () => {
+      try {
+        const patientsQ = query(collection(db, 'patients'), where('deleted', '!=', true));
+        const snapshot = await getCountFromServer(patientsQ);
+        setStats((s) => ({ ...s, patients: snapshot.data().count }));
+      } catch (e) {
+        console.warn("Failed to fetch patient count:", e);
+      }
+    };
+    fetchPatientCount();
 
     // Upcoming appointments (today)
     const startOfDay = new Date(); startOfDay.setHours(0, 0, 0, 0);
@@ -63,11 +83,47 @@ export default function DashboardPage() {
       setStats((s) => ({ ...s, appointments: snap.size }));
     }));
 
-    // Abnormal lab results
-    const labQ = query(collection(db, 'labResults'), where('status', '==', 'abnormal'), limit(99));
-    unsubs.push(onSnapshot(labQ, (snap) => {
-      setStats((s) => ({ ...s, abnormalLabs: snap.size }));
-    }));
+    // Clinical Data (Restricted to clinical roles)
+    if (['admin', 'doctor', 'nurse'].includes(profile?.role)) {
+      const labQ = query(collection(db, 'labResults'), orderBy('resultedAt', 'desc'));
+      unsubs.push(onSnapshot(labQ, (snap) => {
+        const latestLabs = new Map();
+        
+        // Since docs are ordered by resultedAt desc, the first time we see a patientId_testName combo, it's the most recent.
+        snap.docs.forEach(d => {
+          const data = d.data();
+          if (!data.patientId || !data.testName) return;
+          
+          const key = `${data.patientId}_${data.testName}`;
+          if (!latestLabs.has(key)) {
+            latestLabs.set(key, data.status);
+          }
+        });
+
+        let activeAbnormalCount = 0;
+        latestLabs.forEach(status => {
+          if (status === 'abnormal' || status === 'critical') {
+            activeAbnormalCount++;
+          }
+        });
+
+        setStats((s) => ({ ...s, abnormalLabs: activeAbnormalCount }));
+      }));
+
+      const rxQ = query(collection(db, 'allPrescriptions'), where('status', '==', 'active'));
+      unsubs.push(onSnapshot(rxQ, (snap) => {
+        const activeCount = snap.docs.filter(d => {
+          const data = d.data();
+          if (data.duration && data.prescribedAt) {
+            const prescribedTime = data.prescribedAt.toMillis();
+            const durationMs = parseInt(data.duration) * 86400000;
+            return Date.now() <= prescribedTime + durationMs;
+          }
+          return true;
+        }).length;
+        setStats((s) => ({ ...s, activeMeds: activeCount }));
+      }));
+    }
 
     // Recent patients
     const recentQ = query(collection(db, 'patients'), orderBy('createdAt', 'desc'), limit(5));
@@ -77,7 +133,7 @@ export default function DashboardPage() {
     }));
 
     return () => unsubs.forEach((u) => u());
-  }, []);
+  }, [profile?.role]);
 
   const greeting = () => {
     const h = new Date().getHours();
@@ -96,8 +152,9 @@ export default function DashboardPage() {
         liveIndicator
         actions={
           <button className="btn-icon" style={{ background: 'rgba(255,255,255,0.15)', border: 'none', color: 'white' }}
-            onClick={() => navigate('/settings')}>
-            <Activity size={20} />
+            onClick={handleLogout}
+            title="Sign Out">
+            <LogOut size={20} />
           </button>
         }
       />
@@ -120,8 +177,12 @@ export default function DashboardPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1rem' }}>
             <StatCard icon={Users}       label="Patients"    value={stats?.patients ?? 0}      color="#C48B28" bg="rgba(196,139,40,0.12)" />
             <StatCard icon={Calendar}    label="Today's Appts" value={stats?.appointments ?? 0} color="#2563EB" bg="#EFF6FF" />
-            <StatCard icon={FlaskConical} label="Abnormal Labs" value={stats?.abnormalLabs ?? 0}  color="#DC2626" bg="#FEF2F2" sub="Needs review" />
-            <StatCard icon={Pill}        label="Active Meds"  value="—"                          color="#16A34A" bg="#F0FDF4" />
+            {['admin', 'doctor', 'nurse'].includes(profile?.role) && (
+              <>
+                <StatCard icon={FlaskConical} label="Abnormal Labs" value={stats?.abnormalLabs ?? 0}  color="#DC2626" bg="#FEF2F2" sub="Needs review" />
+                <StatCard icon={Pill}        label="Active Meds"  value={stats?.activeMeds ?? 0}      color="#16A34A" bg="#F0FDF4" />
+              </>
+            )}
           </div>
         )}
 
@@ -129,27 +190,22 @@ export default function DashboardPage() {
         <p className="section-title">Quick Actions</p>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1rem' }}>
           {[
-            { label: 'Add Patient',     icon: Users,         to: '/patients/new',  color: '#C48B28', bg: 'rgba(196,139,40,0.12)' },
-            { label: 'New Appointment', icon: Calendar,      to: '/appointments',  color: '#2563EB', bg: '#EFF6FF' },
-            { label: 'Lab Results',     icon: FlaskConical,  to: '/laboratory',    color: '#DC2626', bg: '#FEF2F2' },
-            { label: 'Orders/Rx',       icon: ClipboardList, to: '/patients',      color: '#7A5C2E', bg: 'rgba(90,60,11,0.08)' },
-          ].map(({ label, icon: Icon, to, color, bg }) => (
+            { label: 'Add Patient',     icon: Users,         to: '/patients',     roles: ['admin', 'doctor', 'nurse', 'staff'] },
+            { label: 'New Appointment', icon: Calendar,      to: '/appointments', roles: ['admin', 'doctor', 'staff'] },
+            { label: 'Lab Results',     icon: FlaskConical,  to: '/laboratory',   roles: ['admin', 'doctor', 'nurse'] },
+            { label: 'Orders/Rx',       icon: ClipboardList, to: '/patients',     roles: ['admin', 'doctor'] },
+          ]
+          .filter(action => action.roles.includes(profile?.role || 'staff'))
+          .map(({ label, icon: Icon, to }) => (
             <button
               key={label}
               onClick={() => navigate(to)}
-              style={{
-                display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
-                gap: 8, padding: '1rem',
-                background: 'var(--color-white)', borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--color-border)',
-                boxShadow: 'var(--shadow-sm)', cursor: 'pointer',
-                transition: 'all 0.2s', textAlign: 'left',
-              }}
+              className="quick-action-card"
             >
-              <div style={{ width: 38, height: 38, borderRadius: 10, background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Icon size={20} color={color} strokeWidth={2} />
+              <div className="icon-wrapper">
+                <Icon size={22} strokeWidth={2.2} />
               </div>
-              <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-main)' }}>{label}</span>
+              <span>{label}</span>
             </button>
           ))}
         </div>

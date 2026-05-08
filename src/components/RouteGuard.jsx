@@ -42,7 +42,7 @@ export default function RouteGuard({ children, roles }) {
   if (!user) return <Navigate to="/login" replace />;
 
   if (roles && profile && !roles.includes(profile.role)) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/unauthorized" replace />;
   }
 
   return children;

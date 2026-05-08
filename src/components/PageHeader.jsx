@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Moon, Sun } from 'lucide-react';
+import { useThemeStore } from '../store/themeStore';
 
 /**
  * Sticky gradient page header with optional back button and actions slot.
@@ -12,6 +13,7 @@ export default function PageHeader({
   liveIndicator = false,
 }) {
   const navigate = useNavigate();
+  const { theme, startBlinkToggle } = useThemeStore();
 
   return (
     <div className="page-header">
@@ -46,7 +48,17 @@ export default function PageHeader({
             </p>
           )}
         </div>
-        {actions && <div style={{ display: 'flex', gap: 8 }}>{actions}</div>}
+        <div style={{ display: 'flex', gap: 8 }}>
+          {actions}
+          <button 
+            className="btn-icon" 
+            onClick={startBlinkToggle} 
+            style={{ background: 'rgba(255,255,255,0.15)', border: 'none', color: 'white' }}
+            title="Toggle Dark Mode"
+          >
+            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+        </div>
       </div>
     </div>
   );

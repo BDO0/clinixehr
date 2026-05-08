@@ -25,15 +25,35 @@
   --color-info-bg:     #EFF6FF;
   --color-drug-warn:   #C026D3;
   --color-drug-warn-bg:#FDF4FF;
-  --shadow-sm: 0 1px 3px rgba(90,60,11,0.08), 0 1px 2px rgba(90,60,11,0.06);
-  --shadow-md: 0 4px 16px rgba(90,60,11,0.10), 0 2px 6px rgba(90,60,11,0.07);
-  --shadow-lg: 0 10px 40px rgba(90,60,11,0.13), 0 4px 12px rgba(90,60,11,0.08);
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
+  --shadow-sm: 0 2px 8px rgba(90,60,11,0.04), 0 1px 2px rgba(90,60,11,0.02);
+  --shadow-md: 0 8px 24px rgba(90,60,11,0.08), 0 4px 8px rgba(90,60,11,0.04);
+  --shadow-lg: 0 16px 48px rgba(90,60,11,0.12), 0 8px 16px rgba(90,60,11,0.06);
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
   --nav-height: 72px;
 }
+
+/* ─── Dark Mode Overrides ─── */
+.dark {
+  --color-cream:       #120C05;
+  --color-amber-light: #C48B28;
+  --color-amber:       #F59E0B;
+  --color-amber-dark:  #FBBF24;
+  --color-white:       #1A1208;
+  --color-surface:     #24180A;
+  --color-surface-2:   #30200D;
+  --color-border:      #4A3314;
+  --color-text-main:   #FDF6E3;
+  --color-text-sub:    #D4B585;
+  --color-text-muted:  #A38354;
+  
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.6), 0 4px 8px rgba(0,0,0,0.3);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.8), 0 8px 16px rgba(0,0,0,0.4);
+}
+
 
 @theme {
   --color-cream:       #FFF5E1;
@@ -76,15 +96,19 @@ body {
   background: var(--color-white);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
-  border: 1px solid var(--color-border);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  border: 1px solid rgba(232, 213, 163, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.card:hover { box-shadow: var(--shadow-md); }
+.card:hover { 
+  box-shadow: var(--shadow-md); 
+  transform: translateY(-2px);
+  border-color: rgba(232, 213, 163, 0.8);
+}
 .card-elevated {
   background: var(--color-white);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(232, 213, 163, 0.6);
 }
 
 /* ─── Buttons ─── */
@@ -96,27 +120,46 @@ body {
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius-sm);
   border: none; cursor: pointer;
-  box-shadow: 0 2px 8px rgba(196,139,40,0.35);
-  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(196,139,40,0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   min-height: 48px;
   text-decoration: none;
 }
-.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(196,139,40,0.45); }
-.btn-primary:active { transform: translateY(0); }
+.btn-primary:hover { 
+  transform: translateY(-2px); 
+  box-shadow: 0 6px 20px rgba(196,139,40,0.45); 
+  background: linear-gradient(135deg, #CF962F 0%, #B57F26 100%);
+}
+.btn-primary:active { transform: scale(0.98); box-shadow: 0 2px 6px rgba(196,139,40,0.3); }
 
 .btn-secondary {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  background: var(--color-surface-2);
+  background: rgba(255, 240, 204, 0.4);
+  backdrop-filter: blur(8px);
   color: var(--color-amber-dark);
   font-weight: 600; font-size: 0.95rem;
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius-sm);
-  border: 1.5px solid var(--color-border); cursor: pointer;
-  transition: all 0.2s ease;
+  border: 1.5px solid rgba(232, 213, 163, 0.8); cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   min-height: 48px;
   text-decoration: none;
 }
-.btn-secondary:hover { background: var(--color-border); }
+.dark .btn-secondary {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: var(--color-amber);
+}
+.btn-secondary:hover { 
+  background: rgba(255, 240, 204, 0.8); 
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(196,139,40,0.1);
+}
+.dark .btn-secondary:hover {
+  background: rgba(245, 158, 11, 0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.btn-secondary:active { transform: scale(0.98); }
 
 .btn-ghost {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
@@ -161,9 +204,13 @@ body {
   color: var(--color-text-main);
   font-size: 0.95rem;
   font-family: inherit;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
   outline: none;
   min-height: 48px;
+}
+.dark .input-field {
+  background: var(--color-surface);
+  border-color: var(--color-border);
 }
 .input-field:focus {
   border-color: var(--color-amber);
@@ -216,6 +263,14 @@ textarea.input-field { resize: vertical; min-height: 96px; }
 .alert-success { background: var(--color-success-bg); border-color: var(--color-success); color: var(--color-success); }
 .alert-warning { background: var(--color-warning-bg); border-color: var(--color-warning); color: var(--color-warning); }
 .alert-info    { background: var(--color-info-bg); border-color: var(--color-info); color: var(--color-info); }
+.alert-critical {
+  background: rgba(220, 38, 38, 0.1);
+  border: 1.5px solid var(--color-danger);
+  color: var(--color-danger);
+  border-left: 6px solid var(--color-danger);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+  animation: slideInDown 0.3s ease, pulse-critical 3s infinite;
+}
 
 /* ─── Page Layout ─── */
 .page-root {
@@ -225,11 +280,14 @@ textarea.input-field { resize: vertical; min-height: 96px; }
 }
 
 .page-header {
-  background: linear-gradient(135deg, var(--color-amber-dark) 0%, #3D2408 100%);
+  background: rgba(45, 26, 6, 0.85); /* Dark translucent */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   padding: 1.25rem 1.25rem 1rem;
   color: white;
   position: sticky; top: 0; z-index: 40;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 24px rgba(45, 26, 6, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .page-content { padding: 1rem 1rem 0; }
@@ -252,17 +310,27 @@ textarea.input-field { resize: vertical; min-height: 96px; }
   box-shadow: var(--shadow-sm);
   transition: all 0.2s ease;
 }
+.dark .stat-card {
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-2) 100%);
+}
 .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 
 /* ─── Bottom Nav ─── */
 .bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0;
   height: var(--nav-height);
-  background: var(--color-white);
-  border-top: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(232, 213, 163, 0.3);
   display: flex; align-items: stretch;
   z-index: 100;
-  box-shadow: 0 -4px 20px rgba(90,60,11,0.10);
+  box-shadow: 0 -8px 32px rgba(90,60,11,0.06);
+}
+.dark .bottom-nav {
+  background: rgba(26, 18, 8, 0.85);
+  border-top-color: rgba(74, 51, 20, 0.5);
+  box-shadow: 0 -8px 32px rgba(0,0,0,0.5);
 }
 .nav-item {
   flex: 1; display: flex; flex-direction: column;
@@ -283,9 +351,14 @@ textarea.input-field { resize: vertical; min-height: 96px; }
 
 /* ─── Skeleton Loader ─── */
 .skeleton {
-  background: linear-gradient(90deg, var(--color-surface-2) 25%, var(--color-border) 50%, var(--color-surface-2) 75%);
+  background: linear-gradient(
+    90deg,
+    rgba(235, 193, 118, 0.08) 25%,
+    rgba(196, 139, 40, 0.18) 50%,
+    rgba(235, 193, 118, 0.08) 75%
+  );
   background-size: 400% 100%;
-  animation: shimmer 1.4s ease infinite;
+  animation: shimmer 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   border-radius: var(--radius-sm);
 }
 @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
@@ -347,11 +420,12 @@ textarea.input-field { resize: vertical; min-height: 96px; }
 /* ─── Modal ─── */
 .modal-overlay {
   position: fixed; inset: 0;
-  background: rgba(45, 26, 6, 0.5);
-  backdrop-filter: blur(4px);
+  background: rgba(45, 26, 6, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 200;
   display: flex; align-items: flex-end; justify-content: center;
-  animation: fadeIn 0.2s ease;
+  animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .modal-sheet {
   background: var(--color-white);
@@ -359,7 +433,8 @@ textarea.input-field { resize: vertical; min-height: 96px; }
   padding: 1.5rem 1.25rem 2rem;
   width: 100%; max-width: 600px;
   max-height: 90dvh; overflow-y: auto;
-  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 -12px 48px rgba(45, 26, 6, 0.2);
+  animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .modal-handle {
   width: 40px; height: 4px;
@@ -375,6 +450,10 @@ textarea.input-field { resize: vertical; min-height: 96px; }
 @keyframes pulse-amber {
   0%, 100% { box-shadow: 0 0 0 0 rgba(196,139,40,0.4); }
   50%       { box-shadow: 0 0 0 8px rgba(196,139,40,0); }
+}
+@keyframes pulse-critical {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(220,38,38,0); }
 }
 .pulse-amber { animation: pulse-amber 2s infinite; }
 
@@ -419,6 +498,18 @@ textarea.input-field { resize: vertical; min-height: 96px; }
 }
 .empty-state svg { opacity: 0.35; }
 
+/* ─── Autocomplete ─── */
+.autocomplete-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(235, 193, 118, 0.1);
+  transition: all 0.2s ease;
+}
+.autocomplete-item:last-child { border-bottom: none; }
+.autocomplete-item:hover {
+  background: rgba(245, 158, 11, 0.2);
+}
+
 /* ─── Search Bar ─── */
 .search-bar {
   display: flex; align-items: center; gap: 10px;
@@ -437,9 +528,201 @@ textarea.input-field { resize: vertical; min-height: 96px; }
 }
 .search-bar input::placeholder { color: var(--color-text-muted); }
 
-/* ─── Gradient Header Text ─── */
-.gradient-text {
-  background: linear-gradient(90deg, var(--color-amber-light), #FFDE9A);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* ─── Glassmorphism Quick Actions ─── */
+.quick-action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 1.25rem;
+  background: rgba(90, 60, 11, 0.45) !important; /* Deep, muted amber */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(235, 193, 118, 0.15) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
 }
+
+.quick-action-card:hover {
+  transform: translateY(-5px);
+  background: rgba(110, 75, 15, 0.55) !important;
+  border-color: rgba(235, 193, 118, 0.4) !important;
+  box-shadow: 0 12px 40px rgba(90, 60, 11, 0.25);
+}
+
+.quick-action-card .icon-wrapper {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(245, 158, 11, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  color: #FBBF24; /* Sun-kissed gold */
+}
+
+.quick-action-card:hover .icon-wrapper {
+  background: #F59E0B; /* Brighter orange/gold */
+  color: white;
+  transform: scale(1.1) rotate(-8deg);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+}
+
+.quick-action-card span {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(255, 245, 225, 0.9);
+  transition: all 0.3s;
+}
+
+.quick-action-card:hover span {
+  color: white;
+  letter-spacing: 0.01em;
+}
+
+/* ─── Laboratory Premium Panels ─── */
+.lab-panel-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.lab-panel-table th {
+  background: var(--color-surface-2);
+  color: var(--color-text-main);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.lab-panel-table td {
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  color: var(--color-text-main);
+  border-bottom: 1px solid rgba(196, 139, 40, 0.08);
+  vertical-align: middle;
+}
+
+.lab-panel-table tr:last-child td {
+  border-bottom: none;
+}
+
+.lab-panel-table input.input-field {
+  padding: 6px 10px;
+  min-height: 32px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-main);
+}
+
+.lab-panel-table input.input-field:focus {
+  border-color: var(--color-amber);
+  background: var(--color-white);
+  box-shadow: 0 0 0 2px rgba(196, 139, 40, 0.1);
+}
+
+/* ─── Theme Blink Transition (3rd-Person POV Almond Eye — SVG Lids) ─── */
+.theme-lid {
+  position: fixed;
+  left: 0;
+  width: 100vw;        /* explicit width fixes SVG not stretching full screen */
+  z-index: 99999;
+  pointer-events: none;
+  will-change: transform;
+  display: block;
+}
+
+/* Top lid: hidden above screen by default */
+.theme-lid-top {
+  top: 0;
+  height: 55vh;
+  transform: translateY(-100%);
+  transition: transform 0.55s cubic-bezier(0.42, 0, 0.18, 1);
+}
+
+/* Bottom lid: hidden below screen by default */
+.theme-lid-bottom {
+  bottom: 0;
+  height: 55vh;
+  transform: translateY(100%);
+  transition: transform 0.55s cubic-bezier(0.42, 0, 0.18, 1);
+}
+
+/* ── Closing: lids sweep in forming the almond, then seal shut ── */
+.theme-lid-top.closed {
+  transform: translateY(0);
+}
+.theme-lid-bottom.closed {
+  transform: translateY(0);
+}
+
+/* ── Light→Dark: lids snap away instantly, blur-fade reveals dark content ── */
+.theme-lid-top.snap-away {
+  transform: translateY(-100%);
+  transition: none !important;
+}
+.theme-lid-bottom.snap-away {
+  transform: translateY(100%);
+  transition: none !important;
+}
+
+/* ── Dark→Light Phase 2: lids materialize sealed at center (no slide-in) ── */
+.theme-lid-top.sealed {
+  transform: translateY(0);
+  transition: none !important;
+}
+.theme-lid-bottom.sealed {
+  transform: translateY(0);
+  transition: none !important;
+}
+
+/* ── Dark→Light Phase 3: lids peel open from center revealing light mode ── */
+.theme-lid-top.open {
+  transform: translateY(-100%);
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.theme-lid-bottom.open {
+  transform: translateY(100%);
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ─── Blur Transitions ─── */
+.app-wrapper {
+  transition: filter 0.8s ease, opacity 0.8s ease;
+}
+/* Fade IN: new theme blooms into view */
+.app-wrapper.blur-in {
+  animation: blurFadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+/* Fade OUT: dark content dissolves before lids appear (Dark→Light phase 1) */
+.app-wrapper.blur-out {
+  animation: blurFadeOut 0.4s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+@keyframes blurFadeIn {
+  0%   { filter: blur(24px); opacity: 0; }
+  100% { filter: blur(0px);  opacity: 1; }
+}
+
+@keyframes blurFadeOut {
+  0%   { filter: blur(0px);  opacity: 1; }
+  100% { filter: blur(24px); opacity: 0; }
+}
+

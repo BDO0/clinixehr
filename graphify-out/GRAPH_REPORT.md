@@ -1,11 +1,11 @@
-# Graph Report - EHR website  (2026-05-01)
+# Graph Report - EHR website  (2026-05-02)
 
 ## Corpus Check
-- 22 files · ~11,448 words
+- 24 files · ~16,488 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 51 nodes · 30 edges · 1 communities detected
+- 60 nodes · 37 edges · 1 communities detected
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 

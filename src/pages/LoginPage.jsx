@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, setPersistence, browserSessionPersistence } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -20,6 +20,9 @@ export default function LoginPage() {
     if (!email || !password) { toast.error('Please fill in all fields.'); return; }
     setLoading(true);
     try {
+      // Allow independent sessions per tab
+      await setPersistence(auth, browserSessionPersistence);
+
       const cred = await signInWithEmailAndPassword(auth, email, password);
       const snap = await getDoc(doc(db, 'staff', cred.user.uid));
       if (snap.exists()) setProfile({ uid: cred.user.uid, ...snap.data() });

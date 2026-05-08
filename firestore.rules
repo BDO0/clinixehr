@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function getRole() {
+      // Corrected to look in the 'staff' collection
+      return get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.role;
+    }
+
+    // 1. Staff Collection: Staff can read/write their own profile
+    match /staff/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if isSignedIn() && getRole() == 'admin';
+    }
+
+    // 2. Patients & Sub-collections
+    match /patients/{patientId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && getRole() in ['admin', 'doctor', 'nurse'];
+      
+      match /{allSubcollections=**} {
+        allow read: if isSignedIn();
+        allow write: if isSignedIn() && getRole() in ['admin', 'doctor', 'nurse'];
+      }
+    }
+
+    // 3. Lab Results
+    match /labResults/{resultId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && getRole() in ['admin', 'doctor', 'nurse'];
+    }
+
+    // 4. Pharmacy/Prescriptions
+    match /allPrescriptions/{rxId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && getRole() in ['admin', 'doctor'];
+    }
+
+    // 5. Appointments
+    match /appointments/{apptId} {
+      allow read, write: if isSignedIn();
+    }
+  }
+}

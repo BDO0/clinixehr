@@ -132,15 +132,27 @@ export default function PatientsPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // We use a simplified query to avoid "stuck on loading" if composite indexes are missing.
+    // Error handling added to capture Firestore permission or index errors.
     const q = query(
       collection(db, 'patients'),
-      where('deleted', '!=', true),
       orderBy('createdAt', 'desc')
     );
-    const unsub = onSnapshot(q, (snap) => {
-      setPatients(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
-      setLoading(false);
-    });
+
+    const unsub = onSnapshot(q, 
+      (snap) => {
+        const list = snap.docs
+          .map((d) => ({ id: d.id, ...d.data() }))
+          .filter(p => p.deleted !== true); // Client-side fallback for filtering deleted items
+        setPatients(list);
+        setLoading(false);
+      },
+      (err) => {
+        console.error('Firestore Fetch Error:', err);
+        toast.error('Failed to load patients. Check your connection or indexes.');
+        setLoading(false);
+      }
+    );
     return unsub;
   }, []);
 

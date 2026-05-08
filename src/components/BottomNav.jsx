@@ -7,12 +7,11 @@ import { useAuthStore } from '../store/authStore';
 
 const NAV_ALL = [
   { to: '/dashboard',    icon: LayoutDashboard, label: 'Home'      },
-  { to: '/patients',     icon: Users,            label: 'Patients'  },
-  { to: '/appointments', icon: Calendar,         label: 'Schedule'  },
-  { to: '/laboratory',   icon: FlaskConical,     label: 'Lab'       },
-  { to: '/pharmacy',     icon: Pill,             label: 'Pharmacy'  },
-  { to: '/billing',      icon: CreditCard,       label: 'Billing',  roles: ['admin', 'staff'] },
-  { to: '/settings',     icon: Settings,         label: 'Settings'  },
+  { to: '/patients',     icon: Users,            label: 'Patients', roles: ['admin', 'doctor', 'nurse', 'staff'] },
+  { to: '/appointments', icon: Calendar,         label: 'Schedule', roles: ['admin', 'doctor', 'staff'] },
+  { to: '/laboratory',   icon: FlaskConical,     label: 'Lab',      roles: ['admin', 'doctor', 'nurse'] },
+  { to: '/pharmacy',     icon: Pill,             label: 'Pharmacy', roles: ['admin', 'doctor', 'nurse'] },
+  { to: '/billing',      icon: CreditCard,       label: 'Billing',  roles: ['admin', 'staff'] }
 ];
 
 export default function BottomNav() {

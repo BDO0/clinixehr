@@ -25,12 +25,27 @@ const STAFF_ACCOUNTS = [
   {
     email:       'admin1@gmail.com',
     password:    'admin1',
-    displayName: 'Admin1',
+    displayName: 'Admin One',
     role:        'admin',
   },
-  // Add more accounts here later, e.g.:
-  // { email: 'doctor1@clinic.com', password: 'Doctor1!', displayName: 'Dr. Reyes', role: 'doctor' },
-  // { email: 'nurse1@clinic.com',  password: 'Nurse1!',  displayName: 'Nurse Ana', role: 'nurse'  },
+  {
+    email:       'doctor1@gmail.com',
+    password:    'doctor1',
+    displayName: 'Doctor One',
+    role:        'doctor',
+  },
+  {
+    email:       'nurse1@gmail.com',
+    password:    'nurse1',
+    displayName: 'Nurse One',
+    role:        'nurse',
+  },
+  {
+    email:       'staff1@gmail.com',
+    password:    'staff1',
+    displayName: 'Staff One',
+    role:        'staff',
+  },
 ];
 // ──────────────────────────────────────────────────────────
 
