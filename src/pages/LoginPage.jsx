@@ -108,7 +108,7 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="doctor@clinic.com"
                 style={{
-                  flex: 1, border: 'none', outline: 'none',
+                  flex: 1, minWidth: 0, border: 'none', outline: 'none',
                   background: 'none', color: 'white',
                   fontSize: '0.95rem', padding: '0.85rem 0',
                   fontFamily: 'inherit', minHeight: 52,
@@ -137,14 +137,14 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 style={{
-                  flex: 1, border: 'none', outline: 'none',
+                  flex: 1, minWidth: 0, border: 'none', outline: 'none',
                   background: 'none', color: 'white',
                   fontSize: '0.95rem', padding: '0.85rem 0',
                   fontFamily: 'inherit', minHeight: 52,
                 }}
                 autoComplete="current-password"
               />
-              <button type="button" onClick={() => setShowPw(!showPw)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(235,193,118,0.6)', display: 'flex', padding: 0 }}>
+              <button type="button" onClick={() => setShowPw(!showPw)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(235,193,118,0.6)', display: 'flex', padding: 0, flexShrink: 0 }}>
                 {showPw ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
