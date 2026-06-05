@@ -889,21 +889,23 @@ function HistoryTab({ patient }) {
       <div className="card" style={{ padding: '1.5rem' }}>
         <h3 style={{ margin: '0 0 1rem', color: 'var(--color-text-main)', fontSize: '1.1rem' }}>Past Medical History (PMH)</h3>
         {pmh.length > 0 && (
-          <table className="lab-panel-table" style={{ marginBottom: '1rem' }}>
-            <thead><tr><th>Condition</th><th>Year</th><th>Critical</th><th></th></tr></thead>
-            <tbody>
-              {pmh.map((item, i) => (
-                <tr key={i}>
-                  <td style={{ fontWeight: 600 }}>{item.condition}</td>
-                  <td>{item.year || '—'}</td>
-                  <td>{item.critical ? <span className="badge badge-danger">Critical</span> : 'No'}</td>
-                  <td style={{ textAlign: 'right' }}>
-                    <button className="btn-ghost" style={{ padding: '4px' }} onClick={() => setPmh(pmh.filter((_, idx) => idx !== i))}><Trash2 size={14} color="var(--color-danger)" /></button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="table-responsive">
+            <table className="lab-panel-table" style={{ marginBottom: '1rem' }}>
+              <thead><tr><th>Condition</th><th>Year</th><th>Critical</th><th></th></tr></thead>
+              <tbody>
+                {pmh.map((item, i) => (
+                  <tr key={i}>
+                    <td style={{ fontWeight: 600 }}>{item.condition}</td>
+                    <td>{item.year || '—'}</td>
+                    <td>{item.critical ? <span className="badge badge-danger">Critical</span> : 'No'}</td>
+                    <td style={{ textAlign: 'right' }}>
+                      <button className="btn-ghost" style={{ padding: '4px' }} onClick={() => setPmh(pmh.filter((_, idx) => idx !== i))}><Trash2 size={14} color="var(--color-danger)" /></button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end' }}>
           <div style={{ flex: 2 }}><label className="input-label">Condition</label><input className="input-field" value={newPmh.condition} onChange={e => setNewPmh({...newPmh, condition: e.target.value})} placeholder="e.g. Hypertension" /></div>
@@ -921,21 +923,23 @@ function HistoryTab({ patient }) {
       <div className="card" style={{ padding: '1.5rem' }}>
         <h3 style={{ margin: '0 0 1rem', color: 'var(--color-text-main)', fontSize: '1.1rem' }}>Surgical History</h3>
         {surgical.length > 0 && (
-          <table className="lab-panel-table" style={{ marginBottom: '1rem' }}>
-            <thead><tr><th>Procedure</th><th>Year</th><th>Location</th><th></th></tr></thead>
-            <tbody>
-              {surgical.map((item, i) => (
-                <tr key={i}>
-                  <td style={{ fontWeight: 600 }}>{item.procedure}</td>
-                  <td>{item.year || '—'}</td>
-                  <td>{item.hospital || '—'}</td>
-                  <td style={{ textAlign: 'right' }}>
-                    <button className="btn-ghost" style={{ padding: '4px' }} onClick={() => setSurgical(surgical.filter((_, idx) => idx !== i))}><Trash2 size={14} color="var(--color-danger)" /></button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="table-responsive">
+            <table className="lab-panel-table" style={{ marginBottom: '1rem' }}>
+              <thead><tr><th>Procedure</th><th>Year</th><th>Location</th><th></th></tr></thead>
+              <tbody>
+                {surgical.map((item, i) => (
+                  <tr key={i}>
+                    <td style={{ fontWeight: 600 }}>{item.procedure}</td>
+                    <td>{item.year || '—'}</td>
+                    <td>{item.hospital || '—'}</td>
+                    <td style={{ textAlign: 'right' }}>
+                      <button className="btn-ghost" style={{ padding: '4px' }} onClick={() => setSurgical(surgical.filter((_, idx) => idx !== i))}><Trash2 size={14} color="var(--color-danger)" /></button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end' }}>
           <div style={{ flex: 2 }}><label className="input-label">Procedure</label><input className="input-field" value={newSurg.procedure} onChange={e => setNewSurg({...newSurg, procedure: e.target.value})} placeholder="e.g. Appendectomy" /></div>
@@ -948,20 +952,22 @@ function HistoryTab({ patient }) {
       <div className="card" style={{ padding: '1.5rem' }}>
         <h3 style={{ margin: '0 0 1rem', color: 'var(--color-text-main)', fontSize: '1.1rem' }}>Family History</h3>
         {family.length > 0 && (
-          <table className="lab-panel-table" style={{ marginBottom: '1rem' }}>
-            <thead><tr><th>Relation</th><th>Condition</th><th></th></tr></thead>
-            <tbody>
-              {family.map((item, i) => (
-                <tr key={i}>
-                  <td style={{ fontWeight: 600 }}>{item.relation}</td>
-                  <td>{item.condition}</td>
-                  <td style={{ textAlign: 'right' }}>
-                    <button className="btn-ghost" style={{ padding: '4px' }} onClick={() => setFamily(family.filter((_, idx) => idx !== i))}><Trash2 size={14} color="var(--color-danger)" /></button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="table-responsive">
+            <table className="lab-panel-table" style={{ marginBottom: '1rem' }}>
+              <thead><tr><th>Relation</th><th>Condition</th><th></th></tr></thead>
+              <tbody>
+                {family.map((item, i) => (
+                  <tr key={i}>
+                    <td style={{ fontWeight: 600 }}>{item.relation}</td>
+                    <td>{item.condition}</td>
+                    <td style={{ textAlign: 'right' }}>
+                      <button className="btn-ghost" style={{ padding: '4px' }} onClick={() => setFamily(family.filter((_, idx) => idx !== i))}><Trash2 size={14} color="var(--color-danger)" /></button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end' }}>
           <div style={{ flex: 1 }}><label className="input-label">Relation</label><input className="input-field" value={newFam.relation} onChange={e => setNewFam({...newFam, relation: e.target.value})} placeholder="e.g. Father" /></div>
@@ -973,20 +979,22 @@ function HistoryTab({ patient }) {
       <div className="card" style={{ padding: '1.5rem' }}>
         <h3 style={{ margin: '0 0 1rem', color: 'var(--color-text-main)', fontSize: '1.1rem' }}>Social History</h3>
         {social.length > 0 && (
-          <table className="lab-panel-table" style={{ marginBottom: '1rem' }}>
-            <thead><tr><th>Factor</th><th>Details</th><th></th></tr></thead>
-            <tbody>
-              {social.map((item, i) => (
-                <tr key={i}>
-                  <td style={{ fontWeight: 600 }}>{item.factor}</td>
-                  <td>{item.details}</td>
-                  <td style={{ textAlign: 'right' }}>
-                    <button className="btn-ghost" style={{ padding: '4px' }} onClick={() => setSocial(social.filter((_, idx) => idx !== i))}><Trash2 size={14} color="var(--color-danger)" /></button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="table-responsive">
+            <table className="lab-panel-table" style={{ marginBottom: '1rem' }}>
+              <thead><tr><th>Factor</th><th>Details</th><th></th></tr></thead>
+              <tbody>
+                {social.map((item, i) => (
+                  <tr key={i}>
+                    <td style={{ fontWeight: 600 }}>{item.factor}</td>
+                    <td>{item.details}</td>
+                    <td style={{ textAlign: 'right' }}>
+                      <button className="btn-ghost" style={{ padding: '4px' }} onClick={() => setSocial(social.filter((_, idx) => idx !== i))}><Trash2 size={14} color="var(--color-danger)" /></button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end' }}>
           <div style={{ flex: 1 }}><label className="input-label">Factor</label>

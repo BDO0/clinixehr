@@ -110,7 +110,7 @@ export default function LoginPage() {
                 style={{
                   flex: 1, minWidth: 0, border: 'none', outline: 'none',
                   background: 'none', color: 'white',
-                  fontSize: '0.95rem', padding: '0.85rem 0',
+                  fontSize: '1rem', padding: '0.85rem 0',
                   fontFamily: 'inherit', minHeight: 52,
                 }}
                 autoComplete="email"
@@ -139,7 +139,7 @@ export default function LoginPage() {
                 style={{
                   flex: 1, minWidth: 0, border: 'none', outline: 'none',
                   background: 'none', color: 'white',
-                  fontSize: '0.95rem', padding: '0.85rem 0',
+                  fontSize: '1rem', padding: '0.85rem 0',
                   fontFamily: 'inherit', minHeight: 52,
                 }}
                 autoComplete="current-password"

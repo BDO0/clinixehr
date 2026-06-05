@@ -202,11 +202,12 @@ body {
   border-radius: var(--radius-sm);
   background: var(--color-white);
   color: var(--color-text-main);
-  font-size: 0.95rem;
+  font-size: 1rem; /* Must be 16px to prevent iOS Safari auto-zoom */
   font-family: inherit;
   transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
   outline: none;
   min-height: 48px;
+  -webkit-appearance: none; /* Helps with mobile rendering */
 }
 .dark .input-field {
   background: var(--color-surface);
@@ -277,6 +278,8 @@ textarea.input-field { resize: vertical; min-height: 96px; }
   min-height: 100dvh;
   padding-bottom: calc(var(--nav-height) + 16px);
   background: var(--color-cream);
+  overflow-x: hidden;
+  width: 100%;
 }
 
 .page-header {
@@ -348,6 +351,14 @@ textarea.input-field { resize: vertical; min-height: 96px; }
 .nav-item:hover { color: var(--color-amber-dark); background: var(--color-surface); }
 .nav-item svg { transition: transform 0.2s ease; }
 .nav-item.active svg { transform: scale(1.15); }
+
+/* Dynamically hide Bottom Nav when an input/textarea/select is focused (virtual keyboard is active) */
+body:has(input:focus, textarea:focus, select:focus) .bottom-nav {
+  display: none !important;
+}
+body:has(input:focus, textarea:focus, select:focus) .page-root {
+  padding-bottom: 2rem !important; /* Reduce padding since nav is hidden */
+}
 
 /* ─── Skeleton Loader ─── */
 .skeleton {
@@ -425,14 +436,16 @@ textarea.input-field { resize: vertical; min-height: 96px; }
   -webkit-backdrop-filter: blur(8px);
   z-index: 200;
   display: flex; align-items: flex-end; justify-content: center;
+  padding-bottom: env(safe-area-inset-bottom, 0px); /* Safe area padding */
   animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .modal-sheet {
   background: var(--color-white);
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  padding: 1.5rem 1.25rem 2rem;
+  padding: 1.5rem 1.25rem calc(4rem + env(safe-area-inset-bottom, 20px)); /* Extra breathing room for keyboard */
   width: 100%; max-width: 600px;
-  max-height: 90dvh; overflow-y: auto;
+  max-height: 85dvh; overflow-y: auto;
+  overscroll-behavior: contain; /* Prevents background scrolling */
   box-shadow: 0 -12px 48px rgba(45, 26, 6, 0.2);
   animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -535,9 +548,10 @@ textarea.input-field { resize: vertical; min-height: 96px; }
 .search-bar:focus-within { border-color: var(--color-amber); }
 .search-bar input {
   flex: 1; border: none; outline: none; background: none;
-  font-size: 0.95rem; color: var(--color-text-main);
+  font-size: 1rem; color: var(--color-text-main);
   padding: 0.75rem 0; font-family: inherit;
   min-height: 48px;
+  -webkit-appearance: none;
 }
 .search-bar input::placeholder { color: var(--color-text-muted); }
 
@@ -638,11 +652,12 @@ textarea.input-field { resize: vertical; min-height: 96px; }
 .lab-panel-table input.input-field {
   padding: 6px 10px;
   min-height: 32px;
-  font-size: 0.85rem;
+  font-size: 1rem; /* Must be 16px to prevent iOS auto-zoom */
   font-weight: 600;
   background: var(--color-white);
   border: 1px solid var(--color-border);
   color: var(--color-text-main);
+  -webkit-appearance: none;
 }
 
 .lab-panel-table input.input-field:focus {
