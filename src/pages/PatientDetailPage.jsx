@@ -216,7 +216,7 @@ function VitalsTab({ patientId }) {
             </span>
             <span className="badge badge-muted" style={{ fontSize: '0.7rem' }}>{v.recordedByRole}</span>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 6 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))', gap: 6 }}>
             {[['BP', v.bp, 'mmHg'], ['HR', v.hr, 'bpm'], ['Temp', v.temp, '°C'], ['RR', v.rr, '/min'], ['O₂', v.o2, '%'], ['Wt', v.weight, 'kg']].map(([lbl, val, unit]) => val ? (
               <div key={lbl} style={{ background: 'var(--color-surface)', borderRadius: 8, padding: '6px 8px', textAlign: 'center' }}>
                 <div style={{ fontSize: '0.65rem', color: 'var(--color-text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>{lbl}</div>
@@ -895,10 +895,10 @@ function HistoryTab({ patient }) {
               <tbody>
                 {pmh.map((item, i) => (
                   <tr key={i}>
-                    <td style={{ fontWeight: 600 }}>{item.condition}</td>
-                    <td>{item.year || '—'}</td>
-                    <td>{item.critical ? <span className="badge badge-danger">Critical</span> : 'No'}</td>
-                    <td style={{ textAlign: 'right' }}>
+                    <td data-label="Condition" style={{ fontWeight: 600 }}>{item.condition}</td>
+                    <td data-label="Year">{item.year || '—'}</td>
+                    <td data-label="Critical">{item.critical ? <span className="badge badge-danger">Critical</span> : 'No'}</td>
+                    <td data-label="Actions" style={{ textAlign: 'right' }}>
                       <button className="btn-ghost" style={{ padding: '4px' }} onClick={() => setPmh(pmh.filter((_, idx) => idx !== i))}><Trash2 size={14} color="var(--color-danger)" /></button>
                     </td>
                   </tr>
@@ -929,10 +929,10 @@ function HistoryTab({ patient }) {
               <tbody>
                 {surgical.map((item, i) => (
                   <tr key={i}>
-                    <td style={{ fontWeight: 600 }}>{item.procedure}</td>
-                    <td>{item.year || '—'}</td>
-                    <td>{item.hospital || '—'}</td>
-                    <td style={{ textAlign: 'right' }}>
+                    <td data-label="Procedure" style={{ fontWeight: 600 }}>{item.procedure}</td>
+                    <td data-label="Year">{item.year || '—'}</td>
+                    <td data-label="Location">{item.hospital || '—'}</td>
+                    <td data-label="Actions" style={{ textAlign: 'right' }}>
                       <button className="btn-ghost" style={{ padding: '4px' }} onClick={() => setSurgical(surgical.filter((_, idx) => idx !== i))}><Trash2 size={14} color="var(--color-danger)" /></button>
                     </td>
                   </tr>
@@ -958,9 +958,9 @@ function HistoryTab({ patient }) {
               <tbody>
                 {family.map((item, i) => (
                   <tr key={i}>
-                    <td style={{ fontWeight: 600 }}>{item.relation}</td>
-                    <td>{item.condition}</td>
-                    <td style={{ textAlign: 'right' }}>
+                    <td data-label="Relation" style={{ fontWeight: 600 }}>{item.relation}</td>
+                    <td data-label="Condition">{item.condition}</td>
+                    <td data-label="Actions" style={{ textAlign: 'right' }}>
                       <button className="btn-ghost" style={{ padding: '4px' }} onClick={() => setFamily(family.filter((_, idx) => idx !== i))}><Trash2 size={14} color="var(--color-danger)" /></button>
                     </td>
                   </tr>
@@ -985,9 +985,9 @@ function HistoryTab({ patient }) {
               <tbody>
                 {social.map((item, i) => (
                   <tr key={i}>
-                    <td style={{ fontWeight: 600 }}>{item.factor}</td>
-                    <td>{item.details}</td>
-                    <td style={{ textAlign: 'right' }}>
+                    <td data-label="Factor" style={{ fontWeight: 600 }}>{item.factor}</td>
+                    <td data-label="Details">{item.details}</td>
+                    <td data-label="Actions" style={{ textAlign: 'right' }}>
                       <button className="btn-ghost" style={{ padding: '4px' }} onClick={() => setSocial(social.filter((_, idx) => idx !== i))}><Trash2 size={14} color="var(--color-danger)" /></button>
                     </td>
                   </tr>

@@ -197,7 +197,7 @@
       "file_type": "code",
       "source_file": "src/components/DrugWarning.jsx",
       "source_location": "L1",
-      "community": 4,
+      "community": 5,
       "norm_label": "drugwarning.jsx",
       "id": "src_components_drugwarning_jsx"
     },
@@ -206,7 +206,7 @@
       "file_type": "code",
       "source_file": "src/components/DrugWarning.jsx",
       "source_location": "L3",
-      "community": 4,
+      "community": 5,
       "norm_label": "severity_map",
       "id": "components_drugwarning_severity_map"
     },
@@ -215,7 +215,7 @@
       "file_type": "code",
       "source_file": "src/components/DrugWarning.jsx",
       "source_location": "L13",
-      "community": 4,
+      "community": 5,
       "norm_label": "drugwarning()",
       "id": "components_drugwarning_drugwarning"
     },
@@ -269,7 +269,7 @@
       "file_type": "code",
       "source_file": "components/PatientAutocomplete.jsx",
       "source_location": "L7",
-      "community": 0,
+      "community": 2,
       "norm_label": "patientautocomplete()",
       "id": "components_patientautocomplete_patientautocomplete"
     },
@@ -296,7 +296,7 @@
       "file_type": "code",
       "source_file": "src/components/Skeleton.jsx",
       "source_location": "L1",
-      "community": 2,
+      "community": 4,
       "norm_label": "skeleton.jsx",
       "id": "src_components_skeleton_jsx"
     },
@@ -305,7 +305,7 @@
       "file_type": "code",
       "source_file": "src/components/Skeleton.jsx",
       "source_location": "L1",
-      "community": 2,
+      "community": 4,
       "norm_label": "skeletoncard()",
       "id": "components_skeleton_skeletoncard"
     },
@@ -314,7 +314,7 @@
       "file_type": "code",
       "source_file": "src/components/Skeleton.jsx",
       "source_location": "L19",
-      "community": 2,
+      "community": 4,
       "norm_label": "skeletonlist()",
       "id": "components_skeleton_skeletonlist"
     },
@@ -323,7 +323,7 @@
       "file_type": "code",
       "source_file": "src/components/Skeleton.jsx",
       "source_location": "L29",
-      "community": 2,
+      "community": 4,
       "norm_label": "skeletonstat()",
       "id": "components_skeleton_skeletonstat"
     },
@@ -332,7 +332,7 @@
       "file_type": "code",
       "source_file": "src/data/drugInteractions.js",
       "source_location": "L1",
-      "community": 4,
+      "community": 5,
       "norm_label": "druginteractions.js",
       "id": "src_data_druginteractions_js"
     },
@@ -341,7 +341,7 @@
       "file_type": "code",
       "source_file": "src/data/drugInteractions.js",
       "source_location": "L7",
-      "community": 4,
+      "community": 5,
       "norm_label": "drug_interactions",
       "id": "data_druginteractions_drug_interactions"
     },
@@ -350,7 +350,7 @@
       "file_type": "code",
       "source_file": "src/data/drugInteractions.js",
       "source_location": "L211",
-      "community": 4,
+      "community": 5,
       "norm_label": "checkdruginteractions()",
       "id": "data_druginteractions_checkdruginteractions"
     },
@@ -359,7 +359,7 @@
       "file_type": "code",
       "source_file": "src/data/drugInteractions.js",
       "source_location": "L232",
-      "community": 4,
+      "community": 5,
       "norm_label": "allergy_cross_reference",
       "id": "data_druginteractions_allergy_cross_reference"
     },
@@ -368,7 +368,7 @@
       "file_type": "code",
       "source_file": "src/data/drugInteractions.js",
       "source_location": "L246",
-      "community": 4,
+      "community": 5,
       "norm_label": "checkdrugallergies()",
       "id": "data_druginteractions_checkdrugallergies"
     },
@@ -395,7 +395,7 @@
       "file_type": "code",
       "source_file": "src/pages/AppointmentsPage.jsx",
       "source_location": "L1",
-      "community": 5,
+      "community": 2,
       "norm_label": "appointmentspage.jsx",
       "id": "src_pages_appointmentspage_jsx"
     },
@@ -404,7 +404,7 @@
       "file_type": "code",
       "source_file": "pages/AppointmentsPage.jsx",
       "source_location": "L13",
-      "community": 5,
+      "community": 2,
       "norm_label": "status_options",
       "id": "pages_appointmentspage_status_options"
     },
@@ -413,7 +413,7 @@
       "file_type": "code",
       "source_file": "pages/AppointmentsPage.jsx",
       "source_location": "L14",
-      "community": 5,
+      "community": 2,
       "norm_label": "appt_types",
       "id": "pages_appointmentspage_appt_types"
     },
@@ -422,7 +422,7 @@
       "file_type": "code",
       "source_file": "pages/AppointmentsPage.jsx",
       "source_location": "L15",
-      "community": 5,
+      "community": 2,
       "norm_label": "durations",
       "id": "pages_appointmentspage_durations"
     },
@@ -431,7 +431,7 @@
       "file_type": "code",
       "source_file": "pages/AppointmentsPage.jsx",
       "source_location": "L16",
-      "community": 5,
+      "community": 2,
       "norm_label": "rooms",
       "id": "pages_appointmentspage_rooms"
     },
@@ -440,7 +440,7 @@
       "file_type": "code",
       "source_file": "pages/AppointmentsPage.jsx",
       "source_location": "L18",
-      "community": 5,
+      "community": 2,
       "norm_label": "waittimer()",
       "id": "pages_appointmentspage_waittimer"
     },
@@ -449,7 +449,7 @@
       "file_type": "code",
       "source_file": "pages/AppointmentsPage.jsx",
       "source_location": "L35",
-      "community": 5,
+      "community": 2,
       "norm_label": "addapptmodal()",
       "id": "pages_appointmentspage_addapptmodal"
     },
@@ -458,7 +458,7 @@
       "file_type": "code",
       "source_file": "pages/AppointmentsPage.jsx",
       "source_location": "L144",
-      "community": 5,
+      "community": 2,
       "norm_label": "appointmentspage()",
       "id": "pages_appointmentspage_appointmentspage"
     },
@@ -467,43 +467,43 @@
       "file_type": "code",
       "source_file": "src/pages/BillingPage.jsx",
       "source_location": "L1",
-      "community": 2,
+      "community": 3,
       "norm_label": "billingpage.jsx",
       "id": "src_pages_billingpage_jsx"
     },
     {
       "label": "PAYMENT_METHODS",
       "file_type": "code",
-      "source_file": "src/pages/BillingPage.jsx",
-      "source_location": "L12",
-      "community": 2,
+      "source_file": "BillingPage.jsx",
+      "source_location": "L13",
+      "community": 3,
       "norm_label": "payment_methods",
       "id": "pages_billingpage_payment_methods"
     },
     {
       "label": "SERVICE_TYPES",
       "file_type": "code",
-      "source_file": "src/pages/BillingPage.jsx",
-      "source_location": "L13",
-      "community": 2,
+      "source_file": "BillingPage.jsx",
+      "source_location": "L14",
+      "community": 3,
       "norm_label": "service_types",
       "id": "pages_billingpage_service_types"
     },
     {
       "label": "AddBillingModal()",
       "file_type": "code",
-      "source_file": "src/pages/BillingPage.jsx",
-      "source_location": "L15",
-      "community": 2,
+      "source_file": "BillingPage.jsx",
+      "source_location": "L16",
+      "community": 3,
       "norm_label": "addbillingmodal()",
       "id": "pages_billingpage_addbillingmodal"
     },
     {
       "label": "BillingPage()",
       "file_type": "code",
-      "source_file": "src/pages/BillingPage.jsx",
-      "source_location": "L82",
-      "community": 2,
+      "source_file": "BillingPage.jsx",
+      "source_location": "L94",
+      "community": 3,
       "norm_label": "billingpage()",
       "id": "pages_billingpage_billingpage"
     },
@@ -512,7 +512,7 @@
       "file_type": "code",
       "source_file": "src/pages/DashboardPage.jsx",
       "source_location": "L1",
-      "community": 2,
+      "community": 4,
       "norm_label": "dashboardpage.jsx",
       "id": "src_pages_dashboardpage_jsx"
     },
@@ -521,7 +521,7 @@
       "file_type": "code",
       "source_file": "src/pages/DashboardPage.jsx",
       "source_location": "L17",
-      "community": 2,
+      "community": 4,
       "norm_label": "statcard()",
       "id": "pages_dashboardpage_statcard"
     },
@@ -530,7 +530,7 @@
       "file_type": "code",
       "source_file": "src/pages/DashboardPage.jsx",
       "source_location": "L36",
-      "community": 2,
+      "community": 4,
       "norm_label": "dashboardpage()",
       "id": "pages_dashboardpage_dashboardpage"
     },
@@ -546,7 +546,7 @@
     {
       "label": "LAB_TEMPLATES",
       "file_type": "code",
-      "source_file": "src/pages/LaboratoryPage.jsx",
+      "source_file": "LaboratoryPage.jsx",
       "source_location": "L13",
       "community": 0,
       "norm_label": "lab_templates",
@@ -555,7 +555,7 @@
     {
       "label": "LAB_TESTS",
       "file_type": "code",
-      "source_file": "src/pages/LaboratoryPage.jsx",
+      "source_file": "LaboratoryPage.jsx",
       "source_location": "L107",
       "community": 0,
       "norm_label": "lab_tests",
@@ -564,7 +564,7 @@
     {
       "label": "AddLabModal()",
       "file_type": "code",
-      "source_file": "src/pages/LaboratoryPage.jsx",
+      "source_file": "LaboratoryPage.jsx",
       "source_location": "L109",
       "community": 0,
       "norm_label": "addlabmodal()",
@@ -573,7 +573,7 @@
     {
       "label": "LaboratoryPage()",
       "file_type": "code",
-      "source_file": "src/pages/LaboratoryPage.jsx",
+      "source_file": "LaboratoryPage.jsx",
       "source_location": "L238",
       "community": 0,
       "norm_label": "laboratorypage()",
@@ -609,7 +609,7 @@
     {
       "label": "DemographicsTab()",
       "file_type": "code",
-      "source_file": "pages/PatientDetailPage.jsx",
+      "source_file": "PatientDetailPage.jsx",
       "source_location": "L24",
       "community": 1,
       "norm_label": "demographicstab()",
@@ -618,7 +618,7 @@
     {
       "label": "VitalsTab()",
       "file_type": "code",
-      "source_file": "pages/PatientDetailPage.jsx",
+      "source_file": "PatientDetailPage.jsx",
       "source_location": "L122",
       "community": 1,
       "norm_label": "vitalstab()",
@@ -627,7 +627,7 @@
     {
       "label": "OrdersTab()",
       "file_type": "code",
-      "source_file": "pages/PatientDetailPage.jsx",
+      "source_file": "PatientDetailPage.jsx",
       "source_location": "L238",
       "community": 1,
       "norm_label": "orderstab()",
@@ -636,7 +636,7 @@
     {
       "label": "PrescriptionsTab()",
       "file_type": "code",
-      "source_file": "pages/PatientDetailPage.jsx",
+      "source_file": "PatientDetailPage.jsx",
       "source_location": "L322",
       "community": 1,
       "norm_label": "prescriptionstab()",
@@ -645,7 +645,7 @@
     {
       "label": "ExamTab()",
       "file_type": "code",
-      "source_file": "pages/PatientDetailPage.jsx",
+      "source_file": "PatientDetailPage.jsx",
       "source_location": "L545",
       "community": 1,
       "norm_label": "examtab()",
@@ -654,7 +654,7 @@
     {
       "label": "ImmunizationsTab()",
       "file_type": "code",
-      "source_file": "pages/PatientDetailPage.jsx",
+      "source_file": "PatientDetailPage.jsx",
       "source_location": "L636",
       "community": 1,
       "norm_label": "immunizationstab()",
@@ -663,7 +663,7 @@
     {
       "label": "DischargeTab()",
       "file_type": "code",
-      "source_file": "pages/PatientDetailPage.jsx",
+      "source_file": "PatientDetailPage.jsx",
       "source_location": "L718",
       "community": 1,
       "norm_label": "dischargetab()",
@@ -672,7 +672,7 @@
     {
       "label": "HistoryTab()",
       "file_type": "code",
-      "source_file": "pages/PatientDetailPage.jsx",
+      "source_file": "PatientDetailPage.jsx",
       "source_location": "L828",
       "community": 1,
       "norm_label": "historytab()",
@@ -681,7 +681,7 @@
     {
       "label": "LabsTab()",
       "file_type": "code",
-      "source_file": "pages/PatientDetailPage.jsx",
+      "source_file": "PatientDetailPage.jsx",
       "source_location": "L1019",
       "community": 1,
       "norm_label": "labstab()",
@@ -690,7 +690,7 @@
     {
       "label": "TABS",
       "file_type": "code",
-      "source_file": "pages/PatientDetailPage.jsx",
+      "source_file": "PatientDetailPage.jsx",
       "source_location": "L1154",
       "community": 1,
       "norm_label": "tabs",
@@ -699,7 +699,7 @@
     {
       "label": "PatientDetailPage()",
       "file_type": "code",
-      "source_file": "pages/PatientDetailPage.jsx",
+      "source_file": "PatientDetailPage.jsx",
       "source_location": "L1166",
       "community": 1,
       "norm_label": "patientdetailpage()",
@@ -710,7 +710,7 @@
       "file_type": "code",
       "source_file": "src/pages/PatientsPage.jsx",
       "source_location": "L1",
-      "community": 3,
+      "community": 4,
       "norm_label": "patientspage.jsx",
       "id": "src_pages_patientspage_jsx"
     },
@@ -719,7 +719,7 @@
       "file_type": "code",
       "source_file": "src/pages/PatientsPage.jsx",
       "source_location": "L15",
-      "community": 3,
+      "community": 4,
       "norm_label": "gender_options",
       "id": "pages_patientspage_gender_options"
     },
@@ -728,7 +728,7 @@
       "file_type": "code",
       "source_file": "src/pages/PatientsPage.jsx",
       "source_location": "L16",
-      "community": 3,
+      "community": 4,
       "norm_label": "blood_types",
       "id": "pages_patientspage_blood_types"
     },
@@ -737,7 +737,7 @@
       "file_type": "code",
       "source_file": "src/pages/PatientsPage.jsx",
       "source_location": "L18",
-      "community": 3,
+      "community": 4,
       "norm_label": "addpatientmodal()",
       "id": "pages_patientspage_addpatientmodal"
     },
@@ -746,7 +746,7 @@
       "file_type": "code",
       "source_file": "src/pages/PatientsPage.jsx",
       "source_location": "L127",
-      "community": 3,
+      "community": 4,
       "norm_label": "patientspage()",
       "id": "pages_patientspage_patientspage"
     },
@@ -755,7 +755,7 @@
       "file_type": "code",
       "source_file": "src/pages/PharmacyPage.jsx",
       "source_location": "L1",
-      "community": 4,
+      "community": 5,
       "norm_label": "pharmacypage.jsx",
       "id": "src_pages_pharmacypage_jsx"
     },
@@ -764,7 +764,7 @@
       "file_type": "code",
       "source_file": "src/pages/PharmacyPage.jsx",
       "source_location": "L14",
-      "community": 4,
+      "community": 5,
       "norm_label": "pharmacypage()",
       "id": "pages_pharmacypage_pharmacypage"
     },
@@ -827,52 +827,79 @@
       "file_type": "code",
       "source_file": "components/Icd10Autocomplete.jsx",
       "source_location": "L1",
-      "id": "components_icd10autocomplete_jsx",
       "community": 8,
-      "norm_label": "icd10autocomplete.jsx"
+      "norm_label": "icd10autocomplete.jsx",
+      "id": "components_icd10autocomplete_jsx"
     },
     {
       "label": "PageHeader.jsx",
       "file_type": "code",
       "source_file": "components/PageHeader.jsx",
       "source_location": "L1",
-      "id": "components_pageheader_jsx",
-      "community": 5,
-      "norm_label": "pageheader.jsx"
+      "community": 2,
+      "norm_label": "pageheader.jsx",
+      "id": "components_pageheader_jsx"
     },
     {
       "label": "PatientAutocomplete.jsx",
       "file_type": "code",
       "source_file": "components/PatientAutocomplete.jsx",
       "source_location": "L1",
-      "id": "components_patientautocomplete_jsx",
-      "community": 0,
-      "norm_label": "patientautocomplete.jsx"
+      "community": 2,
+      "norm_label": "patientautocomplete.jsx",
+      "id": "components_patientautocomplete_jsx"
     },
     {
       "label": "AppointmentsPage.jsx",
       "file_type": "code",
       "source_file": "pages/AppointmentsPage.jsx",
       "source_location": "L1",
-      "id": "pages_appointmentspage_jsx",
-      "community": 5,
-      "norm_label": "appointmentspage.jsx"
+      "community": 2,
+      "norm_label": "appointmentspage.jsx",
+      "id": "pages_appointmentspage_jsx"
     },
     {
       "label": "LoginPage.jsx",
       "file_type": "code",
       "source_file": "pages/LoginPage.jsx",
       "source_location": "L1",
-      "id": "pages_loginpage_jsx",
       "community": 0,
-      "norm_label": "loginpage.jsx"
+      "norm_label": "loginpage.jsx",
+      "id": "pages_loginpage_jsx"
     },
     {
       "label": "PatientDetailPage.jsx",
       "file_type": "code",
       "source_file": "pages/PatientDetailPage.jsx",
       "source_location": "L1",
-      "id": "pages_patientdetailpage_jsx",
+      "community": 1,
+      "norm_label": "patientdetailpage.jsx",
+      "id": "pages_patientdetailpage_jsx"
+    },
+    {
+      "label": "BillingPage.jsx",
+      "file_type": "code",
+      "source_file": "BillingPage.jsx",
+      "source_location": "L1",
+      "id": "billingpage_jsx",
+      "community": 3,
+      "norm_label": "billingpage.jsx"
+    },
+    {
+      "label": "LaboratoryPage.jsx",
+      "file_type": "code",
+      "source_file": "LaboratoryPage.jsx",
+      "source_location": "L1",
+      "id": "laboratorypage_jsx",
+      "community": 0,
+      "norm_label": "laboratorypage.jsx"
+    },
+    {
+      "label": "PatientDetailPage.jsx",
+      "file_type": "code",
+      "source_file": "PatientDetailPage.jsx",
+      "source_location": "L1",
+      "id": "patientdetailpage_jsx",
       "community": 1,
       "norm_label": "patientdetailpage.jsx"
     }
@@ -1670,9 +1697,9 @@
       "source_file": "components/Icd10Autocomplete.jsx",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_icd10autocomplete_icd10autocomplete",
-      "target": "components_icd10autocomplete_jsx",
-      "confidence_score": 1.0
+      "target": "components_icd10autocomplete_jsx"
     },
     {
       "relation": "imports_from",
@@ -1811,9 +1838,9 @@
       "source_file": "components/PageHeader.jsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_pageheader_pageheader",
-      "target": "components_pageheader_jsx",
-      "confidence_score": 1.0
+      "target": "components_pageheader_jsx"
     },
     {
       "relation": "contains",
@@ -1853,9 +1880,9 @@
       "source_file": "components/PatientAutocomplete.jsx",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_patientautocomplete_patientautocomplete",
-      "target": "components_patientautocomplete_jsx",
-      "confidence_score": 1.0
+      "target": "components_patientautocomplete_jsx"
     },
     {
       "relation": "imports_from",
@@ -2298,9 +2325,9 @@
       "source_file": "pages/AppointmentsPage.jsx",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_appointmentspage_status_options",
-      "target": "pages_appointmentspage_jsx",
-      "confidence_score": 1.0
+      "target": "pages_appointmentspage_jsx"
     },
     {
       "relation": "contains",
@@ -2308,9 +2335,9 @@
       "source_file": "pages/AppointmentsPage.jsx",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_appointmentspage_appt_types",
-      "target": "pages_appointmentspage_jsx",
-      "confidence_score": 1.0
+      "target": "pages_appointmentspage_jsx"
     },
     {
       "relation": "contains",
@@ -2318,9 +2345,9 @@
       "source_file": "pages/AppointmentsPage.jsx",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_appointmentspage_durations",
-      "target": "pages_appointmentspage_jsx",
-      "confidence_score": 1.0
+      "target": "pages_appointmentspage_jsx"
     },
     {
       "relation": "contains",
@@ -2328,9 +2355,9 @@
       "source_file": "pages/AppointmentsPage.jsx",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_appointmentspage_rooms",
-      "target": "pages_appointmentspage_jsx",
-      "confidence_score": 1.0
+      "target": "pages_appointmentspage_jsx"
     },
     {
       "relation": "contains",
@@ -2338,9 +2365,9 @@
       "source_file": "pages/AppointmentsPage.jsx",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_appointmentspage_waittimer",
-      "target": "pages_appointmentspage_jsx",
-      "confidence_score": 1.0
+      "target": "pages_appointmentspage_jsx"
     },
     {
       "relation": "calls",
@@ -2359,9 +2386,9 @@
       "source_file": "pages/AppointmentsPage.jsx",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_appointmentspage_addapptmodal",
-      "target": "pages_appointmentspage_jsx",
-      "confidence_score": 1.0
+      "target": "pages_appointmentspage_jsx"
     },
     {
       "relation": "calls",
@@ -2380,9 +2407,9 @@
       "source_file": "pages/AppointmentsPage.jsx",
       "source_location": "L144",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_appointmentspage_appointmentspage",
-      "target": "pages_appointmentspage_jsx",
-      "confidence_score": 1.0
+      "target": "pages_appointmentspage_jsx"
     },
     {
       "relation": "imports_from",
@@ -2447,6 +2474,26 @@
       "target": "pages_billingpage_billingpage"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "BillingPage.jsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "pages_billingpage_payment_methods",
+      "target": "billingpage_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "BillingPage.jsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "pages_billingpage_service_types",
+      "target": "billingpage_jsx",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -2456,6 +2503,26 @@
       "weight": 1.0,
       "source": "pages_billingpage_addbillingmodal",
       "target": "store_authstore_useauthstore"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "BillingPage.jsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "pages_billingpage_addbillingmodal",
+      "target": "billingpage_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "BillingPage.jsx",
+      "source_location": "L94",
+      "weight": 1.0,
+      "source": "pages_billingpage_billingpage",
+      "target": "billingpage_jsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -2573,6 +2640,26 @@
       "target": "pages_laboratorypage_laboratorypage"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "LaboratoryPage.jsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "pages_laboratorypage_lab_templates",
+      "target": "laboratorypage_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "LaboratoryPage.jsx",
+      "source_location": "L107",
+      "weight": 1.0,
+      "source": "pages_laboratorypage_lab_tests",
+      "target": "laboratorypage_jsx",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -2584,6 +2671,16 @@
       "target": "store_authstore_useauthstore"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "LaboratoryPage.jsx",
+      "source_location": "L109",
+      "weight": 1.0,
+      "source": "pages_laboratorypage_addlabmodal",
+      "target": "laboratorypage_jsx",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -2593,6 +2690,16 @@
       "weight": 1.0,
       "source": "pages_laboratorypage_laboratorypage",
       "target": "store_authstore_useauthstore"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "LaboratoryPage.jsx",
+      "source_location": "L238",
+      "weight": 1.0,
+      "source": "pages_laboratorypage_laboratorypage",
+      "target": "laboratorypage_jsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -2643,9 +2750,9 @@
       "source_file": "pages/LoginPage.jsx",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_loginpage_loginpage",
-      "target": "pages_loginpage_jsx",
-      "confidence_score": 1.0
+      "target": "pages_loginpage_jsx"
     },
     {
       "relation": "imports_from",
@@ -2785,8 +2892,18 @@
       "source_file": "pages/PatientDetailPage.jsx",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_patientdetailpage_demographicstab",
-      "target": "pages_patientdetailpage_jsx",
+      "target": "pages_patientdetailpage_jsx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PatientDetailPage.jsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "pages_patientdetailpage_demographicstab",
+      "target": "patientdetailpage_jsx",
       "confidence_score": 1.0
     },
     {
@@ -2806,8 +2923,18 @@
       "source_file": "pages/PatientDetailPage.jsx",
       "source_location": "L122",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_patientdetailpage_vitalstab",
-      "target": "pages_patientdetailpage_jsx",
+      "target": "pages_patientdetailpage_jsx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PatientDetailPage.jsx",
+      "source_location": "L122",
+      "weight": 1.0,
+      "source": "pages_patientdetailpage_vitalstab",
+      "target": "patientdetailpage_jsx",
       "confidence_score": 1.0
     },
     {
@@ -2827,8 +2954,18 @@
       "source_file": "pages/PatientDetailPage.jsx",
       "source_location": "L238",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_patientdetailpage_orderstab",
-      "target": "pages_patientdetailpage_jsx",
+      "target": "pages_patientdetailpage_jsx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PatientDetailPage.jsx",
+      "source_location": "L238",
+      "weight": 1.0,
+      "source": "pages_patientdetailpage_orderstab",
+      "target": "patientdetailpage_jsx",
       "confidence_score": 1.0
     },
     {
@@ -2848,8 +2985,18 @@
       "source_file": "pages/PatientDetailPage.jsx",
       "source_location": "L322",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_patientdetailpage_prescriptionstab",
-      "target": "pages_patientdetailpage_jsx",
+      "target": "pages_patientdetailpage_jsx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PatientDetailPage.jsx",
+      "source_location": "L322",
+      "weight": 1.0,
+      "source": "pages_patientdetailpage_prescriptionstab",
+      "target": "patientdetailpage_jsx",
       "confidence_score": 1.0
     },
     {
@@ -2869,8 +3016,18 @@
       "source_file": "pages/PatientDetailPage.jsx",
       "source_location": "L545",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_patientdetailpage_examtab",
-      "target": "pages_patientdetailpage_jsx",
+      "target": "pages_patientdetailpage_jsx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PatientDetailPage.jsx",
+      "source_location": "L545",
+      "weight": 1.0,
+      "source": "pages_patientdetailpage_examtab",
+      "target": "patientdetailpage_jsx",
       "confidence_score": 1.0
     },
     {
@@ -2890,8 +3047,18 @@
       "source_file": "pages/PatientDetailPage.jsx",
       "source_location": "L636",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_patientdetailpage_immunizationstab",
-      "target": "pages_patientdetailpage_jsx",
+      "target": "pages_patientdetailpage_jsx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PatientDetailPage.jsx",
+      "source_location": "L636",
+      "weight": 1.0,
+      "source": "pages_patientdetailpage_immunizationstab",
+      "target": "patientdetailpage_jsx",
       "confidence_score": 1.0
     },
     {
@@ -2911,8 +3078,18 @@
       "source_file": "pages/PatientDetailPage.jsx",
       "source_location": "L718",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_patientdetailpage_dischargetab",
-      "target": "pages_patientdetailpage_jsx",
+      "target": "pages_patientdetailpage_jsx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PatientDetailPage.jsx",
+      "source_location": "L718",
+      "weight": 1.0,
+      "source": "pages_patientdetailpage_dischargetab",
+      "target": "patientdetailpage_jsx",
       "confidence_score": 1.0
     },
     {
@@ -2921,8 +3098,18 @@
       "source_file": "pages/PatientDetailPage.jsx",
       "source_location": "L828",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_patientdetailpage_historytab",
-      "target": "pages_patientdetailpage_jsx",
+      "target": "pages_patientdetailpage_jsx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PatientDetailPage.jsx",
+      "source_location": "L828",
+      "weight": 1.0,
+      "source": "pages_patientdetailpage_historytab",
+      "target": "patientdetailpage_jsx",
       "confidence_score": 1.0
     },
     {
@@ -2931,8 +3118,18 @@
       "source_file": "pages/PatientDetailPage.jsx",
       "source_location": "L1019",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_patientdetailpage_labstab",
-      "target": "pages_patientdetailpage_jsx",
+      "target": "pages_patientdetailpage_jsx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PatientDetailPage.jsx",
+      "source_location": "L1019",
+      "weight": 1.0,
+      "source": "pages_patientdetailpage_labstab",
+      "target": "patientdetailpage_jsx",
       "confidence_score": 1.0
     },
     {
@@ -2941,8 +3138,18 @@
       "source_file": "pages/PatientDetailPage.jsx",
       "source_location": "L1154",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_patientdetailpage_tabs",
-      "target": "pages_patientdetailpage_jsx",
+      "target": "pages_patientdetailpage_jsx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PatientDetailPage.jsx",
+      "source_location": "L1154",
+      "weight": 1.0,
+      "source": "pages_patientdetailpage_tabs",
+      "target": "patientdetailpage_jsx",
       "confidence_score": 1.0
     },
     {
@@ -2962,8 +3169,18 @@
       "source_file": "pages/PatientDetailPage.jsx",
       "source_location": "L1166",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_patientdetailpage_patientdetailpage",
-      "target": "pages_patientdetailpage_jsx",
+      "target": "pages_patientdetailpage_jsx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "PatientDetailPage.jsx",
+      "source_location": "L1166",
+      "weight": 1.0,
+      "source": "pages_patientdetailpage_patientdetailpage",
+      "target": "patientdetailpage_jsx",
       "confidence_score": 1.0
     },
     {
@@ -3119,9 +3336,9 @@
       "source_file": "pages/PatientDetailPage.jsx",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_icd10autocomplete_jsx",
-      "target": "pages_patientdetailpage_jsx",
-      "confidence_score": 1.0
+      "target": "pages_patientdetailpage_jsx"
     },
     {
       "relation": "imports_from",
@@ -3130,9 +3347,9 @@
       "source_file": "pages/AppointmentsPage.jsx",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_pageheader_jsx",
-      "target": "pages_appointmentspage_jsx",
-      "confidence_score": 1.0
+      "target": "pages_appointmentspage_jsx"
     },
     {
       "relation": "imports_from",
@@ -3141,9 +3358,9 @@
       "source_file": "pages/PatientDetailPage.jsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_pageheader_jsx",
-      "target": "pages_patientdetailpage_jsx",
-      "confidence_score": 1.0
+      "target": "pages_patientdetailpage_jsx"
     },
     {
       "relation": "imports_from",
@@ -3152,11 +3369,11 @@
       "source_file": "pages/AppointmentsPage.jsx",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_patientautocomplete_jsx",
-      "target": "pages_appointmentspage_jsx",
-      "confidence_score": 1.0
+      "target": "pages_appointmentspage_jsx"
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "fb046e38e7e9a295b54c6a5878fe5876b9b8d31f"
+  "built_at_commit": "08a9f2435adf777a880a7746a2ad327a74225c1f"
 }

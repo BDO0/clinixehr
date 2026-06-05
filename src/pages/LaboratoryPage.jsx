@@ -197,18 +197,18 @@ function AddLabModal({ onClose }) {
                   <tbody>
                     {LAB_TEMPLATES[form.testName].map(m => (
                       <tr key={m.key}>
-                        <td style={{ fontWeight: 600 }}>{m.label}</td>
-                        <td style={{ padding: '4px 8px' }}>
+                        <td data-label="Metric" style={{ fontWeight: 600 }}>{m.label}</td>
+                        <td data-label="Result" style={{ padding: '4px 8px' }}>
                           <input 
                             className="input-field" 
-                            style={{ minHeight: '30px', padding: '4px 8px' }}
+                            style={{ minHeight: '30px', padding: '4px 8px', width: '100%' }}
                             value={form.panelData[m.key] || ''} 
                             onChange={(e) => handlePanelChange(m.key, e.target.value)} 
                             placeholder="—"
                           />
                         </td>
-                        <td style={{ color: 'var(--color-text-sub)', fontWeight: 600 }}>{m.unit}</td>
-                        <td style={{ color: 'var(--color-amber)', fontSize: '0.78rem', fontWeight: 700 }}>{m.ref}</td>
+                        <td data-label="Unit" style={{ color: 'var(--color-text-sub)', fontWeight: 600 }}>{m.unit}</td>
+                        <td data-label="Ref Range" style={{ color: 'var(--color-amber)', fontSize: '0.78rem', fontWeight: 700 }}>{m.ref}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -307,10 +307,10 @@ export default function LaboratoryPage() {
                       <tbody>
                         {LAB_TEMPLATES[r.testName]?.map(m => (
                           <tr key={m.key}>
-                            <td style={{ fontWeight: 600, width: '30%' }}>{m.label}</td>
-                            <td style={{ fontWeight: 800, color: 'var(--color-amber)' }}>{r.panelData[m.key] || '—'}</td>
-                            <td style={{ color: 'var(--color-text-sub)', fontWeight: 600 }}>{m.unit}</td>
-                            <td style={{ color: 'var(--color-amber)', fontSize: '0.78rem', fontWeight: 700 }}>{m.ref}</td>
+                            <td data-label="Metric" style={{ fontWeight: 600, width: '30%' }}>{m.label}</td>
+                            <td data-label="Result" style={{ fontWeight: 800, color: 'var(--color-amber)' }}>{r.panelData[m.key] || '—'}</td>
+                            <td data-label="Unit" style={{ color: 'var(--color-text-sub)', fontWeight: 600 }}>{m.unit}</td>
+                            <td data-label="Ref Range" style={{ color: 'var(--color-amber)', fontSize: '0.78rem', fontWeight: 700 }}>{m.ref}</td>
                           </tr>
                         ))}
                       </tbody>

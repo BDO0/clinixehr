@@ -1,10 +1,10 @@
 # Graph Report - .  (2026-06-05)
 
 ## Corpus Check
-- Corpus is ~20,182 words - fits in a single context window. You may not need a graph.
+- Corpus is ~20,231 words - fits in a single context window. You may not need a graph.
 
 ## Summary
-- 97 nodes · 215 edges · 11 communities (10 shown, 1 thin omitted)
+- 100 nodes · 234 edges · 11 communities (10 shown, 1 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
@@ -25,49 +25,49 @@
 3. `SkeletonList()` - 8 edges
 4. `useThemeStore` - 5 edges
 5. `auth` - 4 edges
-6. `App()` - 3 edges
-7. `PageHeader()` - 3 edges
-8. `checkDrugInteractions()` - 3 edges
-9. `AddApptModal()` - 3 edges
-10. `AppointmentsPage()` - 3 edges
+6. `VitalsTab()` - 4 edges
+7. `OrdersTab()` - 4 edges
+8. `PrescriptionsTab()` - 4 edges
+9. `ExamTab()` - 4 edges
+10. `ImmunizationsTab()` - 4 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `AddApptModal()` --calls--> `useAuthStore`  [EXTRACTED]
   pages/AppointmentsPage.jsx → src/store/authStore.js
 - `AppointmentsPage()` --calls--> `useAuthStore`  [EXTRACTED]
   pages/AppointmentsPage.jsx → src/store/authStore.js
-- `LoginPage()` --calls--> `useAuthStore`  [EXTRACTED]
-  pages/LoginPage.jsx → src/store/authStore.js
-- `BottomNav()` --calls--> `useAuthStore`  [EXTRACTED]
-  src/components/BottomNav.jsx → src/store/authStore.js
-- `PageHeader()` --calls--> `useThemeStore`  [EXTRACTED]
-  components/PageHeader.jsx → src/store/themeStore.js
+- `AddBillingModal()` --calls--> `useAuthStore`  [EXTRACTED]
+  BillingPage.jsx → src/store/authStore.js
+- `AddLabModal()` --calls--> `useAuthStore`  [EXTRACTED]
+  LaboratoryPage.jsx → src/store/authStore.js
+- `LaboratoryPage()` --calls--> `useAuthStore`  [EXTRACTED]
+  LaboratoryPage.jsx → src/store/authStore.js
 
 ## Communities (11 total, 1 thin omitted)
 
 ### Community 0 - "Patient Details UI & Auth State"
-Cohesion: 0.17
-Nodes (10): PatientAutocomplete(), AddLabModal(), LAB_TEMPLATES, LAB_TESTS, LaboratoryPage(), LoginPage(), app, auth (+2 more)
+Cohesion: 0.21
+Nodes (9): AddLabModal(), LAB_TEMPLATES, LAB_TESTS, LaboratoryPage(), LoginPage(), app, auth, db (+1 more)
 
 ### Community 1 - "Firebase Auth & Labs UI"
-Cohesion: 0.33
+Cohesion: 0.39
 Nodes (12): DemographicsTab(), DischargeTab(), ExamTab(), HistoryTab(), ImmunizationsTab(), LabsTab(), OrdersTab(), PatientDetailPage() (+4 more)
 
 ### Community 2 - "Dashboard & Billing UI"
-Cohesion: 0.21
-Nodes (6): SkeletonList(), SkeletonStat(), AddBillingModal(), PAYMENT_METHODS, SERVICE_TYPES, DashboardPage()
+Cohesion: 0.26
+Nodes (8): PatientAutocomplete(), AddApptModal(), AppointmentsPage(), APPT_TYPES, DURATIONS, ROOMS, STATUS_OPTIONS, WaitTimer()
 
 ### Community 3 - "Pharmacy & Drug Interactions"
-Cohesion: 0.2
-Nodes (6): BottomNav(), NAV_ALL, RouteGuard(), AddPatientModal(), BLOOD_TYPES, GENDER_OPTIONS
+Cohesion: 0.23
+Nodes (7): BottomNav(), NAV_ALL, RouteGuard(), AddBillingModal(), BillingPage(), PAYMENT_METHODS, SERVICE_TYPES
 
 ### Community 4 - "App Entry & Theme Layout"
-Cohesion: 0.22
-Nodes (6): SEVERITY_MAP, ALLERGY_CROSS_REFERENCE, checkDrugAllergies(), checkDrugInteractions(), DRUG_INTERACTIONS, PharmacyPage()
+Cohesion: 0.21
+Nodes (6): SkeletonList(), SkeletonStat(), DashboardPage(), AddPatientModal(), BLOOD_TYPES, GENDER_OPTIONS
 
 ### Community 5 - "Admin Account Setup Script"
-Cohesion: 0.33
-Nodes (7): AddApptModal(), AppointmentsPage(), APPT_TYPES, DURATIONS, ROOMS, STATUS_OPTIONS, WaitTimer()
+Cohesion: 0.22
+Nodes (6): SEVERITY_MAP, ALLERGY_CROSS_REFERENCE, checkDrugAllergies(), checkDrugInteractions(), DRUG_INTERACTIONS, PharmacyPage()
 
 ### Community 6 - "Appointments & Wait Timer"
 Cohesion: 0.36
@@ -78,7 +78,7 @@ Cohesion: 0.29
 Nodes (7): app, auth, createStaffAccount(), db, firebaseConfig, main(), STAFF_ACCOUNTS
 
 ## Knowledge Gaps
-- **17 isolated node(s):** `firebaseConfig`, `STAFF_ACCOUNTS`, `app`, `auth`, `db` (+12 more)
+- **13 isolated node(s):** `firebaseConfig`, `STAFF_ACCOUNTS`, `app`, `auth`, `db` (+8 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -86,10 +86,10 @@ Nodes (7): app, auth, createStaffAccount(), db, firebaseConfig, main(), STAFF_AC
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `useAuthStore` connect `Firebase Auth & Labs UI` to `Patient Details UI & Auth State`, `Dashboard & Billing UI`, `Pharmacy & Drug Interactions`, `App Entry & Theme Layout`, `Admin Account Setup Script`, `Appointments & Wait Timer`?**
-  _High betweenness centrality (0.250) - this node is a cross-community bridge._
+  _High betweenness centrality (0.269) - this node is a cross-community bridge._
 - **Why does `db` connect `Patient Details UI & Auth State` to `Firebase Auth & Labs UI`, `Dashboard & Billing UI`, `Pharmacy & Drug Interactions`, `App Entry & Theme Layout`, `Admin Account Setup Script`, `Appointments & Wait Timer`?**
-  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+  _High betweenness centrality (0.023) - this node is a cross-community bridge._
 - **Why does `LoginPage()` connect `Patient Details UI & Auth State` to `Firebase Auth & Labs UI`?**
-  _High betweenness centrality (0.019) - this node is a cross-community bridge._
+  _High betweenness centrality (0.018) - this node is a cross-community bridge._
 - **What connects `firebaseConfig`, `STAFF_ACCOUNTS`, `app` to the rest of the system?**
-  _17 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _13 weakly-connected nodes found - possible documentation gaps or missing edges._

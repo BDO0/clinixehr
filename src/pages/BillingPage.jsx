@@ -8,19 +8,21 @@ import { SkeletonList } from '../components/Skeleton';
 import toast from 'react-hot-toast';
 import { CreditCard, Plus, DollarSign } from 'lucide-react';
 import { format } from 'date-fns';
+import PatientAutocomplete from '../components/PatientAutocomplete';
 
 const PAYMENT_METHODS = ['Cash', 'PhilHealth', 'HMO', 'Credit Card', 'GCash', 'Maya', 'Bank Transfer'];
 const SERVICE_TYPES   = ['Consultation', 'Laboratory', 'Imaging', 'Procedure', 'Pharmacy', 'Room & Board', 'ER', 'Other'];
 
 function AddBillingModal({ onClose }) {
   const profile = useAuthStore((s) => s.profile);
-  const [form, setForm] = useState({ patientName: '', serviceType: '', description: '', amount: '', paymentMethod: 'Cash', status: 'unpaid' });
+  const [form, setForm] = useState({ patientName: '', patientId: '', serviceType: '', description: '', amount: '', paymentMethod: 'Cash', status: 'unpaid' });
   const [saving, setSaving] = useState(false);
   function set(k, v) { setForm(f => ({ ...f, [k]: v })); }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!form.patientName || !form.amount) { toast.error('Patient and amount required.'); return; }
+    if (!form.patientId) { toast.error('Please select an existing patient from the suggestions.'); return; }
+    if (!form.amount) { toast.error('Amount is required.'); return; }
     setSaving(true);
     try {
       await addDoc(collection(db, 'billing'), {
@@ -41,7 +43,17 @@ function AddBillingModal({ onClose }) {
         <div className="modal-handle" />
         <h2 style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '1.1rem', fontWeight: 700, margin: '0 0 1.25rem' }}>New Billing Record</h2>
         <form onSubmit={handleSubmit}>
-          <div className="form-group"><label className="input-label">Patient Name *</label><input className="input-field" value={form.patientName} onChange={(e) => set('patientName', e.target.value)} placeholder="Maria Santos" /></div>
+          <PatientAutocomplete 
+            value={form.patientName} 
+            onChange={(val) => {
+              set('patientName', val);
+              set('patientId', '');
+            }}
+            onSelect={(id, name) => {
+              set('patientId', id);
+              set('patientName', name);
+            }}
+          />
           <div className="form-row">
             <div className="form-group">
               <label className="input-label">Service Type</label>
