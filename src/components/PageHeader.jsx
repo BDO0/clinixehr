@@ -27,11 +27,11 @@ export default function PageHeader({
             <ChevronLeft size={20} />
           </button>
         )}
-        <div style={{ flex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
             <h1
               className="gradient-text font-display"
-              style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0 }}
+              style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
             >
               {title}
             </h1>

@@ -54,7 +54,7 @@ export default function Icd10Autocomplete({ value, onChange, onSelect }) {
   };
 
   return (
-    <div className="form-group" style={{ position: 'relative' }} ref={wrapperRef}>
+    <div className="form-group" style={{ position: 'relative', overflow: 'visible' }} ref={wrapperRef}>
       <label className="input-label">Assessment / Diagnosis (ICD-10) *</label>
       <div style={{ position: 'relative' }}>
         <input

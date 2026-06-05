@@ -41,7 +41,7 @@ function DemographicsTab({ patient, immunizations = [] }) {
           <h2 style={{ margin: 0, fontSize: '1.6rem', color: 'var(--color-text-main)', fontFamily: 'Montserrat, sans-serif', fontWeight: 800 }}>
             {patient.firstName} {patient.lastName}
           </h2>
-          <p style={{ margin: '4px 0 0', color: 'var(--color-amber)', fontSize: '0.95rem', fontWeight: 600 }}>
+          <p style={{ margin: '4px 0 0', color: 'var(--color-amber)', fontSize: '0.82rem', fontWeight: 600, wordBreak: 'break-all', overflowWrap: 'break-word' }}>
             Patient ID: {patient.id}
           </p>
         </div>
@@ -907,16 +907,16 @@ function HistoryTab({ patient }) {
             </table>
           </div>
         )}
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end' }}>
+        <div className="inline-add-row">
           <div style={{ flex: 2 }}><label className="input-label">Condition</label><input className="input-field" value={newPmh.condition} onChange={e => setNewPmh({...newPmh, condition: e.target.value})} placeholder="e.g. Hypertension" /></div>
           <div style={{ flex: 1 }}><label className="input-label">Year</label><input className="input-field" value={newPmh.year} onChange={e => setNewPmh({...newPmh, year: e.target.value})} placeholder="YYYY" /></div>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', height: '48px', paddingLeft: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', height: '48px', paddingLeft: '8px' }}>
             <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-main)' }}>
               <input type="checkbox" checked={newPmh.critical} onChange={e => setNewPmh({...newPmh, critical: e.target.checked})} style={{ width: '18px', height: '18px' }} />
               Mark Critical
             </label>
           </div>
-          <button className="btn-secondary" style={{ height: '48px' }} onClick={addPmh}>Add</button>
+          <button className="btn-secondary" onClick={addPmh}>Add</button>
         </div>
       </div>
 
@@ -941,11 +941,11 @@ function HistoryTab({ patient }) {
             </table>
           </div>
         )}
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end' }}>
+        <div className="inline-add-row">
           <div style={{ flex: 2 }}><label className="input-label">Procedure</label><input className="input-field" value={newSurg.procedure} onChange={e => setNewSurg({...newSurg, procedure: e.target.value})} placeholder="e.g. Appendectomy" /></div>
           <div style={{ flex: 1 }}><label className="input-label">Year</label><input className="input-field" value={newSurg.year} onChange={e => setNewSurg({...newSurg, year: e.target.value})} placeholder="YYYY" /></div>
           <div style={{ flex: 1.5 }}><label className="input-label">Location/Hospital</label><input className="input-field" value={newSurg.hospital} onChange={e => setNewSurg({...newSurg, hospital: e.target.value})} placeholder="City Gen" /></div>
-          <button className="btn-secondary" style={{ height: '48px' }} onClick={addSurg}>Add</button>
+          <button className="btn-secondary" onClick={addSurg}>Add</button>
         </div>
       </div>
 
@@ -969,10 +969,10 @@ function HistoryTab({ patient }) {
             </table>
           </div>
         )}
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end' }}>
+        <div className="inline-add-row">
           <div style={{ flex: 1 }}><label className="input-label">Relation</label><input className="input-field" value={newFam.relation} onChange={e => setNewFam({...newFam, relation: e.target.value})} placeholder="e.g. Father" /></div>
           <div style={{ flex: 2 }}><label className="input-label">Condition</label><input className="input-field" value={newFam.condition} onChange={e => setNewFam({...newFam, condition: e.target.value})} placeholder="e.g. Heart Disease" /></div>
-          <button className="btn-secondary" style={{ height: '48px' }} onClick={addFam}>Add</button>
+          <button className="btn-secondary" onClick={addFam}>Add</button>
         </div>
       </div>
 
@@ -996,7 +996,7 @@ function HistoryTab({ patient }) {
             </table>
           </div>
         )}
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end' }}>
+        <div className="inline-add-row">
           <div style={{ flex: 1 }}><label className="input-label">Factor</label>
             <select className="input-field" value={newSoc.factor} onChange={e => setNewSoc({...newSoc, factor: e.target.value})}>
               <option value="">Select...</option>
@@ -1008,7 +1008,7 @@ function HistoryTab({ patient }) {
             </select>
           </div>
           <div style={{ flex: 2 }}><label className="input-label">Details</label><input className="input-field" value={newSoc.details} onChange={e => setNewSoc({...newSoc, details: e.target.value})} placeholder="e.g. 1 pack/day for 10 yrs" /></div>
-          <button className="btn-secondary" style={{ height: '48px' }} onClick={addSoc}>Add</button>
+          <button className="btn-secondary" onClick={addSoc}>Add</button>
         </div>
       </div>
     </div>

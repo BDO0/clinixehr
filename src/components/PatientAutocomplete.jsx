@@ -80,7 +80,7 @@ export default function PatientAutocomplete({ value, onChange, onSelect }) {
   };
 
   return (
-    <div className="form-group" style={{ position: 'relative' }} ref={wrapperRef}>
+    <div className="form-group" style={{ position: 'relative', overflow: 'visible' }} ref={wrapperRef}>
       <label className="input-label">Patient Name *</label>
       <div style={{ position: 'relative' }}>
         <input

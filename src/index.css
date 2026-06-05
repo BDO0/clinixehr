@@ -293,7 +293,7 @@ textarea.input-field { resize: vertical; min-height: 96px; }
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.page-content { padding: 1rem 1rem 0; }
+.page-content { padding: 1rem 1rem 0; overflow-wrap: break-word; word-break: break-word; }
 
 /* ─── Section Headers ─── */
 .section-title {
@@ -427,6 +427,15 @@ body:has(input:focus, textarea:focus, select:focus) .page-root {
   color: var(--color-amber-dark);
   box-shadow: var(--shadow-sm);
 }
+/* On mobile, don't force tabs to share space — let them scroll */
+@media (max-width: 600px) {
+  .tab {
+    flex: 0 0 auto;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    min-width: max-content;
+  }
+}
 
 /* ─── Modal ─── */
 .modal-overlay {
@@ -448,6 +457,11 @@ body:has(input:focus, textarea:focus, select:focus) .page-root {
   overscroll-behavior: contain; /* Prevents background scrolling */
   box-shadow: 0 -12px 48px rgba(45, 26, 6, 0.2);
   animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+/* Allow autocomplete/dropdown to overflow within modal forms */
+.modal-sheet .form-group {
+  position: relative;
+  overflow: visible; /* Prevent overflow-y:auto from clipping absolute dropdowns */
 }
 .modal-handle {
   width: 40px; height: 4px;
@@ -500,6 +514,37 @@ body:has(input:focus, textarea:focus, select:focus) .page-root {
 .form-group { margin-bottom: 1rem; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
 @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+/* ─── Inline Add Row (History forms, etc.) ─── */
+/* Flex-wrap row that stacks on mobile so inputs remain usable */
+.inline-add-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+.inline-add-row > * {
+  min-width: 0; /* Prevent flex children from overflowing */
+}
+.inline-add-row .btn-secondary,
+.inline-add-row .btn-primary {
+  flex-shrink: 0;
+  height: 48px;
+}
+@media (max-width: 600px) {
+  .inline-add-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .inline-add-row > * {
+    flex: unset !important; /* Override inline flex values */
+    width: 100%;
+  }
+  .inline-add-row .btn-secondary,
+  .inline-add-row .btn-primary {
+    width: 100%;
+  }
+}
 
 /* ─── Responsive Grids & Tables ─── */
 .grid-2-mobile-1 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
