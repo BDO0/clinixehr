@@ -111,7 +111,7 @@ export default function PharmacyPage() {
                       </div>
                     )}
                     {rx.overrideRationale && (
-                      <div style={{ marginTop: 8, padding: '6px 10px', background: 'rgba(239, 68, 68, 0.05)', borderRadius: 6, fontSize: '0.75rem', border: '1px solid rgba(239, 68, 68, 0.1)' }}>
+                      <div style={{ marginTop: 8, padding: '6px 10px', background: 'var(--color-danger-bg)', borderRadius: 6, fontSize: '0.75rem', border: '1px solid rgba(239, 68, 68, 0.1)' }}>
                         <div style={{ color: 'var(--color-danger)', fontWeight: 700, fontSize: '0.6rem', textTransform: 'uppercase', marginBottom: 2, display: 'flex', alignItems: 'center', gap: 4 }}>
                           <ShieldAlert size={10} /> Clinical Justification for Override
                         </div>

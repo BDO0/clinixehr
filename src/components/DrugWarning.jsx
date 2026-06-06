@@ -13,7 +13,7 @@ const SEVERITY_MAP = {
 export default function DrugWarning({ interactions }) {
   if (!interactions || interactions.length === 0) {
     return (
-      <div className="alert alert-success" style={{ marginBottom: 12, display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(34, 197, 94, 0.05)', borderColor: 'rgba(34, 197, 94, 0.2)' }}>
+      <div className="alert alert-success" style={{ marginBottom: 12, display: 'flex', alignItems: 'center', gap: 10, background: 'var(--color-success-bg)', borderColor: 'var(--color-success-border)' }}>
         <CheckCircle2 size={18} color="var(--color-success)" />
         <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-success)' }}>
           Clinical Safety Verified: No interactions detected.
@@ -46,7 +46,7 @@ export default function DrugWarning({ interactions }) {
               )}
               
               {interaction.management && (
-                <div style={{ fontSize: '0.82rem', padding: '6px 10px', background: 'rgba(0,0,0,0.03)', borderRadius: 6, borderLeft: `3px solid ${color}` }}>
+                <div style={{ fontSize: '0.82rem', padding: '6px 10px', background: 'var(--color-surface)', borderRadius: 6, borderLeft: `3px solid ${color}` }}>
                   <strong style={{ fontSize: '0.7rem', textTransform: 'uppercase', display: 'block', marginBottom: 2 }}>Clinical Management:</strong>
                   {interaction.management}
                 </div>

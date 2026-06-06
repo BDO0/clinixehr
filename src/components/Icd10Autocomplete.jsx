@@ -79,13 +79,13 @@ export default function Icd10Autocomplete({ value, onChange, onSelect }) {
           left: 0,
           right: 0,
           zIndex: 100,
-          background: 'rgba(255, 250, 240, 0.95)',
+          background: 'var(--color-surface)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
           border: '1px solid var(--color-border)',
           borderRadius: 'var(--radius-sm)',
           marginTop: '6px',
-          boxShadow: '0 8px 32px rgba(90, 60, 11, 0.15)',
+          boxShadow: 'var(--shadow-lg)',
           maxHeight: '250px',
           overflowY: 'auto'
         }}>
@@ -95,7 +95,7 @@ export default function Icd10Autocomplete({ value, onChange, onSelect }) {
                 <li 
                   key={item.code}
                   className="autocomplete-item"
-                  style={{ borderBottom: '1px solid rgba(196, 139, 40, 0.05)', display: 'flex', gap: '8px', alignItems: 'flex-start' }}
+                  style={{ borderBottom: '1px solid var(--color-border)', display: 'flex', gap: '8px', alignItems: 'flex-start' }}
                   onClick={() => handleSelect(item)}
                 >
                   <div style={{ fontWeight: 800, color: 'var(--color-amber-dark)', fontSize: '0.85rem', minWidth: '50px' }}>

@@ -24,7 +24,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 function DemographicsTab({ patient, immunizations = [] }) {
   if (!patient) return null;
   return (
-    <div className="card" style={{ background: 'rgba(196, 139, 40, 0.04)', padding: '1.5rem', border: '1px solid rgba(235, 193, 118, 0.3)' }}>
+    <div className="card" style={{ background: 'var(--color-surface)', padding: '1.5rem', border: '1px solid rgba(235, 193, 118, 0.3)' }}>
       {/* Profile Header with Avatar */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '2rem' }}>
         <div style={{
@@ -95,7 +95,7 @@ function DemographicsTab({ patient, immunizations = [] }) {
           <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
             Immunization History
           </h3>
-          <div style={{ background: 'white', borderRadius: '12px', padding: '1rem', border: '1px solid rgba(196,139,40,0.1)' }}>
+          <div style={{ background: 'var(--color-white)', borderRadius: '12px', padding: '1rem', border: '1px solid rgba(196,139,40,0.1)' }}>
             {immunizations.length === 0 ? (
               <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>No immunizations recorded yet.</p>
             ) : (
@@ -462,7 +462,7 @@ function PrescriptionsTab({ patientId, patient }) {
 
           {/* Pending Safety Dashboard (Soft Stop) */}
           {pendingSafety && (
-            <div style={{ margin: '1rem 0', padding: '1rem', background: 'rgba(0,0,0,0.02)', borderRadius: 12, border: '1px dashed var(--color-border)' }}>
+            <div style={{ margin: '1rem 0', padding: '1rem', background: 'var(--color-surface)', borderRadius: 12, border: '1px dashed var(--color-border)' }}>
               <h4 style={{ fontSize: '0.7rem', textTransform: 'uppercase', color: 'var(--color-text-muted)', marginBottom: 8 }}>Safety Check Results</h4>
               {pendingSafety.allergy && (
                 <div className="alert alert-critical" style={{ marginBottom: 8, fontSize: '0.85rem', display: 'flex', gap: 8 }}>
@@ -475,11 +475,11 @@ function PrescriptionsTab({ patientId, patient }) {
 
           {/* Clinical Justification for Overrides */}
           {pendingSafety && (
-            <div className="form-group" style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(239, 68, 68, 0.05)', borderRadius: 8, border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+            <div className="form-group" style={{ marginTop: '1rem', padding: '1rem', background: 'var(--color-danger-bg)', borderRadius: 8, border: '1px solid rgba(239, 68, 68, 0.2)' }}>
               <label className="input-label" style={{ color: 'var(--color-danger)', fontWeight: 800 }}>Clinical Justification Required *</label>
               <textarea 
                 className="input-field" 
-                style={{ borderColor: 'var(--color-danger)', background: 'white' }}
+                style={{ borderColor: 'var(--color-danger)', background: 'var(--color-white)' }}
                 value={form.justification} 
                 onChange={(e) => setForm(f => ({...f, justification: e.target.value}))} 
                 placeholder="Reason for overriding interaction/allergy (e.g. Benefits outweigh risks, patient stable on this dose...)" 
@@ -511,7 +511,7 @@ function PrescriptionsTab({ patientId, patient }) {
               </div>
               
               {rx.overrideRationale && (
-                <div style={{ marginTop: 10, padding: '8px 12px', background: 'rgba(239, 68, 68, 0.05)', borderRadius: 6, fontSize: '0.8rem', border: '1px solid rgba(239, 68, 68, 0.1)' }}>
+                <div style={{ marginTop: 10, padding: '8px 12px', background: 'var(--color-danger-bg)', borderRadius: 6, fontSize: '0.8rem', border: '1px solid rgba(239, 68, 68, 0.1)' }}>
                   <div style={{ color: 'var(--color-danger)', fontWeight: 700, fontSize: '0.65rem', textTransform: 'uppercase', marginBottom: 2, display: 'flex', alignItems: 'center', gap: 4 }}>
                     <ShieldAlert size={10} /> Override Rationale
                   </div>
@@ -526,13 +526,13 @@ function PrescriptionsTab({ patientId, patient }) {
                 {rx.computedStatus}
               </span>
               {rx.computedStatus === 'active' && ['doctor', 'nurse'].includes(profile?.role) && (
-                <button onClick={() => handleDiscontinue(rx.id)} className="btn-ghost" style={{ fontSize: '0.7rem', padding: '4px 8px', color: 'var(--color-danger)', background: 'rgba(239, 68, 68, 0.05)', borderRadius: 6 }}>
+                <button onClick={() => handleDiscontinue(rx.id)} className="btn-ghost" style={{ fontSize: '0.7rem', padding: '4px 8px', color: 'var(--color-danger)', background: 'var(--color-danger-bg)', borderRadius: 6 }}>
                   Discontinue
                 </button>
               )}
             </div>
           </div>
-          <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', marginTop: 12, borderTop: '1px solid rgba(0,0,0,0.03)', paddingTop: 8 }}>
+          <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', marginTop: 12, borderTop: '1px solid var(--color-border)', paddingTop: 8 }}>
             Prescribed by Dr. {rx.prescribedBy} · {rx.prescribedAt?.toDate ? format(rx.prescribedAt.toDate(), 'MMM d, yyyy') : '—'}
           </div>
         </div>
@@ -809,7 +809,7 @@ function DischargeTab({ patientId }) {
           </div>
           {p.condition && <div style={{ fontSize: '0.82rem', marginBottom: 6 }}><strong>Condition:</strong> {p.condition}</div>}
           
-          <div style={{ display: 'grid', gap: '0.5rem', background: 'rgba(196,139,40,0.05)', padding: '0.5rem', borderRadius: 4, marginTop: 8 }}>
+          <div style={{ display: 'grid', gap: '0.5rem', background: 'var(--color-surface)', padding: '0.5rem', borderRadius: 4, marginTop: 8 }}>
             {p.medication && <div style={{ fontSize: '0.8rem' }}><strong style={{ color: 'var(--color-amber-dark)' }}>1. Medication:</strong> {p.medication}</div>}
             {p.exercise && <div style={{ fontSize: '0.8rem' }}><strong style={{ color: 'var(--color-amber-dark)' }}>2. Exercise:</strong> {p.exercise}</div>}
             {p.diet && <div style={{ fontSize: '0.8rem' }}><strong style={{ color: 'var(--color-amber-dark)' }}>3. Diet:</strong> {p.diet}</div>}

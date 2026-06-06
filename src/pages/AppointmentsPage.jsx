@@ -29,16 +29,40 @@ function WaitTimer({ arrivedAt }) {
     const int = setInterval(update, 60000);
     return () => clearInterval(int);
   }, [arrivedAt]);
-  return wait ? <span className="badge badge-warning" style={{ fontSize: '0.7rem', background: '#FDE68A', color: '#92400E' }}>⏱ {wait}</span> : null;
+  return wait ? <span className="badge badge-warning" style={{ fontSize: '0.7rem' }}>⏱ {wait}</span> : null;
 }
 
 function AddApptModal({ onClose }) {
   const profile = useAuthStore((s) => s.profile);
   const [form, setForm] = useState({ 
     patientName: '', patientId: '', scheduledAt: '', reason: '', doctor: '', status: 'pending',
-    type: 'Consultation', duration: 30, room: 'Room 1'
+    type: 'Consultation', duration: 30, room: 'Room 1', amount: ''
   });
+  const [doctors, setDoctors] = useState([]);
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    async function fetchDoctors() {
+      try {
+        const q = query(collection(db, 'staff'), where('role', '==', 'doctor'));
+        const snap = await getDocs(q);
+        setDoctors(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      } catch (e) {
+        console.warn('Failed to fetch doctors:', e);
+      }
+    }
+    fetchDoctors();
+  }, []);
+
+  // Pre-fill amount when type changes
+  useEffect(() => {
+    if (form.type) {
+      const apptPrices = { 'Consultation': 500, 'Follow-up': 350, 'Procedure': 1500, 'Vaccination': 300, 'Other': 400 };
+      const defaultAmount = apptPrices[form.type] || 400;
+      set('amount', defaultAmount.toString());
+    }
+  }, [form.type]);
+
   function set(k, v) { setForm(f => ({ ...f, [k]: v })); }
 
   async function handleSubmit(e) {
@@ -124,7 +148,21 @@ function AddApptModal({ onClose }) {
           </div>
 
           <div className="form-group"><label className="input-label">Reason / Chief Complaint</label><input className="input-field" value={form.reason} onChange={(e) => set('reason', e.target.value)} placeholder="Follow-up, Check-up…" /></div>
-          <div className="form-group"><label className="input-label">Attending Doctor</label><input className="input-field" value={form.doctor} onChange={(e) => set('doctor', e.target.value)} placeholder="Reyes" /></div>
+          <div className="form-group">
+            <label className="input-label">Attending Doctor</label>
+            <select className="input-field" value={form.doctor} onChange={(e) => set('doctor', e.target.value)}>
+              <option value="">Select doctor…</option>
+              {doctors.map(d => (
+                <option key={d.id} value={d.displayName || `${d.firstName || ''} ${d.lastName || ''}`.trim()}>
+                  Dr. {d.displayName || `${d.firstName || ''} ${d.lastName || ''}`.trim()}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label className="input-label">Amount (₱) *</label>
+            <input className="input-field" type="number" step="0.01" value={form.amount} onChange={(e) => set('amount', e.target.value)} placeholder="500.00" />
+          </div>
           <div className="form-group">
             <label className="input-label">Initial Status</label>
             <select className="input-field" value={form.status} onChange={(e) => set('status', e.target.value)}>
@@ -174,22 +212,66 @@ export default function AppointmentsPage() {
       toast.success(`Marked as ${status}`);
 
       if (status === 'completed' && appointment?.patientId) {
-        await addDoc(collection(db, 'patients', appointment.patientId, 'examinations'), {
-           chiefComplaint: appointment.reason || `Appointment: ${appointment.type}`,
-           hpi: `Automated note from completed appointment.\nType: ${appointment.type}\nDuration: ${appointment.duration} mins`,
-           pe: '', assessment: '', plan: '', intervention: '', evaluation: '',
-           examinedBy: appointment.doctor ? `Dr. ${appointment.doctor}` : profile?.displayName || 'System',
-           examinedAt: Timestamp.now()
-        });
-        toast.success("Draft examination note auto-generated.");
+        // Use the amount stored on the appointment, or fallback to defaults
+        const apptAmount = parseFloat(appointment.amount) || 
+          ({ 'Consultation': 500, 'Follow-up': 350, 'Procedure': 1500, 'Vaccination': 300, 'Other': 400 }[appointment.type] || 400);
+        let billingCreated = false;
+
+        // 1. Create billing record with the user-entered amount from scheduling
+        try {
+          await addDoc(collection(db, 'billing'), {
+            patientName: appointment.patientName,
+            patientId: appointment.patientId,
+            serviceType: 'Consultation',
+            description: `Appointment: ${appointment.type} — ${appointment.reason || appointment.type}`,
+            amount: apptAmount,
+            paymentMethod: 'Cash',
+            status: 'unpaid',
+            createdBy: profile?.uid,
+            createdByName: profile?.displayName || '',
+            createdAt: Timestamp.now(),
+            source: 'appointment',
+            sourceId: id,
+          });
+          billingCreated = true;
+        } catch (e) {
+          console.warn('Failed to create billing:', e);
+        }
+
+        // 2. Create exam note (only for clinical roles — staff will skip this)
+        let examCreated = false;
+        if (['admin', 'doctor', 'nurse'].includes(profile?.role)) {
+          try {
+            await addDoc(collection(db, 'patients', appointment.patientId, 'examinations'), {
+              chiefComplaint: appointment.reason || `Appointment: ${appointment.type}`,
+              hpi: `Automated note from completed appointment.\nType: ${appointment.type}\nDuration: ${appointment.duration} mins`,
+              pe: '', assessment: '', plan: '', intervention: '', evaluation: '',
+              examinedBy: appointment.doctor ? `Dr. ${appointment.doctor}` : profile?.displayName || 'System',
+              examinedAt: Timestamp.now()
+            });
+            examCreated = true;
+          } catch (e) {
+            console.warn('Failed to create exam note:', e);
+          }
+        }
+
+        if (billingCreated && examCreated) {
+          toast.success(`Exam note + ₱${apptAmount.toLocaleString()} billing entry created.`);
+        } else if (billingCreated) {
+          toast.success(`Appointment completed. ₱${apptAmount.toLocaleString()} billing entry created.`);
+        } else {
+          toast.success('Appointment marked as completed.');
+        }
       }
-    } catch { toast.error('Update failed.'); }
+    } catch {
+      toast.error('Failed to update appointment status.');
+    }
   }
 
   function getStatusBadge(status) {
     switch(status) {
       case 'confirmed': return <span className="badge badge-success">confirmed</span>;
-      case 'arrived': return <span className="badge badge-warning" style={{ background: '#F59E0B', color: 'white', border: 'none' }}>arrived</span>;
+      case 'arrived': return <span className="badge" style={{ background: 'var(--color-warning)', color: 'white', border: 'none' }}>arrived</span>;
       case 'completed': return <span className="badge badge-info">completed</span>;
       case 'cancelled': return <span className="badge badge-danger">cancelled</span>;
       default: return <span className="badge">pending</span>;
@@ -225,7 +307,7 @@ export default function AppointmentsPage() {
               return (
                 <div key={appt.id} className="card" style={{ padding: '0.9rem', borderLeft: appt.status === 'arrived' ? '4px solid #F59E0B' : 'none' }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                    <div style={{ textAlign: 'center', background: 'rgba(196,139,40,0.1)', borderRadius: 10, padding: '6px 10px', minWidth: 52 }}>
+                    <div style={{ textAlign: 'center', background: 'var(--color-surface)', borderRadius: 10, padding: '6px 10px', minWidth: 52 }}>
                       <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--color-amber)', lineHeight: 1 }}>{date ? format(date, 'd') : '—'}</div>
                       <div style={{ fontSize: '0.65rem', fontWeight: 600, color: 'var(--color-text-sub)', textTransform: 'uppercase' }}>{date ? format(date, 'MMM') : ''}</div>
                     </div>
@@ -258,7 +340,7 @@ export default function AppointmentsPage() {
                     <button className="btn-primary" style={{ width: '100%', marginTop: 10, padding: '0.5rem', fontSize: '0.85rem' }} onClick={() => changeStatus(appt.id, 'arrived', appt)}>Check-in (Arrived)</button>
                   )}
                   {appt.status === 'arrived' && (
-                    <button style={{ width: '100%', marginTop: 10, padding: '0.5rem', fontSize: '0.85rem', background: 'var(--color-success)', color: 'white', border: 'none', borderRadius: 'var(--radius-sm)', fontWeight: 600, cursor: 'pointer' }} onClick={() => changeStatus(appt.id, 'completed', appt)}>Mark Consult Completed</button>
+                    <button className="btn-primary" style={{ width: '100%', marginTop: 10, padding: '0.5rem', fontSize: '0.85rem', background: 'var(--color-success)' }} onClick={() => changeStatus(appt.id, 'completed', appt)}>Mark Consult Completed</button>
                   )}
                 </div>
               );

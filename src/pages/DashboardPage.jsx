@@ -175,12 +175,12 @@ export default function DashboardPage() {
           </div>
         ) : (
           <div className="grid-2-mobile-1" style={{ marginBottom: '1rem' }}>
-            <StatCard icon={Users}       label="Patients"    value={stats?.patients ?? 0}      color="#C48B28" bg="rgba(196,139,40,0.12)" />
-            <StatCard icon={Calendar}    label="Today's Appts" value={stats?.appointments ?? 0} color="#2563EB" bg="#EFF6FF" />
+            <StatCard icon={Users}       label="Patients"    value={stats?.patients ?? 0}      color="var(--color-amber)" bg="var(--color-amber-bg)" />
+            <StatCard icon={Calendar}    label="Today's Appts" value={stats?.appointments ?? 0} color="#2563EB" bg="var(--color-blue-bg)" />
             {['admin', 'doctor', 'nurse'].includes(profile?.role) && (
               <>
-                <StatCard icon={FlaskConical} label="Abnormal Labs" value={stats?.abnormalLabs ?? 0}  color="#DC2626" bg="#FEF2F2" sub="Needs review" />
-                <StatCard icon={Pill}        label="Active Meds"  value={stats?.activeMeds ?? 0}      color="#16A34A" bg="#F0FDF4" />
+                <StatCard icon={FlaskConical} label="Abnormal Labs" value={stats?.abnormalLabs ?? 0}  color="var(--color-danger)" bg="var(--color-danger-bg)" sub="Needs review" />
+                <StatCard icon={Pill}        label="Active Meds"  value={stats?.activeMeds ?? 0}      color="var(--color-success)" bg="var(--color-success-bg)" />
               </>
             )}
           </div>

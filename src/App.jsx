@@ -121,9 +121,9 @@ export default function App() {
           {/* Appointments: Admin, Doctor, Staff */}
           <Route path="/appointments" element={<RouteGuard roles={['admin', 'doctor', 'staff']}><AppointmentsPage /></RouteGuard>} />
 
-          {/* Billing/Finance: Admin, Staff */}
+          {/* Billing/Finance: Admin, Staff, Doctor, Nurse */}
           <Route path="/billing" element={
-            <RouteGuard roles={['admin', 'staff']}>
+            <RouteGuard roles={['admin', 'staff', 'doctor', 'nurse']}>
               <BillingPage />
             </RouteGuard>
           } />

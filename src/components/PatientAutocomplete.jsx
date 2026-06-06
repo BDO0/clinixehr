@@ -52,6 +52,10 @@ export default function PatientAutocomplete({ value, onChange, onSelect }) {
       setShowDropdown(true);
     } catch (e) {
       console.error('Failed to search patients:', e);
+      // Only show error if we haven't searched successfully before
+      setHasSearched(true);
+      setResults([]);
+      setShowDropdown(true); // Show dropdown to display error message
     } finally {
       setLoading(false);
     }
@@ -105,13 +109,13 @@ export default function PatientAutocomplete({ value, onChange, onSelect }) {
           left: 0,
           right: 0,
           zIndex: 100,
-          background: 'rgba(255, 250, 240, 0.95)', // Milky white (surface color)
+          background: 'var(--color-surface)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
           border: '1px solid var(--color-border)',
           borderRadius: 'var(--radius-sm)',
           marginTop: '6px',
-          boxShadow: '0 8px 32px rgba(90, 60, 11, 0.15)',
+          boxShadow: 'var(--shadow-md)',
           overflow: 'hidden'
         }}>
           {loading ? (
@@ -139,7 +143,7 @@ export default function PatientAutocomplete({ value, onChange, onSelect }) {
           ) : (
             <div style={{ padding: '1.2rem', textAlign: 'center' }}>
               <div style={{ color: 'var(--color-amber)', fontSize: '0.9rem', marginBottom: '8px' }}>
-                No patient found.
+                {loading ? 'Searching...' : 'No patient found.'}
               </div>
               <button 
                 type="button"

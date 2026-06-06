@@ -23,17 +23,33 @@ function AddBillingModal({ onClose }) {
     e.preventDefault();
     if (!form.patientId) { toast.error('Please select an existing patient from the suggestions.'); return; }
     if (!form.amount) { toast.error('Amount is required.'); return; }
+    if (!form.serviceType) { toast.error('Service type is required.'); return; }
     setSaving(true);
     try {
       await addDoc(collection(db, 'billing'), {
-        ...form,
+        patientName: form.patientName,
+        patientId: form.patientId,
+        serviceType: form.serviceType,
+        description: form.description || '',
         amount: parseFloat(form.amount),
+        paymentMethod: form.paymentMethod,
+        status: form.status,
         createdBy: profile?.uid,
+        createdByName: profile?.displayName || '',
         createdAt: Timestamp.now(),
       });
       toast.success('Billing record added!');
       onClose();
-    } catch { toast.error('Failed to add billing record.'); }
+    } catch (err) {
+      console.error('Billing add error:', err);
+      if (err.code === 'permission-denied') {
+        toast.error('Permission denied: You do not have permission to create billing records.');
+      } else if (err.code === 'unavailable') {
+        toast.error('Network error: Check your internet connection and try again.');
+      } else {
+        toast.error(`Failed to add billing record: ${err.message || 'Unknown error'}`);
+      }
+    }
     finally { setSaving(false); }
   }
 
@@ -110,8 +126,19 @@ export default function BillingPage() {
   const totalPaid = records.filter(r => r.status === 'paid').reduce((s, r) => s + (r.amount || 0), 0);
 
   async function markPaid(id) {
-    try { await updateDoc(doc(db, 'billing', id), { status: 'paid', paidAt: Timestamp.now() }); toast.success('Marked as paid!'); }
-    catch { toast.error('Update failed.'); }
+    try {
+      await updateDoc(doc(db, 'billing', id), { status: 'paid', paidAt: Timestamp.now() });
+      toast.success('Marked as paid!');
+    } catch (err) {
+      console.error('Mark paid error:', err);
+      if (err.code === 'permission-denied') {
+        toast.error('Permission denied: You do not have permission to update billing records.');
+      } else if (err.code === 'unavailable') {
+        toast.error('Network error: Check your internet connection.');
+      } else {
+        toast.error('Failed to mark as paid. Please try again.');
+      }
+    }
   }
 
   return (

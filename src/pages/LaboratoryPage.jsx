@@ -106,11 +106,28 @@ const LAB_TEMPLATES = {
 
 const LAB_TESTS = Object.keys(LAB_TEMPLATES);
 
+// Default prices per lab test type — configurable
+const LAB_PRICES = {
+  'CBC': 350, 'BMP': 500, 'CMP': 800, 'Lipid Panel': 600,
+  'Urinalysis': 200, 'HbA1c': 400, 'TSH': 450, 'PT/INR': 300,
+  'ABG': 700, 'LFT': 550, 'Creatinine': 250, 'BUN': 250,
+  'Troponin': 900, 'CRP': 350, 'ESR': 300, 'Culture & Sensitivity': 500
+};
+const DEFAULT_LAB_PRICE = 500;
+
 function AddLabModal({ onClose }) {
   const profile = useAuthStore((s) => s.profile);
-  const [form, setForm] = useState({ patientName: '', patientId: '', testName: '', result: '', unit: '', referenceRange: '', status: 'normal', notes: '', panelData: {} });
+  const [form, setForm] = useState({ patientName: '', patientId: '', testName: '', result: '', unit: '', referenceRange: '', status: 'normal', notes: '', panelData: {}, amount: '' });
   const [saving, setSaving] = useState(false);
   function set(k, v) { setForm(f => ({ ...f, [k]: v })); }
+
+  // Pre-fill amount when testName changes
+  useEffect(() => {
+    if (form.testName) {
+      const defaultAmount = LAB_PRICES[form.testName] || DEFAULT_LAB_PRICE;
+      set('amount', defaultAmount.toString());
+    }
+  }, [form.testName]);
 
   function handlePanelChange(key, val) {
     setForm(f => ({ ...f, panelData: { ...f.panelData, [key]: val } }));
@@ -134,16 +151,47 @@ function AddLabModal({ onClose }) {
       }
     }
 
+    const amount = parseFloat(form.amount);
+    if (!amount || amount <= 0) { toast.error('Enter a valid amount.'); return; }
+
     setSaving(true);
     try {
-      await addDoc(collection(db, 'labResults'), {
-        ...form,
+      const labRef = await addDoc(collection(db, 'labResults'), {
+        patientName: form.patientName,
+        patientId: form.patientId,
+        testName: form.testName,
+        result: form.result,
+        unit: form.unit,
+        referenceRange: form.referenceRange,
+        status: form.status,
+        notes: form.notes,
+        panelData: form.panelData,
         orderedBy: profile?.displayName || 'Staff',
         resultedAt: Timestamp.now(),
       });
-      toast.success('Lab result saved!');
+      
+      // Auto-create billing record with user-entered amount
+      await addDoc(collection(db, 'billing'), {
+        patientName: form.patientName,
+        patientId: form.patientId,
+        serviceType: 'Laboratory',
+        description: `Lab: ${form.testName}`,
+        amount: amount,
+        paymentMethod: 'Cash',
+        status: 'unpaid',
+        createdBy: profile?.uid,
+        createdByName: profile?.displayName || '',
+        createdAt: Timestamp.now(),
+        source: 'lab',
+        sourceId: labRef.id,
+      });
+      
+      toast.success(`Lab result saved! ₱${amount.toLocaleString()} billing entry created.`);
       onClose();
-    } catch { toast.error('Failed to save lab result.'); }
+    } catch (err) {
+      console.error('Failed to save lab result:', err);
+      toast.error('Failed to save lab result.');
+    }
     finally { setSaving(false); }
   }
 
@@ -224,6 +272,10 @@ function AddLabModal({ onClose }) {
               <div className="form-group"><label className="input-label">Reference Range</label><input className="input-field" value={form.referenceRange} onChange={(e) => set('referenceRange', e.target.value)} placeholder="4.0 - 10.0" /></div>
             </>
           )}
+          <div className="form-group">
+            <label className="input-label">Amount (₱) *</label>
+            <input className="input-field" type="number" step="0.01" value={form.amount} onChange={(e) => set('amount', e.target.value)} placeholder="500.00" />
+          </div>
           <div className="form-group"><label className="input-label">Notes</label><textarea className="input-field" value={form.notes} onChange={(e) => set('notes', e.target.value)} placeholder="Clinical notes…" /></div>
           <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
             <button type="button" className="btn-secondary" style={{ flex: 1 }} onClick={onClose}>Cancel</button>
