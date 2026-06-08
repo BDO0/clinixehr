@@ -8,6 +8,13 @@ import { useAuthStore } from './store/authStore';
 import { useThemeStore } from './store/themeStore';
 
 import RouteGuard        from './components/RouteGuard';
+import FEATURES          from './config/features';
+import PublicLayout      from './components/PublicLayout';
+import PublicHomePage    from './pages/PublicHomePage';
+import PublicServicesPage from './pages/PublicServicesPage';
+import PublicDoctorsPage  from './pages/PublicDoctorsPage';
+import PublicBookAppointmentPage from './pages/PublicBookAppointmentPage';
+import PublicTeleconsultPage from './pages/PublicTeleconsultPage';
 import LoginPage         from './pages/LoginPage';
 import DashboardPage     from './pages/DashboardPage';
 import PatientsPage      from './pages/PatientsPage';
@@ -104,6 +111,17 @@ export default function App() {
         transitionState === 'fading-dark-out' ? 'blur-out' : ''
       }`}>
         <Routes>
+          {/* ─── Public Website Routes ─── */}
+          {FEATURES.ENABLE_PUBLIC_SITE && (
+            <Route element={<PublicLayout />}>
+              <Route path="/" element={<PublicHomePage />} />
+              <Route path="/services" element={<PublicServicesPage />} />
+              <Route path="/doctors" element={<PublicDoctorsPage />} />
+              <Route path="/book-appointment" element={<PublicBookAppointmentPage />} />
+              <Route path="/teleconsult" element={<PublicTeleconsultPage />} />
+            </Route>
+          )}
+
           {/* Public */}
           <Route path="/login" element={<LoginPage />} />
 
@@ -132,8 +150,10 @@ export default function App() {
           {/* Admin: Admin-only route */}
           <Route path="/admin" element={<RouteGuard roles={['admin']}><AdminDashboardPage /></RouteGuard>} />
 
-          {/* Catch-all */}
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          {/* Catch-all - redirect to public home or dashboard */}
+          <Route path="*" element={
+            FEATURES.ENABLE_PUBLIC_SITE ? <Navigate to="/" replace /> : <Navigate to="/dashboard" replace />
+          } />
         </Routes>
       </div>
     </BrowserRouter>
