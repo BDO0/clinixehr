@@ -14,105 +14,129 @@ import toast from 'react-hot-toast';
 import {
   Activity, Stethoscope, ClipboardList, Pill,
   FlaskConical, FileText, Plus, Thermometer, User,
-  AlertTriangle, Trash2, History, Syringe, ShieldAlert, AlertCircle
+  AlertTriangle, Trash2, History, Syringe, ShieldAlert, AlertCircle,
+  Clock
 } from 'lucide-react';
 import Icd10Autocomplete from '../components/Icd10Autocomplete';
 import { format } from 'date-fns';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
+// Enhanced Components
+import ClinicalTimeline from '../components/ClinicalTimeline';
+import ClinicalInsights from '../components/ClinicalInsights';
+import PatientSummaryCard from '../components/PatientSummaryCard';
+import SmartAlertsHeader from '../components/SmartAlertsHeader';
+import PrintButton from '../components/PrintButton';
+import QrPatientBadge from '../components/QrPatientBadge';
+import MedicationTimeline from '../components/MedicationTimeline';
+
 // ─── Demographics Tab ─────────────────────────────────
-function DemographicsTab({ patient, immunizations = [] }) {
+function DemographicsTab({ patient, immunizations = [], vitals, labs, appointments, prescriptions }) {
   if (!patient) return null;
   return (
-    <div className="card" style={{ background: 'var(--color-surface)', padding: '1.5rem', border: '1px solid rgba(235, 193, 118, 0.3)' }}>
-      {/* Profile Header with Avatar */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '2rem' }}>
-        <div style={{
-          width: 84, height: 84, borderRadius: '24px',
-          background: 'linear-gradient(135deg, #FBBF24, #C48B28)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: 'white', fontSize: '2.5rem', fontWeight: 800,
-          boxShadow: '0 8px 24px rgba(196,139,40,0.3)',
-          flexShrink: 0
-        }}>
-          {patient.firstName?.charAt(0)}{patient.lastName?.charAt(0)}
-        </div>
-        <div>
-          <h2 style={{ margin: 0, fontSize: '1.6rem', color: 'var(--color-text-main)', fontFamily: 'Montserrat, sans-serif', fontWeight: 800 }}>
-            {patient.firstName} {patient.lastName}
-          </h2>
-          <p style={{ margin: '4px 0 0', color: 'var(--color-amber)', fontSize: '0.82rem', fontWeight: 600, wordBreak: 'break-all', overflowWrap: 'break-word' }}>
-            Patient ID: {patient.id}
-          </p>
-        </div>
-      </div>
+    <div>
+      {/* Patient Summary Card */}
+      <PatientSummaryCard
+        patient={patient}
+        vitals={vitals}
+        labs={labs}
+        appointments={appointments}
+        prescriptions={prescriptions}
+      />
 
-      <div style={{ display: 'grid', gap: '1.75rem' }}>
-        {/* Primary Data */}
-        <section>
-          <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
-            Primary Information
-          </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
-            <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Age / DOB</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.age ? `${patient.age} yrs` : '—'} {patient.dateOfBirth ? `(${patient.dateOfBirth})` : ''}</div></div>
-            <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Gender</label><div style={{ fontWeight: 600, fontSize: '0.95rem', textTransform: 'capitalize' }}>{patient.gender || '—'}</div></div>
+      <div className="card" style={{ background: 'var(--color-surface)', padding: '1.5rem', border: '1px solid rgba(235, 193, 118, 0.3)' }}>
+        {/* Profile Header with Avatar */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '2rem' }}>
+          <div style={{
+            width: 84, height: 84, borderRadius: '24px',
+            background: 'linear-gradient(135deg, #FBBF24, #C48B28)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: 'white', fontSize: '2.5rem', fontWeight: 800,
+            boxShadow: '0 8px 24px rgba(196,139,40,0.3)',
+            flexShrink: 0
+          }}>
+            {patient.firstName?.charAt(0)}{patient.lastName?.charAt(0)}
           </div>
-        </section>
-
-        {/* Contact Data */}
-        <section>
-          <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
-            Contact Information
-          </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
-            <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Phone</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.phone || '—'}</div></div>
-            <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Emergency Contact</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.emergencyContact || '—'}</div></div>
-            <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Emergency Phone</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.emergencyPhone || '—'}</div></div>
-          </div>
-        </section>
-
-        {/* Metadata */}
-        <section>
-          <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
-            Clinical Metadata
-          </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
-            <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Blood Type</label><div style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--color-danger)' }}>{patient.bloodType || '—'}</div></div>
-            <div>
-              <label className="input-label" style={{ fontSize: '0.7rem' }}>Allergies</label>
-              <div>
-                {patient.allergies?.length > 0 ? (
-                  patient.allergies.map(a => <span key={a} className="badge badge-danger" style={{ marginRight: 4, padding: '4px 8px' }}>{a}</span>)
-                ) : <span style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--color-success)' }}>None recorded</span>}
-              </div>
+          <div>
+            <h2 style={{ margin: 0, fontSize: '1.6rem', color: 'var(--color-text-main)', fontFamily: 'Montserrat, sans-serif', fontWeight: 800 }}>
+              {patient.firstName} {patient.lastName}
+            </h2>
+            <p style={{ margin: '4px 0 0', color: 'var(--color-amber)', fontSize: '0.82rem', fontWeight: 600, wordBreak: 'break-all', overflowWrap: 'break-word' }}>
+              Patient ID: {patient.id}
+            </p>
+            <div style={{ marginTop: 8 }}>
+              <QrPatientBadge patientId={patient.id} />
             </div>
-            <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Last Visit</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.lastVisit ? new Date(patient.lastVisit).toLocaleDateString() : 'N/A'}</div></div>
           </div>
-        </section>
+        </div>
 
-        {/* Immunizations Summary */}
-        <section>
-          <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
-            Immunization History
-          </h3>
-          <div style={{ background: 'var(--color-white)', borderRadius: '12px', padding: '1rem', border: '1px solid rgba(196,139,40,0.1)' }}>
-            {immunizations.length === 0 ? (
-              <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>No immunizations recorded yet.</p>
-            ) : (
-              <div style={{ display: 'grid', gap: '0.75rem' }}>
-                {immunizations.map(v => (
-                  <div key={v.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.85rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <Syringe size={14} color="var(--color-amber)" />
-                      <span style={{ fontWeight: 600 }}>{v.vaccineName}</span>
-                    </div>
-                    <div style={{ color: 'var(--color-text-sub)' }}>{v.dateAdministered}</div>
-                  </div>
-                ))}
+        <div style={{ display: 'grid', gap: '1.75rem' }}>
+          {/* Primary Data */}
+          <section>
+            <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
+              Primary Information
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
+              <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Age / DOB</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.age ? `${patient.age} yrs` : '—'} {patient.dateOfBirth ? `(${patient.dateOfBirth})` : ''}</div></div>
+              <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Gender</label><div style={{ fontWeight: 600, fontSize: '0.95rem', textTransform: 'capitalize' }}>{patient.gender || '—'}</div></div>
+            </div>
+          </section>
+
+          {/* Contact Data */}
+          <section>
+            <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
+              Contact Information
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
+              <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Phone</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.phone || '—'}</div></div>
+              <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Emergency Contact</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.emergencyContact || '—'}</div></div>
+              <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Emergency Phone</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.emergencyPhone || '—'}</div></div>
+            </div>
+          </section>
+
+          {/* Metadata */}
+          <section>
+            <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
+              Clinical Metadata
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
+              <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Blood Type</label><div style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--color-danger)' }}>{patient.bloodType || '—'}</div></div>
+              <div>
+                <label className="input-label" style={{ fontSize: '0.7rem' }}>Allergies</label>
+                <div>
+                  {patient.allergies?.length > 0 ? (
+                    patient.allergies.map(a => <span key={a} className="badge badge-danger" style={{ marginRight: 4, padding: '4px 8px' }}>{a}</span>)
+                  ) : <span style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--color-success)' }}>None recorded</span>}
+                </div>
               </div>
-            )}
-          </div>
-        </section>
+              <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Last Visit</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.lastVisit ? new Date(patient.lastVisit).toLocaleDateString() : 'N/A'}</div></div>
+            </div>
+          </section>
+
+          {/* Immunizations Summary */}
+          <section>
+            <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
+              Immunization History
+            </h3>
+            <div style={{ background: 'var(--color-white)', borderRadius: '12px', padding: '1rem', border: '1px solid rgba(196,139,40,0.1)' }}>
+              {immunizations.length === 0 ? (
+                <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>No immunizations recorded yet.</p>
+              ) : (
+                <div style={{ display: 'grid', gap: '0.75rem' }}>
+                  {immunizations.map(v => (
+                    <div key={v.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.85rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <Syringe size={14} color="var(--color-amber)" />
+                        <span style={{ fontWeight: 600 }}>{v.vaccineName}</span>
+                      </div>
+                      <div style={{ color: 'var(--color-text-sub)' }}>{v.dateAdministered}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   );
@@ -499,6 +523,14 @@ function PrescriptionsTab({ patientId, patient }) {
         </form>
       )}
 
+      {/* Medication Timeline Visualization */}
+      <div style={{ marginTop: '1.5rem', marginBottom: '1rem' }}>
+        <h4 style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--color-text-muted)', marginBottom: 8, letterSpacing: '0.05em' }}>
+          Medication History
+        </h4>
+        <MedicationTimeline prescriptions={rxList} />
+      </div>
+
       {loading ? <SkeletonList count={3} /> : rxList.length === 0 ? (
         <div className="empty-state"><Pill size={36} /><p>No prescriptions yet.</p></div>
       ) : rxList.map((rx) => (
@@ -531,6 +563,9 @@ function PrescriptionsTab({ patientId, patient }) {
                 </button>
               )}
             </div>
+          </div>
+          <div style={{ marginTop: 10, display: 'flex', justifyContent: 'flex-end' }}>
+            <PrintButton type="prescription" patient={patient} data={rx} onPrint="print" />
           </div>
           <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', marginTop: 12, borderTop: '1px solid var(--color-border)', paddingTop: 8 }}>
             Prescribed by Dr. {rx.prescribedBy} · {rx.prescribedAt?.toDate ? format(rx.prescribedAt.toDate(), 'MMM d, yyyy') : '—'}
@@ -715,7 +750,7 @@ function ImmunizationsTab({ patientId }) {
 }
 
 // ─── Discharge Tab ────────────────────────────────────
-function DischargeTab({ patientId }) {
+function DischargeTab({ patientId, patient }) {
   const profile = useAuthStore((s) => s.profile);
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -817,6 +852,9 @@ function DischargeTab({ patientId }) {
             {p.nextVisit && <div style={{ fontSize: '0.8rem' }}><strong style={{ color: 'var(--color-amber-dark)' }}>5. Next Visit:</strong> {p.nextVisit}</div>}
           </div>
 
+          <div style={{ marginTop: 8, display: 'flex', justifyContent: 'flex-end' }}>
+            <PrintButton type="discharge" patient={patient} data={p} onPrint="print" />
+          </div>
           <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', marginTop: 6 }}>By {p.createdBy}</div>
         </div>
       ))}
@@ -1016,7 +1054,7 @@ function HistoryTab({ patient }) {
 }
 
 // ─── Labs Tab ─────────────────────────────────────────
-function LabsTab({ patientId }) {
+function LabsTab({ patientId, patient }) {
   const [labs, setLabs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedMetric, setSelectedMetric] = useState('');
@@ -1141,6 +1179,9 @@ function LabsTab({ patientId }) {
               <strong>Result:</strong> {lab.result} {lab.unit} <span style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem' }}>(Ref: {lab.referenceRange})</span>
             </div>
           )}
+          <div style={{ marginTop: 8, display: 'flex', justifyContent: 'flex-end' }}>
+            <PrintButton type="lab" patient={patient} data={lab} onPrint="print" />
+          </div>
           <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', marginTop: 8 }}>
             {lab.resultedAt?.toDate ? format(lab.resultedAt.toDate(), 'MMM d, yyyy h:mm a') : '—'} · By {lab.orderedBy}
           </div>
@@ -1153,6 +1194,7 @@ function LabsTab({ patientId }) {
 // ─── Main Page ────────────────────────────────────────
 const TABS = [
   { key: 'overview',  label: 'Overview',  icon: User,          roles: ['admin', 'doctor', 'nurse', 'staff'] },
+  { key: 'timeline',  label: 'Timeline',  icon: Clock,         roles: ['admin', 'doctor', 'nurse', 'staff'] },
   { key: 'history',   label: 'History',   icon: History,       roles: ['admin', 'doctor', 'nurse'] },
   { key: 'vitals',    label: 'Vitals',    icon: Activity,      roles: ['admin', 'doctor', 'nurse'] },
   { key: 'labs',      label: 'Labs',      icon: FlaskConical,  roles: ['admin', 'doctor', 'nurse'] },
@@ -1170,6 +1212,16 @@ export default function PatientDetailPage() {
   const [patient, setPatient] = useState(null);
   const [immunizations, setImmunizations] = useState([]);
   
+  // Additional data sources for timeline + summary
+  const [vitals, setVitals] = useState([]);
+  const [labs, setLabs] = useState([]);
+  const [exams, setExams] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [prescriptions, setPrescriptions] = useState([]);
+  const [appointments, setAppointments] = useState([]);
+  const [dischargePlans, setDischargePlans] = useState([]);
+  const [allLoading, setAllLoading] = useState(true);
+
   // Default tab handling
   const role = profile?.role || 'staff';
   const allowedTabs = TABS.filter(t => t.roles.includes(role));
@@ -1183,10 +1235,66 @@ export default function PatientDetailPage() {
   }, [id]);
 
   useEffect(() => {
-    const q = query(collection(db, 'patients', id, 'immunizations'), orderBy('dateAdministered', 'desc'));
-    return onSnapshot(q, (snap) => {
+    const imQ = query(collection(db, 'patients', id, 'immunizations'), orderBy('dateAdministered', 'desc'));
+    return onSnapshot(imQ, (snap) => {
       setImmunizations(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     });
+  }, [id]);
+
+  // Collect all data sources for timeline + insights + summary
+  useEffect(() => {
+    const unsubs = [];
+
+    // Vitals
+    const vQ = query(collection(db, 'patients', id, 'vitals'), orderBy('recordedAt', 'desc'));
+    unsubs.push(onSnapshot(vQ, (snap) => setVitals(snap.docs.map(d => ({ id: d.id, ...d.data() })))));
+
+    // Labs
+    const lQ = query(collection(db, 'labResults'), where('patientId', '==', id));
+    unsubs.push(onSnapshot(lQ, (snap) => setLabs(snap.docs.map(d => ({ id: d.id, ...d.data() })))));
+
+    // Exams
+    const eQ = query(collection(db, 'patients', id, 'examinations'), orderBy('examinedAt', 'desc'));
+    unsubs.push(onSnapshot(eQ, (snap) => setExams(snap.docs.map(d => ({ id: d.id, ...d.data() })))));
+
+    // Orders
+    const oQ = query(collection(db, 'patients', id, 'orders'), orderBy('createdAt', 'desc'));
+    unsubs.push(onSnapshot(oQ, (snap) => setOrders(snap.docs.map(d => ({ id: d.id, ...d.data() })))));
+
+    // Prescriptions
+    const pQ = query(collection(db, 'patients', id, 'prescriptions'), orderBy('prescribedAt', 'desc'));
+    unsubs.push(onSnapshot(pQ, (snap) => {
+      const list = snap.docs.map(d => {
+        const data = d.data();
+        let isExpired = false;
+        if (data.status === 'active' && data.duration && data.prescribedAt) {
+          const prescribedTime = data.prescribedAt.toMillis();
+          const durationMs = parseInt(data.duration) * 86400000;
+          if (Date.now() > prescribedTime + durationMs) isExpired = true;
+        }
+        return { id: d.id, ...data, isExpired, computedStatus: data.status === 'discontinued' ? 'discontinued' : isExpired ? 'completed' : data.status };
+      });
+      setPrescriptions(list);
+    }));
+
+    // Appointments (by patientId would require collectionGroup, use all + filter)
+    const aQ = query(collection(db, 'appointments'));
+    unsubs.push(onSnapshot(aQ, (snap) => {
+      const all = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      setAppointments(all.filter(a => a.patientId === id));
+    }));
+
+    // Discharge plans
+    const dQ = query(collection(db, 'patients', id, 'dischargePlans'), orderBy('createdAt', 'desc'));
+    unsubs.push(onSnapshot(dQ, (snap) => setDischargePlans(snap.docs.map(d => ({ id: d.id, ...d.data() })))));
+
+    // Set loading false when first batch arrives
+    const timer = setTimeout(() => setAllLoading(false), 500);
+
+    return () => {
+      unsubs.forEach(u => u());
+      clearTimeout(timer);
+    };
   }, [id]);
 
   const criticalAlerts = [];
@@ -1200,6 +1308,18 @@ export default function PatientDetailPage() {
       });
     }
   }
+
+  // Build timeline sources object
+  const timelineSources = {
+    vitals,
+    labs,
+    exams,
+    orders,
+    prescriptions,
+    immunizations,
+    appointments,
+    dischargePlans,
+  };
 
   return (
     <div className="page-root">
@@ -1223,6 +1343,28 @@ export default function PatientDetailPage() {
           </div>
         )}
 
+        {/* Smart Alerts Header — always visible for clinical roles */}
+        {['admin', 'doctor', 'nurse'].includes(role) && (
+          <SmartAlertsHeader
+            patient={patient}
+            labs={labs}
+            appointments={appointments}
+            prescriptions={prescriptions}
+          />
+        )}
+
+        {/* Clinical Insights — always visible for clinical roles */}
+        {['admin', 'doctor', 'nurse'].includes(role) && (
+          <ClinicalInsights
+            patient={patient}
+            vitals={vitals}
+            labs={labs}
+            prescriptions={prescriptions}
+            immunizations={immunizations}
+            appointments={appointments}
+          />
+        )}
+
         {/* Tabs */}
         {allowedTabs.length > 0 ? (
           <>
@@ -1235,15 +1377,22 @@ export default function PatientDetailPage() {
               ))}
             </div>
 
-            {tab === 'overview' && <DemographicsTab patient={patient} immunizations={immunizations} />}
+            {tab === 'overview' && <DemographicsTab patient={patient} immunizations={immunizations} vitals={vitals} labs={labs} appointments={appointments} prescriptions={prescriptions} />}
+            {tab === 'timeline' && (
+              <ClinicalTimeline
+                patientId={id}
+                sources={timelineSources}
+                loading={allLoading}
+              />
+            )}
             {tab === 'vitals' && <VitalsTab patientId={id} />}
-            {tab === 'labs' && <LabsTab patientId={id} />}
+            {tab === 'labs' && <LabsTab patientId={id} patient={patient} />}
             {tab === 'history' && <HistoryTab patient={patient} />}
             {tab === 'exam'   && <ExamTab   patientId={id} />}
             {tab === 'orders' && <OrdersTab patientId={id} />}
             {tab === 'rx'     && <PrescriptionsTab patientId={id} patient={patient} />}
             {tab === 'immunizations' && <ImmunizationsTab patientId={id} />}
-            {tab === 'discharge' && <DischargeTab patientId={id} />}
+            {tab === 'discharge' && <DischargeTab patientId={id} patient={patient} />}
           </>
         ) : (
           <div className="card" style={{ padding: '2rem 1rem', textAlign: 'center', marginTop: '1rem' }}>

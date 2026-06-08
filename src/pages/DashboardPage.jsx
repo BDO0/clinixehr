@@ -6,6 +6,7 @@ import { useAuthStore } from '../store/authStore';
 import PageHeader from '../components/PageHeader';
 import BottomNav from '../components/BottomNav';
 import { SkeletonStat, SkeletonList } from '../components/Skeleton';
+import KpiWidget from '../components/KpiWidget';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import {

@@ -1,0 +1,138 @@
+{
+  "C:\\Abdo\\EHR website\\eslint.config.js": {
+    "mtime": 1777033715.1129448,
+    "hash": "3aa4b57d7f08181d86bde52a4dcb7f22"
+  },
+  "C:\\Abdo\\EHR website\\vite.config.js": {
+    "mtime": 1777033836.0791194,
+    "hash": "3b70a0b92236b6884dda15346af7cb25"
+  },
+  "C:\\Abdo\\EHR website\\scripts\\createAdmin.mjs": {
+    "mtime": 1777642138.9081955,
+    "hash": "865c5ba8f3d493dc4864aec462c2bef4"
+  },
+  "C:\\Abdo\\EHR website\\src\\App.jsx": {
+    "mtime": 1777705864.3456457,
+    "hash": "4b42e5df69557383668b54d4045c0831"
+  },
+  "C:\\Abdo\\EHR website\\src\\firebase.js": {
+    "mtime": 1777033916.608888,
+    "hash": "7fd135e846c5c7e14bd75a55781f1685"
+  },
+  "C:\\Abdo\\EHR website\\src\\main.jsx": {
+    "mtime": 1777034510.7014396,
+    "hash": "e13723e2574429d9a6d849727e3ff695"
+  },
+  "C:\\Abdo\\EHR website\\src\\components\\BottomNav.jsx": {
+    "mtime": 1777694411.2400105,
+    "hash": "ddc11048998bba12179bec655b137253"
+  },
+  "C:\\Abdo\\EHR website\\src\\components\\DrugWarning.jsx": {
+    "mtime": 1778222909.8476858,
+    "hash": "d8fddd475f94c49dc5272664e3442ab3"
+  },
+  "C:\\Abdo\\EHR website\\src\\components\\Icd10Autocomplete.jsx": {
+    "mtime": 1780653199.8411555,
+    "hash": "58486ed440db7696af639585e00e7f86"
+  },
+  "C:\\Abdo\\EHR website\\src\\components\\PageHeader.jsx": {
+    "mtime": 1780653150.035354,
+    "hash": "e532fb9fc6502296e99116f5e0721059"
+  },
+  "C:\\Abdo\\EHR website\\src\\components\\PatientAutocomplete.jsx": {
+    "mtime": 1780653152.0612109,
+    "hash": "e524c49e38cad383bda8e3465b0d6acc"
+  },
+  "C:\\Abdo\\EHR website\\src\\components\\RouteGuard.jsx": {
+    "mtime": 1777646467.5192235,
+    "hash": "1328c72aec779dd8532fde0f09a2f027"
+  },
+  "C:\\Abdo\\EHR website\\src\\components\\Skeleton.jsx": {
+    "mtime": 1777033988.6512768,
+    "hash": "2556ba8d120aec53ffc5d8c60a279c60"
+  },
+  "C:\\Abdo\\EHR website\\src\\data\\drugInteractions.js": {
+    "mtime": 1778224820.9370573,
+    "hash": "e9cbd8a125eeaebb3488912cca867326"
+  },
+  "C:\\Abdo\\EHR website\\src\\data\\icd10.js": {
+    "mtime": 1777692204.6245992,
+    "hash": "f15597266be69716ab65867f5c2cf0f6"
+  },
+  "C:\\Abdo\\EHR website\\src\\pages\\AppointmentsPage.jsx": {
+    "mtime": 1780650377.7681365,
+    "hash": "a3f6346ec523c26f9b23aa9eb006cad5"
+  },
+  "C:\\Abdo\\EHR website\\src\\pages\\BillingPage.jsx": {
+    "mtime": 1780653525.777495,
+    "hash": "1e6aa9e9f3d29d6246292a81d4af3c75"
+  },
+  "C:\\Abdo\\EHR website\\src\\pages\\DashboardPage.jsx": {
+    "mtime": 1778266632.5360453,
+    "hash": "b2f00356a366c4e675f060d19a2e045a"
+  },
+  "C:\\Abdo\\EHR website\\src\\pages\\LaboratoryPage.jsx": {
+    "mtime": 1780653541.2029834,
+    "hash": "2ca9314dcd7e04d82f60b85a7343ee70"
+  },
+  "C:\\Abdo\\EHR website\\src\\pages\\LoginPage.jsx": {
+    "mtime": 1780651056.394883,
+    "hash": "c67b3fbdd69eceea0fc69c081d6c86f2"
+  },
+  "C:\\Abdo\\EHR website\\src\\pages\\PatientDetailPage.jsx": {
+    "mtime": 1780653560.8086374,
+    "hash": "a04991c5f1e79d95daea3bc4d59254ab"
+  },
+  "C:\\Abdo\\EHR website\\src\\pages\\PatientsPage.jsx": {
+    "mtime": 1777646070.5086782,
+    "hash": "3aada83e295a0ec0d5ba815a20883508"
+  },
+  "C:\\Abdo\\EHR website\\src\\pages\\PharmacyPage.jsx": {
+    "mtime": 1778223010.250907,
+    "hash": "0d2e7a3601613ff9b2c396584569bb59"
+  },
+  "C:\\Abdo\\EHR website\\src\\pages\\UnauthorizedPage.jsx": {
+    "mtime": 1777646458.3178127,
+    "hash": "6da125988f17bd1efae49d5e574dbf22"
+  },
+  "C:\\Abdo\\EHR website\\src\\store\\authStore.js": {
+    "mtime": 1777033931.7195835,
+    "hash": "d0fb2f6daa04722fdbc54149bb008b0c"
+  },
+  "C:\\Abdo\\EHR website\\src\\store\\themeStore.js": {
+    "mtime": 1777705845.4723215,
+    "hash": "67db5a4df90f791e6c0c51bfbb2cc132"
+  },
+  "C:\\Abdo\\EHR website\\AGENTS.md": {
+    "mtime": 1780649700.0385168,
+    "hash": "c4f1b573c02f7ab8b602d5e226d1f1d6"
+  },
+  "C:\\Abdo\\EHR website\\index.html": {
+    "mtime": 1777034521.1236942,
+    "hash": "f54d6e080e158e40a6cc7d0dab3bc42e"
+  },
+  "C:\\Abdo\\EHR website\\README.md": {
+    "mtime": 1777033715.2370296,
+    "hash": "a28dc4cb878325f3e9e5649f3e1469ac"
+  },
+  "C:\\Abdo\\EHR website\\ClinixEHR.pdf": {
+    "mtime": 1778269684.0654707,
+    "hash": "cb691df130f57edae4e64df807f4f50f"
+  },
+  "C:\\Abdo\\EHR website\\public\\favicon.svg": {
+    "mtime": 1777033715.3042722,
+    "hash": "7e840862161341271697daa99a40d76b"
+  },
+  "C:\\Abdo\\EHR website\\public\\icons.svg": {
+    "mtime": 1777033715.3589945,
+    "hash": "3b4fcfcf393eca4d264dca4a4663bc37"
+  },
+  "C:\\Abdo\\EHR website\\src\\assets\\hero.png": {
+    "mtime": 1777033715.2630496,
+    "hash": "aead493361b27e7510691c5d7072dfc1"
+  },
+  "C:\\Abdo\\EHR website\\src\\assets\\vite.svg": {
+    "mtime": 1777033715.390735,
+    "hash": "9960a24288958394ac50e57ff638b036"
+  }
+}

@@ -16,6 +16,7 @@ import AppointmentsPage  from './pages/AppointmentsPage';
 import LaboratoryPage    from './pages/LaboratoryPage';
 import PharmacyPage      from './pages/PharmacyPage';
 import BillingPage       from './pages/BillingPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
 import UnauthorizedPage  from './pages/UnauthorizedPage';
 
 export default function App() {
@@ -127,6 +128,9 @@ export default function App() {
               <BillingPage />
             </RouteGuard>
           } />
+
+          {/* Admin: Admin-only route */}
+          <Route path="/admin" element={<RouteGuard roles={['admin']}><AdminDashboardPage /></RouteGuard>} />
 
           {/* Catch-all */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
