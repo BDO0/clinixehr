@@ -880,13 +880,3 @@ body:has(input:focus, textarea:focus, select:focus) .page-root {
   100% { filter: blur(24px); opacity: 0; }
 }
 
-/* ─── Public Website Responsive ─── */
-@media (max-width: 768px) {
-  .mobile-nav-toggle {
-    display: flex !important;
-  }
-  .public-nav-desktop {
-    display: none !important;
-  }
-}
-
