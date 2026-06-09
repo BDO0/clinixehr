@@ -898,5 +898,138 @@ body:has(input:focus, textarea:focus, select:focus) .page-root {
   .public-nav-desktop {
     display: none !important;
   }
+  .public-navbar-links {
+    display: none;
+  }
+}
+
+/* ─── Responsive: tablets and below ─── */
+@media (max-width: 1024px) {
+  .public-nav-desktop {
+    gap: 0.1rem !important;
+  }
+  .public-nav-desktop a {
+    padding: 0.5rem 0.6rem !important;
+    font-size: 0.78rem !important;
+  }
+}
+
+/* ─── Mobile: small screens ─── */
+@media (max-width: 480px) {
+  :root {
+    --nav-height: 64px;
+  }
+
+  .page-header {
+    padding: 0.85rem 0.85rem 0.75rem;
+  }
+
+  .page-header h1 {
+    font-size: 1.05rem !important;
+  }
+
+  .page-content {
+    padding: 0.75rem 0.75rem 0;
+  }
+
+  .stat-card {
+    padding: 0.75rem;
+  }
+
+  .stat-card div:nth-child(2) {
+    font-size: 1.4rem !important;
+  }
+
+  .quick-action-card {
+    padding: 1rem;
+  }
+
+  .quick-action-card span {
+    font-size: 0.82rem;
+  }
+
+  .quick-action-card .icon-wrapper {
+    width: 38px;
+    height: 38px;
+  }
+
+  .bottom-nav {
+    height: 64px;
+  }
+
+  .nav-item {
+    font-size: 0.62rem;
+    padding: 4px 2px;
+    min-width: 0;
+    flex: 1 1 0;
+  }
+
+  .nav-item svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-danger {
+    padding: 0.6rem 1rem;
+    font-size: 0.88rem;
+    min-height: 44px;
+  }
+
+  .card {
+    border-radius: var(--radius-sm);
+  }
+
+  .modal-sheet {
+    padding: 1.25rem 1rem calc(3.5rem + env(safe-area-inset-bottom, 20px));
+  }
+
+  .section-title {
+    font-size: 0.7rem;
+  }
+
+  .list-item {
+    padding: 0.7rem 0.75rem;
+  }
+
+  footer {
+    padding: 2rem 0.75rem 1rem !important;
+    margin-top: 2rem !important;
+  }
+
+  footer > div {
+    gap: 1.25rem !important;
+  }
+}
+
+/* ─── Tiny screens (320px) ─── */
+@media (max-width: 360px) {
+  .page-header div:first-child {
+    gap: 6px;
+  }
+
+  .page-header h1 {
+    font-size: 0.95rem !important;
+    white-space: normal !important;
+  }
+
+  .bottom-nav {
+    height: 56px;
+  }
+
+  .nav-item {
+    font-size: 0.55rem;
+    gap: 2px;
+  }
+
+  .nav-item svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .stat-card div:nth-child(2) {
+    font-size: 1.2rem !important;
+  }
 }
 

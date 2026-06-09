@@ -17,7 +17,7 @@ export default function PageHeader({
 
   return (
     <div className="page-header">
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
         {backTo && (
           <button
             className="btn-icon"

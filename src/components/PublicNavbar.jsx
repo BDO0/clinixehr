@@ -48,7 +48,7 @@ export default function PublicNavbar() {
         </Link>
 
         {/* Desktop Links */}
-        <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+        <div className="public-nav-desktop" style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
           {NAV_LINKS.map(link => (
             <Link
               key={link.to}
