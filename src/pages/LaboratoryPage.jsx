@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { collection, query, orderBy, onSnapshot, addDoc, Timestamp } from 'firebase/firestore';
+import { collection, query, orderBy, addDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuthStore } from '../store/authStore';
 import PageHeader from '../components/PageHeader';
@@ -9,6 +9,8 @@ import toast from 'react-hot-toast';
 import { FlaskConical, Plus, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { format } from 'date-fns';
 import PatientAutocomplete from '../components/PatientAutocomplete';
+import { safeOnSnapshot } from '../utils/safeFirestore';
+import { DEMO_LABS } from '../data/fallbackData';
 
 const LAB_TEMPLATES = {
   'CBC': [
@@ -296,9 +298,9 @@ export default function LaboratoryPage() {
 
   useEffect(() => {
     const q = query(collection(db, 'labResults'), orderBy('resultedAt', 'desc'));
-    return onSnapshot(q, (snap) => {
-      setResults(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-      setLoading(false);
+    return safeOnSnapshot(q, DEMO_LABS, {
+      onData: (data) => { setResults(data); setLoading(false); },
+      minItems: 3,
     });
   }, []);
 

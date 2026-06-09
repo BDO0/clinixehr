@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { collection, query, orderBy, onSnapshot, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, orderBy, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuthStore } from '../store/authStore';
 import PageHeader from '../components/PageHeader';
@@ -10,6 +10,8 @@ import { checkDrugInteractions } from '../data/drugInteractions';
 import { Pill, ShieldAlert } from 'lucide-react';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
+import { safeOnSnapshot } from '../utils/safeFirestore';
+import { DEMO_PRESCRIPTIONS } from '../data/fallbackData';
 
 export default function PharmacyPage() {
   const profile = useAuthStore((s) => s.profile);
@@ -19,27 +21,25 @@ export default function PharmacyPage() {
   const [interactions, setInteractions] = useState([]);
 
   useEffect(() => {
-    // Global view: query all prescriptions from all patients (collectionGroup)
-    // Requires Firestore collectionGroup index in production.
-    // For simplicity, we pull from a top-level 'prescriptions' mirror collection.
     const q = query(collection(db, 'allPrescriptions'), orderBy('prescribedAt', 'desc'));
-    return onSnapshot(q, (snap) => {
-      const list = snap.docs.map((d) => {
+    return safeOnSnapshot(q, DEMO_PRESCRIPTIONS, {
+      mapFn: (d) => {
         const data = d.data();
         let isExpired = false;
         if (data.status === 'active' && data.duration && data.prescribedAt) {
           const prescribedTime = data.prescribedAt.toMillis();
           const durationMs = parseInt(data.duration) * 86400000;
-          if (Date.now() > prescribedTime + durationMs) {
-            isExpired = true;
-          }
+          if (Date.now() > prescribedTime + durationMs) isExpired = true;
         }
         return { id: d.id, ...data, isExpired, computedStatus: data.status === 'discontinued' ? 'discontinued' : isExpired ? 'completed' : data.status };
-      });
-      setAllRx(list);
-      const active = list.filter(r => r.computedStatus === 'active').map(r => r.drug);
-      setInteractions(checkDrugInteractions(active));
-      setLoading(false);
+      },
+      onData: (list) => {
+        setAllRx(list);
+        const active = list.filter(r => r.computedStatus === 'active').map(r => r.drug);
+        setInteractions(checkDrugInteractions(active));
+        setLoading(false);
+      },
+      minItems: 2,
     });
   }, []);
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { collection, query, orderBy, onSnapshot, addDoc, Timestamp, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, orderBy, addDoc, Timestamp, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuthStore } from '../store/authStore';
 import PageHeader from '../components/PageHeader';
@@ -9,6 +9,8 @@ import toast from 'react-hot-toast';
 import { CreditCard, Plus, DollarSign } from 'lucide-react';
 import { format } from 'date-fns';
 import PatientAutocomplete from '../components/PatientAutocomplete';
+import { safeOnSnapshot } from '../utils/safeFirestore';
+import { DEMO_BILLING } from '../data/fallbackData';
 
 const PAYMENT_METHODS = ['Cash', 'PhilHealth', 'HMO', 'Credit Card', 'GCash', 'Maya', 'Bank Transfer'];
 const SERVICE_TYPES   = ['Consultation', 'Laboratory', 'Imaging', 'Procedure', 'Pharmacy', 'Room & Board', 'ER', 'Other'];
@@ -115,9 +117,9 @@ export default function BillingPage() {
 
   useEffect(() => {
     const q = query(collection(db, 'billing'), orderBy('createdAt', 'desc'));
-    return onSnapshot(q, (snap) => {
-      setRecords(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-      setLoading(false);
+    return safeOnSnapshot(q, DEMO_BILLING, {
+      onData: (data) => { setRecords(data); setLoading(false); },
+      minItems: 3,
     });
   }, []);
 

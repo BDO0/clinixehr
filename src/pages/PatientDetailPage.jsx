@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
-  collection, query, orderBy, onSnapshot, addDoc, Timestamp, where, doc, getDoc, updateDoc, setDoc
+  collection, query, orderBy, addDoc, Timestamp, where, doc, updateDoc, setDoc
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -15,11 +15,13 @@ import {
   Activity, Stethoscope, ClipboardList, Pill,
   FlaskConical, FileText, Plus, Thermometer, User,
   AlertTriangle, Trash2, History, Syringe, ShieldAlert, AlertCircle,
-  Clock
+  Clock, Edit2, Save, X
 } from 'lucide-react';
 import Icd10Autocomplete from '../components/Icd10Autocomplete';
 import { format } from 'date-fns';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { safeOnSnapshot } from '../utils/safeFirestore';
+import { getDemoPatient, getDemoVitals, getDemoOrders, getDemoExams, getDemoImmunizations, getDemoDischarge, DEMO_LABS } from '../data/fallbackData';
 
 // Enhanced Components
 import ClinicalTimeline from '../components/ClinicalTimeline';
@@ -31,8 +33,76 @@ import QrPatientBadge from '../components/QrPatientBadge';
 import MedicationTimeline from '../components/MedicationTimeline';
 
 // ─── Demographics Tab ─────────────────────────────────
+const GENDER_OPTIONS_DEMO = ['Male', 'Female', 'Other'];
+const BLOOD_TYPES_DEMO    = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'Unknown'];
+
 function DemographicsTab({ patient, immunizations = [], vitals, labs, appointments, prescriptions }) {
+  const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState({});
+
+  // Initialize form when patient data loads or editing starts
+  useEffect(() => {
+    if (patient) {
+      setForm({
+        firstName: patient.firstName || '',
+        lastName: patient.lastName || '',
+        dateOfBirth: patient.dateOfBirth || '',
+        gender: patient.gender || '',
+        phone: patient.phone || '',
+        address: patient.address || '',
+        bloodType: patient.bloodType || '',
+        allergies: patient.allergies?.join(', ') || '',
+        emergencyContact: patient.emergencyContact || '',
+        emergencyPhone: patient.emergencyPhone || '',
+      });
+    }
+  }, [patient]);
+
   if (!patient) return null;
+
+  function set(field, value) {
+    setForm(f => ({ ...f, [field]: value }));
+  }
+
+  async function handleSave(e) {
+    e.preventDefault();
+    if (!form.firstName || !form.lastName) {
+      toast.error('First and last name are required.');
+      return;
+    }
+    setSaving(true);
+    try {
+      // Calculate age from DOB if provided
+      let age = patient.age;
+      if (form.dateOfBirth) {
+        age = Math.floor((Date.now() - new Date(form.dateOfBirth)) / (365.25 * 86400000));
+      }
+
+      await updateDoc(doc(db, 'patients', patient.id), {
+        firstName: form.firstName.trim(),
+        lastName: form.lastName.trim(),
+        dateOfBirth: form.dateOfBirth,
+        age: age,
+        gender: form.gender,
+        phone: form.phone,
+        address: form.address,
+        bloodType: form.bloodType,
+        allergies: form.allergies ? form.allergies.split(',').map(s => s.trim()).filter(Boolean) : [],
+        emergencyContact: form.emergencyContact,
+        emergencyPhone: form.emergencyPhone,
+        updatedAt: Timestamp.now(),
+      });
+      toast.success('Patient profile updated!');
+      setEditing(false);
+    } catch (err) {
+      console.error('Failed to update patient:', err);
+      toast.error('Failed to update patient profile.');
+    } finally {
+      setSaving(false);
+    }
+  }
+
   return (
     <div>
       {/* Patient Summary Card */}
@@ -45,7 +115,7 @@ function DemographicsTab({ patient, immunizations = [], vitals, labs, appointmen
       />
 
       <div className="card" style={{ background: 'var(--color-surface)', padding: '1.5rem', border: '1px solid rgba(235, 193, 118, 0.3)' }}>
-        {/* Profile Header with Avatar */}
+        {/* Profile Header with Avatar and Edit Button */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '2rem' }}>
           <div style={{
             width: 84, height: 84, borderRadius: '24px',
@@ -57,7 +127,7 @@ function DemographicsTab({ patient, immunizations = [], vitals, labs, appointmen
           }}>
             {patient.firstName?.charAt(0)}{patient.lastName?.charAt(0)}
           </div>
-          <div>
+          <div style={{ flex: 1 }}>
             <h2 style={{ margin: 0, fontSize: '1.6rem', color: 'var(--color-text-main)', fontFamily: 'Montserrat, sans-serif', fontWeight: 800 }}>
               {patient.firstName} {patient.lastName}
             </h2>
@@ -68,75 +138,220 @@ function DemographicsTab({ patient, immunizations = [], vitals, labs, appointmen
               <QrPatientBadge patientId={patient.id} />
             </div>
           </div>
-        </div>
-
-        <div style={{ display: 'grid', gap: '1.75rem' }}>
-          {/* Primary Data */}
-          <section>
-            <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
-              Primary Information
-            </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
-              <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Age / DOB</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.age ? `${patient.age} yrs` : '—'} {patient.dateOfBirth ? `(${patient.dateOfBirth})` : ''}</div></div>
-              <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Gender</label><div style={{ fontWeight: 600, fontSize: '0.95rem', textTransform: 'capitalize' }}>{patient.gender || '—'}</div></div>
-            </div>
-          </section>
-
-          {/* Contact Data */}
-          <section>
-            <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
-              Contact Information
-            </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
-              <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Phone</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.phone || '—'}</div></div>
-              <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Emergency Contact</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.emergencyContact || '—'}</div></div>
-              <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Emergency Phone</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.emergencyPhone || '—'}</div></div>
-            </div>
-          </section>
-
-          {/* Metadata */}
-          <section>
-            <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
-              Clinical Metadata
-            </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
-              <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Blood Type</label><div style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--color-danger)' }}>{patient.bloodType || '—'}</div></div>
-              <div>
-                <label className="input-label" style={{ fontSize: '0.7rem' }}>Allergies</label>
-                <div>
-                  {patient.allergies?.length > 0 ? (
-                    patient.allergies.map(a => <span key={a} className="badge badge-danger" style={{ marginRight: 4, padding: '4px 8px' }}>{a}</span>)
-                  ) : <span style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--color-success)' }}>None recorded</span>}
-                </div>
+          <div>
+            {!editing ? (
+              <button
+                className="btn-secondary"
+                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '0.5rem 1rem', fontSize: '0.82rem' }}
+                onClick={() => setEditing(true)}
+              >
+                <Edit2 size={16} /> Edit Profile
+              </button>
+            ) : (
+              <div style={{ display: 'flex', gap: 6 }}>
+                <button
+                  className="btn-ghost"
+                  style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '0.5rem 1rem', fontSize: '0.82rem', color: 'var(--color-text-muted)' }}
+                  onClick={() => {
+                    setEditing(false);
+                    // Reset form to original patient data
+                    setForm({
+                      firstName: patient.firstName || '',
+                      lastName: patient.lastName || '',
+                      dateOfBirth: patient.dateOfBirth || '',
+                      gender: patient.gender || '',
+                      phone: patient.phone || '',
+                      address: patient.address || '',
+                      bloodType: patient.bloodType || '',
+                      allergies: patient.allergies?.join(', ') || '',
+                      emergencyContact: patient.emergencyContact || '',
+                      emergencyPhone: patient.emergencyPhone || '',
+                    });
+                  }}
+                >
+                  <X size={16} /> Cancel
+                </button>
               </div>
-              <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Last Visit</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.lastVisit ? new Date(patient.lastVisit).toLocaleDateString() : 'N/A'}</div></div>
-            </div>
-          </section>
-
-          {/* Immunizations Summary */}
-          <section>
-            <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
-              Immunization History
-            </h3>
-            <div style={{ background: 'var(--color-white)', borderRadius: '12px', padding: '1rem', border: '1px solid rgba(196,139,40,0.1)' }}>
-              {immunizations.length === 0 ? (
-                <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>No immunizations recorded yet.</p>
-              ) : (
-                <div style={{ display: 'grid', gap: '0.75rem' }}>
-                  {immunizations.map(v => (
-                    <div key={v.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.85rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <Syringe size={14} color="var(--color-amber)" />
-                        <span style={{ fontWeight: 600 }}>{v.vaccineName}</span>
-                      </div>
-                      <div style={{ color: 'var(--color-text-sub)' }}>{v.dateAdministered}</div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </section>
+            )}
+          </div>
         </div>
+
+        {editing ? (
+          /* ─── EDIT MODE ─── */
+          <form onSubmit={handleSave}>
+            <div style={{ display: 'grid', gap: '1.75rem' }}>
+              {/* Primary Data */}
+              <section>
+                <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
+                  Primary Information
+                </h3>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="input-label">First Name *</label>
+                    <input className="input-field" value={form.firstName} onChange={e => set('firstName', e.target.value)} required />
+                  </div>
+                  <div className="form-group">
+                    <label className="input-label">Last Name *</label>
+                    <input className="input-field" value={form.lastName} onChange={e => set('lastName', e.target.value)} required />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="input-label">Date of Birth</label>
+                    <input className="input-field" type="date" value={form.dateOfBirth} onChange={e => set('dateOfBirth', e.target.value)} />
+                  </div>
+                  <div className="form-group">
+                    <label className="input-label">Gender</label>
+                    <select className="input-field" value={form.gender} onChange={e => set('gender', e.target.value)}>
+                      <option value="">Select…</option>
+                      {GENDER_OPTIONS_DEMO.map(g => <option key={g}>{g}</option>)}
+                    </select>
+                  </div>
+                </div>
+              </section>
+
+              {/* Contact Data */}
+              <section>
+                <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
+                  Contact Information
+                </h3>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="input-label">Phone</label>
+                    <input className="input-field" value={form.phone} onChange={e => set('phone', e.target.value)} placeholder="09XX XXX XXXX" />
+                  </div>
+                  <div className="form-group">
+                    <label className="input-label">Address</label>
+                    <input className="input-field" value={form.address} onChange={e => set('address', e.target.value)} placeholder="Street, City" />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="input-label">Emergency Contact</label>
+                    <input className="input-field" value={form.emergencyContact} onChange={e => set('emergencyContact', e.target.value)} placeholder="Full name" />
+                  </div>
+                  <div className="form-group">
+                    <label className="input-label">Emergency Phone</label>
+                    <input className="input-field" value={form.emergencyPhone} onChange={e => set('emergencyPhone', e.target.value)} placeholder="09XX XXX XXXX" />
+                  </div>
+                </div>
+              </section>
+
+              {/* Metadata */}
+              <section>
+                <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
+                  Clinical Metadata
+                </h3>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="input-label">Blood Type</label>
+                    <select className="input-field" value={form.bloodType} onChange={e => set('bloodType', e.target.value)}>
+                      <option value="">Select…</option>
+                      {BLOOD_TYPES_DEMO.map(b => <option key={b}>{b}</option>)}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="input-label">Known Allergies (comma-separated)</label>
+                    <input className="input-field" value={form.allergies} onChange={e => set('allergies', e.target.value)} placeholder="Penicillin, Sulfa" />
+                  </div>
+                </div>
+              </section>
+
+              {/* Save Button */}
+              <div style={{ display: 'flex', gap: 10 }}>
+                <button type="button" className="btn-secondary" style={{ flex: 1 }} onClick={() => {
+                  setEditing(false);
+                  setForm({
+                    firstName: patient.firstName || '',
+                    lastName: patient.lastName || '',
+                    dateOfBirth: patient.dateOfBirth || '',
+                    gender: patient.gender || '',
+                    phone: patient.phone || '',
+                    address: patient.address || '',
+                    bloodType: patient.bloodType || '',
+                    allergies: patient.allergies?.join(', ') || '',
+                    emergencyContact: patient.emergencyContact || '',
+                    emergencyPhone: patient.emergencyPhone || '',
+                  });
+                }}>
+                  <X size={16} /> Cancel
+                </button>
+                <button type="submit" className="btn-primary" style={{ flex: 1 }} disabled={saving}>
+                  <Save size={16} /> {saving ? 'Saving…' : 'Save Profile'}
+                </button>
+              </div>
+            </div>
+          </form>
+        ) : (
+          /* ─── VIEW MODE ─── */
+          <div style={{ display: 'grid', gap: '1.75rem' }}>
+            {/* Primary Data */}
+            <section>
+              <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
+                Primary Information
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
+                <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Age / DOB</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.age ? `${patient.age} yrs` : '—'} {patient.dateOfBirth ? `(${patient.dateOfBirth})` : ''}</div></div>
+                <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Gender</label><div style={{ fontWeight: 600, fontSize: '0.95rem', textTransform: 'capitalize' }}>{patient.gender || '—'}</div></div>
+              </div>
+            </section>
+
+            {/* Contact Data */}
+            <section>
+              <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
+                Contact Information
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
+                <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Phone</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.phone || '—'}</div></div>
+                <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Emergency Contact</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.emergencyContact || '—'}</div></div>
+                <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Emergency Phone</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.emergencyPhone || '—'}</div></div>
+              </div>
+            </section>
+
+            {/* Metadata */}
+            <section>
+              <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
+                Clinical Metadata
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
+                <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Blood Type</label><div style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--color-danger)' }}>{patient.bloodType || '—'}</div></div>
+                <div>
+                  <label className="input-label" style={{ fontSize: '0.7rem' }}>Allergies</label>
+                  <div>
+                    {patient.allergies?.length > 0 ? (
+                      patient.allergies.map(a => <span key={a} className="badge badge-danger" style={{ marginRight: 4, padding: '4px 8px' }}>{a}</span>)
+                    ) : <span style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--color-success)' }}>None recorded</span>}
+                  </div>
+                </div>
+                <div><label className="input-label" style={{ fontSize: '0.7rem' }}>Last Visit</label><div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{patient.lastVisit ? new Date(patient.lastVisit).toLocaleDateString() : 'N/A'}</div></div>
+              </div>
+            </section>
+
+            {/* Immunizations Summary */}
+            <section>
+              <h3 style={{ color: '#C48B28', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.8rem', borderBottom: '1px solid rgba(196,139,40,0.15)', paddingBottom: '6px' }}>
+                Immunization History
+              </h3>
+              <div style={{ background: 'var(--color-white)', borderRadius: '12px', padding: '1rem', border: '1px solid rgba(196,139,40,0.1)' }}>
+                {immunizations.length === 0 ? (
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>No immunizations recorded yet.</p>
+                ) : (
+                  <div style={{ display: 'grid', gap: '0.75rem' }}>
+                    {immunizations.map(v => (
+                      <div key={v.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.85rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <Syringe size={14} color="var(--color-amber)" />
+                          <span style={{ fontWeight: 600 }}>{v.vaccineName}</span>
+                        </div>
+                        <div style={{ color: 'var(--color-text-sub)' }}>{v.dateAdministered}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -156,9 +371,9 @@ function VitalsTab({ patientId }) {
       collection(db, 'patients', patientId, 'vitals'),
       orderBy('recordedAt', 'desc')
     );
-    return onSnapshot(q, (snap) => {
-      setVitals(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
-      setLoading(false);
+    return safeOnSnapshot(q, getDemoVitals(patientId), {
+      onData: (data) => { setVitals(data); setLoading(false); },
+      minItems: 1,
     });
   }, [patientId]);
 
@@ -269,7 +484,10 @@ function OrdersTab({ patientId }) {
 
   useEffect(() => {
     const q = query(collection(db, 'patients', patientId, 'orders'), orderBy('createdAt', 'desc'));
-    return onSnapshot(q, (snap) => { setOrders(snap.docs.map((d) => ({ id: d.id, ...d.data() }))); setLoading(false); });
+    return safeOnSnapshot(q, getDemoOrders(patientId), {
+      onData: (data) => { setOrders(data); setLoading(false); },
+      minItems: 1,
+    });
   }, [patientId]);
 
   async function saveOrder(e) {
@@ -359,8 +577,8 @@ function PrescriptionsTab({ patientId, patient }) {
 
   useEffect(() => {
     const q = query(collection(db, 'patients', patientId, 'prescriptions'), orderBy('prescribedAt', 'desc'));
-    return onSnapshot(q, (snap) => {
-      const list = snap.docs.map((d) => {
+    return safeOnSnapshot(q, [], {
+      mapFn: (d) => {
         const data = d.data();
         let isExpired = false;
         if (data.status === 'active' && data.duration && data.prescribedAt) {
@@ -369,10 +587,13 @@ function PrescriptionsTab({ patientId, patient }) {
           if (Date.now() > prescribedTime + durationMs) isExpired = true;
         }
         return { id: d.id, ...data, isExpired, computedStatus: data.status === 'discontinued' ? 'discontinued' : isExpired ? 'completed' : data.status };
-      });
-      setRxList(list);
-      setInteractions(checkDrugInteractions(list.filter(r => r.computedStatus === 'active').map(r => r.drug)));
-      setLoading(false);
+      },
+      onData: (list) => {
+        setRxList(list);
+        setInteractions(checkDrugInteractions(list.filter(r => r.computedStatus === 'active').map(r => r.drug)));
+        setLoading(false);
+      },
+      minItems: 1,
     });
   }, [patientId]);
 
@@ -587,7 +808,10 @@ function ExamTab({ patientId }) {
 
   useEffect(() => {
     const q = query(collection(db, 'patients', patientId, 'examinations'), orderBy('examinedAt', 'desc'));
-    return onSnapshot(q, (snap) => { setExams(snap.docs.map((d) => ({ id: d.id, ...d.data() }))); setLoading(false); });
+    return safeOnSnapshot(q, getDemoExams(patientId), {
+      onData: (data) => { setExams(data); setLoading(false); },
+      minItems: 1,
+    });
   }, [patientId]);
 
   async function saveExam(e) {
@@ -678,9 +902,9 @@ function ImmunizationsTab({ patientId }) {
 
   useEffect(() => {
     const q = query(collection(db, 'patients', patientId, 'immunizations'), orderBy('dateAdministered', 'desc'));
-    return onSnapshot(q, (snap) => {
-      setVaccines(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
-      setLoading(false);
+    return safeOnSnapshot(q, getDemoImmunizations(patientId), {
+      onData: (data) => { setVaccines(data); setLoading(false); },
+      minItems: 1,
     });
   }, [patientId]);
 
@@ -763,9 +987,9 @@ function DischargeTab({ patientId, patient }) {
 
   useEffect(() => {
     const q = query(collection(db, 'patients', patientId, 'dischargePlans'), orderBy('createdAt', 'desc'));
-    return onSnapshot(q, (snap) => {
-      setPlans(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
-      setLoading(false);
+    return safeOnSnapshot(q, getDemoDischarge(patientId), {
+      onData: (data) => { setPlans(data); setLoading(false); },
+      minItems: 1,
     });
   }, [patientId]);
 
@@ -1061,20 +1285,21 @@ function LabsTab({ patientId, patient }) {
 
   useEffect(() => {
     const q = query(collection(db, 'labResults'), where('patientId', '==', patientId));
-    return onSnapshot(q, (snap) => {
-      const list = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-      list.sort((a, b) => (b.resultedAt?.toMillis?.() || 0) - (a.resultedAt?.toMillis?.() || 0));
-      setLabs(list);
-      setLoading(false);
-      
-      // Auto-select first available metric if none selected
-      if (!selectedMetric && list.length > 0) {
-        const first = list.find(l => l.result || (l.panelData && Object.keys(l.panelData).length > 0));
-        if (first) {
-          if (first.result) setSelectedMetric(first.testName);
-          else if (first.panelData) setSelectedMetric(Object.keys(first.panelData)[0]);
+    const fallbackLabs = DEMO_LABS.filter(l => l.patientId === patientId);
+    return safeOnSnapshot(q, fallbackLabs, {
+      onData: (list) => {
+        const sorted = [...list].sort((a, b) => (b.resultedAt?.toMillis?.() || 0) - (a.resultedAt?.toMillis?.() || 0));
+        setLabs(sorted);
+        setLoading(false);
+        if (!selectedMetric && sorted.length > 0) {
+          const first = sorted.find(l => l.result || (l.panelData && Object.keys(l.panelData).length > 0));
+          if (first) {
+            if (first.result) setSelectedMetric(first.testName);
+            else if (first.panelData) setSelectedMetric(Object.keys(first.panelData)[0]);
+          }
         }
-      }
+      },
+      minItems: 1,
     });
   }, [patientId]);
 

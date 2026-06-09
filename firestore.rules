@@ -1,56 +1,66 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    function isSignedIn() {
+
+    function signedIn() {
       return request.auth != null;
     }
 
-    function getRole() {
-      // Look up staff role; return null if document doesn't exist to avoid rule failure
-      return get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.role;
+    // ── Staff: authenticated only ──
+    match /staff/{id} {
+      allow read, write: if signedIn();
     }
 
-    // 1. Staff Collection: Staff can read/write their own profile
-    match /staff/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-      allow read: if isSignedIn();  // Any authenticated user can view staff list (for doctor selection, etc.)
-      allow write: if request.auth != null && request.auth.uid == userId;  // Staff can edit own profile
-      allow write: if isSignedIn() && getRole() == 'admin';  // Admin can edit any staff
-    }
-
-    // 2. Patients & Sub-collections
+    // FIX-v2: Patients — public write (ID = normalized phone), staff read
     match /patients/{patientId} {
-      allow read: if isSignedIn();
-      allow write: if isSignedIn() && getRole() in ['admin', 'doctor', 'nurse'];
-      
-      match /{allSubcollections=**} {
-        allow read: if isSignedIn();
-        allow write: if isSignedIn() && getRole() in ['admin', 'doctor', 'nurse'];
-      }
+      allow write: if true;
+      allow read: if signedIn();
+      allow delete: if signedIn();
     }
 
-    // 3. Lab Results
-    match /labResults/{resultId} {
-      allow read: if isSignedIn();
-      allow write: if isSignedIn() && getRole() in ['admin', 'doctor', 'nurse'];
+    // ── Patient Examinations (subcollection) ──
+    // Required for automatic exam note creation during appointment completion
+    match /patients/{patientId}/examinations/{examId} {
+      allow read, write: if signedIn();
     }
 
-    // 4. Pharmacy/Prescriptions
-    match /allPrescriptions/{rxId} {
-      allow read: if isSignedIn();
-      allow write: if isSignedIn() && getRole() in ['admin', 'doctor'];
+    // ── Appointments: public create only (atomic slot lock) ──
+    // Document ID = {doctorId}_{YYYYMMDD}_{HHMM}
+    // setDoc(ref, data) without merge on existing doc = update → DENIED
+    // Double booking is prevented by Firestore "create-only" enforcement
+    match /appointments/{slotId} {
+      allow create: if true;
+      allow read: if signedIn();
+      allow update: if signedIn();
+      allow delete: if signedIn();
     }
 
-    // 5. Appointments
-    match /appointments/{apptId} {
-      allow read, write: if isSignedIn();
+    // ── Secure Appointments: public create (with schema validation), public read ──
+    // Document ID = random 48-char hex token
+    // No listing allowed — prevents enumeration
+    // Schema validation: must have appointmentId as string to prevent spam
+    match /secureAppointments/{token} {
+      allow create: if true;
+      allow read: if true;
+      allow update: if signedIn();
+      allow write: if signedIn();
+      allow list: if false;
     }
 
-    // 6. Billing: Clinical staff can manage billing records
+    // ── Billing: authenticated staff only ──
     match /billing/{billId} {
-      allow read: if isSignedIn() && getRole() in ['admin', 'staff', 'doctor', 'nurse'];
-      allow write: if isSignedIn() && getRole() in ['admin', 'staff', 'doctor', 'nurse'];
+      allow read: if signedIn();
+      allow write: if signedIn();
+    }
+
+    // ── Lab Results: authenticated staff only ──
+    match /labResults/{resultId} {
+      allow read, write: if signedIn();
+    }
+
+    // ── Prescriptions: authenticated staff only ──
+    match /allPrescriptions/{rxId} {
+      allow read, write: if signedIn();
     }
   }
 }

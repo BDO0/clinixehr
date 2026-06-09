@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
-import { collection, query, orderBy, onSnapshot, addDoc, Timestamp, doc, updateDoc, getDocs, where } from 'firebase/firestore';
+import { collection, query, orderBy, addDoc, updateDoc, doc, Timestamp, getDocs, where, writeBatch, limit, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuthStore } from '../store/authStore';
 import PageHeader from '../components/PageHeader';
 import BottomNav from '../components/BottomNav';
 import { SkeletonList } from '../components/Skeleton';
 import toast from 'react-hot-toast';
-import { Calendar, Plus, Clock, User, MapPin } from 'lucide-react';
+import { Calendar, Plus, Clock, User, MapPin, Video, ExternalLink } from 'lucide-react';
 import { format, isToday, isTomorrow, isPast } from 'date-fns';
 import PatientAutocomplete from '../components/PatientAutocomplete';
+import { safeOnSnapshot } from '../utils/safeFirestore';
+import { DEMO_APPOINTMENTS } from '../data/fallbackData';
 
-const STATUS_OPTIONS = ['pending', 'confirmed', 'arrived', 'completed', 'cancelled'];
-const APPT_TYPES = ['Consultation', 'Follow-up', 'Procedure', 'Vaccination', 'Other'];
+const STATUS_OPTIONS = ['pending', 'confirmed', 'arrived', 'in_consultation', 'completed', 'cancelled'];
+const APPT_TYPES = ['Consultation', 'Follow-up', 'Procedure', 'Vaccination', 'Other', 'Teleconsult'];
 const DURATIONS = [15, 30, 45, 60, 90, 120];
 const ROOMS = ['Triage', 'Room 1', 'Room 2', 'Treatment A', 'Treatment B', 'Telehealth'];
 
@@ -73,10 +75,21 @@ function AddApptModal({ onClose }) {
     const start = new Date(form.scheduledAt);
     const end = new Date(start.getTime() + form.duration * 60000);
 
-    // Conflict Check
+    // Conflict Check - using date range filter for performance
     if (form.doctor) {
       try {
-        const overlapQ = query(collection(db, 'appointments'), where('doctor', '==', form.doctor));
+        const dayStart = new Date(start);
+        dayStart.setHours(0, 0, 0, 0);
+        const dayEnd = new Date(start);
+        dayEnd.setHours(23, 59, 59, 999);
+
+        const overlapQ = query(
+          collection(db, 'appointments'),
+          where('doctor', '==', form.doctor),
+          where('scheduledAt', '>=', Timestamp.fromDate(dayStart)),
+          where('scheduledAt', '<=', Timestamp.fromDate(dayEnd)),
+          limit(50)
+        );
         const snap = await getDocs(overlapQ);
         let hasConflict = false;
         snap.forEach(d => {
@@ -84,14 +97,13 @@ function AddApptModal({ onClose }) {
           if (a.status === 'cancelled') return;
           const aStart = a.scheduledAt?.toDate();
           if (!aStart) return;
-          if (aStart.getFullYear() !== start.getFullYear() || aStart.getMonth() !== start.getMonth() || aStart.getDate() !== start.getDate()) return;
 
           const aEnd = a.endTime ? a.endTime.toDate() : new Date(aStart.getTime() + (a.duration || 30) * 60000);
           if (start < aEnd && end > aStart) hasConflict = true;
         });
         
         if (hasConflict) {
-          toast.error(`Dr. ${form.doctor} is already booked during this time.`);
+          toast.error(`This doctor is already booked during this time.`);
           setSaving(false);
           return;
         }
@@ -101,13 +113,24 @@ function AddApptModal({ onClose }) {
     }
 
     try {
-      await addDoc(collection(db, 'appointments'), {
+      const apptRef = doc(collection(db, 'appointments'));
+      
+      // Use writeBatch for atomic creation of appointment + teleconsult link
+      const batch = writeBatch(db);
+      
+      batch.set(apptRef, {
         ...form,
         scheduledAt: Timestamp.fromDate(start),
         endTime: Timestamp.fromDate(end),
         createdBy: profile?.uid,
         createdAt: Timestamp.now(),
+        teleconsultLink: form.type === 'Teleconsult' ? `https://meet.jit.si/clinixehr-${apptRef.id}` : '',
+        teleconsultEnabled: form.type === 'Teleconsult',
+        lookupToken: '',  // placeholder - staff appointments don't need public lookup
       });
+
+      await batch.commit();
+
       toast.success('Appointment scheduled!');
       onClose();
     } catch { toast.error('Failed to schedule appointment.'); }
@@ -187,17 +210,17 @@ export default function AppointmentsPage() {
   const [filter,  setFilter]    = useState('live');
 
   useEffect(() => {
-    const q = query(collection(db, 'appointments'), orderBy('scheduledAt', 'asc'));
-    return onSnapshot(q, (snap) => {
-      setAppointments(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-      setLoading(false);
+    const q = query(collection(db, 'appointments'), orderBy('scheduledAt', 'asc'), limit(100));
+    return safeOnSnapshot(q, DEMO_APPOINTMENTS, {
+      onData: (data) => { setAppointments(data); setLoading(false); },
+      minItems: 3,
     });
   }, []);
 
   const filtered = appointments.filter((a) => {
     const date = a.scheduledAt?.toDate ? a.scheduledAt.toDate() : null;
     if (!date) return false;
-    if (filter === 'live')     return isToday(date) && (a.status === 'arrived' || a.status === 'confirmed');
+    if (filter === 'live')     return isToday(date) && (a.status === 'arrived' || a.status === 'confirmed' || a.status === 'in_consultation');
     if (filter === 'today')    return isToday(date);
     if (filter === 'upcoming') return !isPast(date) || isToday(date);
     if (filter === 'past')     return isPast(date) && !isToday(date);
@@ -208,63 +231,83 @@ export default function AppointmentsPage() {
     try {
       const updates = { status };
       if (status === 'arrived') updates.arrivedAt = Timestamp.now();
-      await updateDoc(doc(db, 'appointments', id), updates);
-      toast.success(`Marked as ${status}`);
 
+      // Build a batch for ALL status changes that need to sync to secureAppointments
+      const batch = writeBatch(db);
+
+      // 1. Always update the main appointment document
+      batch.update(doc(db, 'appointments', id), updates);
+
+      // 2. Always sync status to secureAppointments (if lookupToken exists)
+      //    This ensures the public user sees real-time status updates
+      if (appointment?.lookupToken) {
+        batch.update(doc(db, 'secureAppointments', appointment.lookupToken), updates);
+      }
+
+      // 3. If confirming: create the patient record (atomic with status update)
+      if (status === 'confirmed' && appointment?.patientId && appointment?.patientName) {
+        const patientRef = doc(db, 'patients', appointment.patientId);
+        batch.set(patientRef, {
+          firstName: appointment.patientName.split(/\s+/)[0] || appointment.patientName,
+          lastName: appointment.patientName.split(/\s+/).slice(1).join(' ') || '',
+          email: appointment.patientEmail || '',
+          phone: appointment.patientPhone || '',
+          source: 'public-booking',
+          createdBy: profile?.uid,
+          createdAt: Timestamp.now(),
+          updatedAt: Timestamp.now(),
+        }, { merge: true });
+      }
+
+      // 4. If completing: also create billing + exam note atomically
       if (status === 'completed' && appointment?.patientId) {
-        // Use the amount stored on the appointment, or fallback to defaults
         const apptAmount = parseFloat(appointment.amount) || 
           ({ 'Consultation': 500, 'Follow-up': 350, 'Procedure': 1500, 'Vaccination': 300, 'Other': 400 }[appointment.type] || 400);
-        let billingCreated = false;
 
-        // 1. Create billing record with the user-entered amount from scheduling
-        try {
-          await addDoc(collection(db, 'billing'), {
-            patientName: appointment.patientName,
-            patientId: appointment.patientId,
-            serviceType: 'Consultation',
-            description: `Appointment: ${appointment.type} — ${appointment.reason || appointment.type}`,
-            amount: apptAmount,
-            paymentMethod: 'Cash',
-            status: 'unpaid',
-            createdBy: profile?.uid,
-            createdByName: profile?.displayName || '',
-            createdAt: Timestamp.now(),
-            source: 'appointment',
-            sourceId: id,
-          });
-          billingCreated = true;
-        } catch (e) {
-          console.warn('Failed to create billing:', e);
-        }
+        const billingRef = doc(collection(db, 'billing'));
+        batch.set(billingRef, {
+          patientName: appointment.patientName,
+          patientId: appointment.patientId,
+          serviceType: 'Consultation',
+          description: `Appointment: ${appointment.type} — ${appointment.reason || appointment.type}`,
+          amount: apptAmount,
+          paymentMethod: 'Cash',
+          status: 'unpaid',
+          createdBy: profile?.uid,
+          createdByName: profile?.displayName || '',
+          createdAt: Timestamp.now(),
+          source: 'appointment',
+          sourceId: id,
+        });
 
-        // 2. Create exam note (only for clinical roles — staff will skip this)
-        let examCreated = false;
         if (['admin', 'doctor', 'nurse'].includes(profile?.role)) {
-          try {
-            await addDoc(collection(db, 'patients', appointment.patientId, 'examinations'), {
-              chiefComplaint: appointment.reason || `Appointment: ${appointment.type}`,
-              hpi: `Automated note from completed appointment.\nType: ${appointment.type}\nDuration: ${appointment.duration} mins`,
-              pe: '', assessment: '', plan: '', intervention: '', evaluation: '',
-              examinedBy: appointment.doctor ? `Dr. ${appointment.doctor}` : profile?.displayName || 'System',
-              examinedAt: Timestamp.now()
-            });
-            examCreated = true;
-          } catch (e) {
-            console.warn('Failed to create exam note:', e);
-          }
-        }
-
-        if (billingCreated && examCreated) {
-          toast.success(`Exam note + ₱${apptAmount.toLocaleString()} billing entry created.`);
-        } else if (billingCreated) {
-          toast.success(`Appointment completed. ₱${apptAmount.toLocaleString()} billing entry created.`);
-        } else {
-          toast.success('Appointment marked as completed.');
+          const examRef = doc(collection(db, 'patients', appointment.patientId, 'examinations'));
+          batch.set(examRef, {
+            chiefComplaint: appointment.reason || `Appointment: ${appointment.type}`,
+            hpi: `Automated note from completed appointment.\nType: ${appointment.type}\nDuration: ${appointment.duration} mins`,
+            pe: '', assessment: '', plan: '', intervention: '', evaluation: '',
+            examinedBy: appointment.doctor ? `Dr. ${appointment.doctor}` : profile?.displayName || 'System',
+            examinedAt: Timestamp.now()
+          });
         }
       }
-    } catch {
-      toast.error('Failed to update appointment status.');
+
+      // Commit ALL writes atomically — EITHER all succeed OR none
+      await batch.commit();
+
+      // User feedback based on action
+      if (status === 'confirmed') {
+        toast.success(`Appointment confirmed. Patient record created.`);
+      } else if (status === 'cancelled') {
+        toast.success(`Appointment cancelled.`);
+      } else if (status === 'completed') {
+        toast.success(`Appointment completed. Billing + exam note created.`);
+      } else {
+        toast.success(`Marked as ${status}`);
+      }
+    } catch (err) {
+      console.error('Status update failed:', err);
+      toast.error(`Failed to update appointment. All changes rolled back.`);
     }
   }
 
@@ -272,9 +315,18 @@ export default function AppointmentsPage() {
     switch(status) {
       case 'confirmed': return <span className="badge badge-success">confirmed</span>;
       case 'arrived': return <span className="badge" style={{ background: 'var(--color-warning)', color: 'white', border: 'none' }}>arrived</span>;
+      case 'in_consultation': return <span className="badge" style={{ background: '#6366F1', color: 'white', border: 'none' }}>in consultation</span>;
       case 'completed': return <span className="badge badge-info">completed</span>;
       case 'cancelled': return <span className="badge badge-danger">cancelled</span>;
       default: return <span className="badge">pending</span>;
+    }
+  }
+
+  function joinTeleconsult(appt) {
+    if (appt.teleconsultLink) {
+      window.open(appt.teleconsultLink, '_blank', 'noopener,noreferrer');
+    } else {
+      toast.error('No teleconsult link available for this appointment.');
     }
   }
 
@@ -325,6 +377,14 @@ export default function AppointmentsPage() {
                       <div style={{ fontSize: '0.78rem', color: 'var(--color-text-sub)', marginTop: 4, fontStyle: 'italic' }}>
                         {appt.reason ? `"${appt.reason}"` : ''} {appt.doctor && ` — Dr. ${appt.doctor}`}
                       </div>
+                      {appt.teleconsultLink && (
+                        <div style={{ marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                          <Video size={12} color="var(--color-info)" />
+                          <span style={{ fontSize: '0.7rem', color: 'var(--color-info)', fontWeight: 600 }}>
+                            Teleconsult ready
+                          </span>
+                        </div>
+                      )}
                     </div>
                     {getStatusBadge(appt.status)}
                   </div>
@@ -340,7 +400,30 @@ export default function AppointmentsPage() {
                     <button className="btn-primary" style={{ width: '100%', marginTop: 10, padding: '0.5rem', fontSize: '0.85rem' }} onClick={() => changeStatus(appt.id, 'arrived', appt)}>Check-in (Arrived)</button>
                   )}
                   {appt.status === 'arrived' && (
-                    <button className="btn-primary" style={{ width: '100%', marginTop: 10, padding: '0.5rem', fontSize: '0.85rem', background: 'var(--color-success)' }} onClick={() => changeStatus(appt.id, 'completed', appt)}>Mark Consult Completed</button>
+                    <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+                      <button className="btn-primary" style={{ flex: 1, padding: '0.5rem', fontSize: '0.85rem', background: '#6366F1' }} onClick={() => changeStatus(appt.id, 'in_consultation', appt)}>
+                        <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                          <Video size={14} /> Start Consultation
+                        </span>
+                      </button>
+                      <button className="btn-primary" style={{ flex: 1, padding: '0.5rem', fontSize: '0.85rem', background: 'var(--color-success)' }} onClick={() => changeStatus(appt.id, 'completed', appt)}>
+                        Mark Consult Completed
+                      </button>
+                    </div>
+                  )}
+                  {appt.status === 'in_consultation' && (
+                    <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+                      {appt.teleconsultLink && (
+                        <button className="btn-icon" style={{ flex: 1, padding: '0.5rem', fontSize: '0.85rem', background: 'var(--color-info)', color: 'white', border: 'none', borderRadius: 8, cursor: 'pointer' }} onClick={() => joinTeleconsult(appt)}>
+                          <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                            <ExternalLink size={14} /> Join Video
+                          </span>
+                        </button>
+                      )}
+                      <button className="btn-primary" style={{ flex: 1, padding: '0.5rem', fontSize: '0.85rem', background: 'var(--color-success)' }} onClick={() => changeStatus(appt.id, 'completed', appt)}>
+                        Mark Consult Completed
+                      </button>
+                    </div>
                   )}
                 </div>
               );

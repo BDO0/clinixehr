@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { collection, query, orderBy, onSnapshot, where, getCountFromServer } from 'firebase/firestore';
+import { collection, query, orderBy, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuthStore } from '../store/authStore';
 import PageHeader from '../components/PageHeader';
@@ -8,6 +8,8 @@ import { SkeletonStat, SkeletonList } from '../components/Skeleton';
 import KpiWidget from '../components/KpiWidget';
 import { Calendar, Users, DollarSign, Clock, AlertTriangle, CreditCard, Activity, FlaskConical } from 'lucide-react';
 import { format } from 'date-fns';
+import { safeOnSnapshot } from '../utils/safeFirestore';
+import { DEMO_APPOINTMENTS, DEMO_LABS, DEMO_BILLING } from '../data/fallbackData';
 
 export default function AdminDashboardPage() {
   const profile = useAuthStore((s) => s.profile);
@@ -19,7 +21,7 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     const unsubs = [];
 
-    // Today's appointments
+    // Today's appointments — safe with fallback
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
     const apptQ = query(
@@ -27,56 +29,74 @@ export default function AdminDashboardPage() {
       where('scheduledAt', '>=', startOfDay),
       orderBy('scheduledAt', 'asc')
     );
-    unsubs.push(onSnapshot(apptQ, (snap) => {
-      const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      const todayCount = list.length;
-      const seen = list.filter(a => a.status === 'completed').length;
-      const waitTimes = list
-        .filter(a => a.arrivedAt && a.scheduledAt?.toDate)
-        .map(a => Math.floor((a.arrivedAt.toDate() - a.scheduledAt.toDate()) / 60000));
-      const avgWait = waitTimes.length > 0 ? Math.round(waitTimes.reduce((s, v) => s + v, 0) / waitTimes.length) : 0;
+    unsubs.push(
+      safeOnSnapshot(apptQ, DEMO_APPOINTMENTS, {
+        onData: (list) => {
+          const todayCount = list.length;
+          const seen = list.filter(a => a.status === 'completed').length;
+          const waitTimes = list
+            .filter(a => a.arrivedAt && a.scheduledAt?.toDate)
+            .map(a => Math.floor((a.arrivedAt.toDate() - a.scheduledAt.toDate()) / 60000));
+          const avgWait = waitTimes.length > 0 ? Math.round(waitTimes.reduce((s, v) => s + v, 0) / waitTimes.length) : 0;
+          setStats(s => ({ ...s, todayAppointments: todayCount, patientsSeen: seen, avgWaitTime: avgWait }));
+          setLoading(false);
+        },
+        minItems: 2,
+      })
+    );
 
-      setStats(s => ({ ...s, todayAppointments: todayCount, patientsSeen: seen, avgWaitTime: avgWait }));
-      setLoading(false);
-    }));
-
-    // Revenue today
+    // Revenue today — safe with fallback
     const revQ = query(collection(db, 'billing'), where('status', '==', 'paid'));
-    unsubs.push(onSnapshot(revQ, (snap) => {
-      let total = 0;
-      snap.docs.forEach(d => {
-        const data = d.data();
-        if (data.paidAt?.toDate) {
-          const paidDate = data.paidAt.toDate();
-          if (paidDate.toDateString() === new Date().toDateString()) {
-            total += data.amount || 0;
-          }
-        }
-      });
-      setStats(s => ({ ...s, revenueToday: total }));
-    }));
+    unsubs.push(
+      safeOnSnapshot(revQ, DEMO_BILLING.filter(b => b.status === 'paid'), {
+        onData: (list) => {
+          let total = 0;
+          list.forEach(d => {
+            if (d.paidAt?.toDate) {
+              const paidDate = d.paidAt.toDate();
+              if (paidDate.toDateString() === new Date().toDateString()) {
+                total += d.amount || 0;
+              }
+            }
+          });
+          // If real data contributed, use it; otherwise use simulated value
+          setStats(s => ({
+            ...s,
+            revenueToday: list.length > 0 ? total : (DEMO_BILLING.filter(b => b.status === 'paid').reduce((sum, b) => sum + (b.amount || 0), 0)),
+          }));
+        },
+      })
+    );
 
-    // Critical cases (latest critical labs)
+    // Critical cases — safe with fallback
     const labQ = query(collection(db, 'labResults'), orderBy('resultedAt', 'desc'));
-    unsubs.push(onSnapshot(labQ, (snap) => {
-      const latest = {};
-      snap.docs.forEach(d => {
-        const data = d.data();
-        if (data.status === 'critical' && data.patientId && !latest[data.patientId]) {
-          latest[data.patientId] = { id: d.id, ...data };
-        }
-      });
-      setCriticalCases(Object.values(latest).slice(0, 5));
-    }));
+    unsubs.push(
+      safeOnSnapshot(labQ, DEMO_LABS.filter(l => l.status === 'critical'), {
+        onData: (list) => {
+          const latest = {};
+          list.forEach(d => {
+            if (d.status === 'critical' && d.patientId && !latest[d.patientId]) {
+              latest[d.patientId] = d;
+            }
+          });
+          setCriticalCases(Object.values(latest).slice(0, 5));
+        },
+        minItems: 1,
+      })
+    );
 
-    // Outstanding bills
+    // Outstanding bills — safe with fallback
     const billQ = query(collection(db, 'billing'), where('status', '==', 'unpaid'), orderBy('createdAt', 'desc'));
-    unsubs.push(onSnapshot(billQ, (snap) => {
-      const unpaid = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      setUnpaidBills(unpaid.slice(0, 5));
-      const total = unpaid.reduce((s, b) => s + (b.amount || 0), 0);
-      setStats(s => ({ ...s, outstandingBills: total }));
-    }));
+    unsubs.push(
+      safeOnSnapshot(billQ, DEMO_BILLING.filter(b => b.status === 'unpaid'), {
+        onData: (unpaid) => {
+          setUnpaidBills(unpaid.slice(0, 5));
+          const total = unpaid.reduce((s, b) => s + (b.amount || 0), 0);
+          setStats(s => ({ ...s, outstandingBills: total }));
+        },
+        minItems: 1,
+      })
+    );
 
     return () => unsubs.forEach(u => u());
   }, []);

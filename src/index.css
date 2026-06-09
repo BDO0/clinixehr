@@ -228,6 +228,16 @@ body {
   border-color: var(--color-amber);
   box-shadow: 0 0 0 3px rgba(196,139,40,0.15);
 }
+
+.input-error {
+  border-color: var(--color-danger) !important;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.15);
+}
+
+.input-error:focus {
+  border-color: var(--color-danger) !important;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.25);
+}
 .input-field::placeholder { color: var(--color-text-muted); }
 
 .input-label {
@@ -878,5 +888,15 @@ body:has(input:focus, textarea:focus, select:focus) .page-root {
 @keyframes blurFadeOut {
   0%   { filter: blur(0px);  opacity: 1; }
   100% { filter: blur(24px); opacity: 0; }
+}
+
+/* ─── Public Website Responsive ─── */
+@media (max-width: 768px) {
+  .mobile-nav-toggle {
+    display: flex !important;
+  }
+  .public-nav-desktop {
+    display: none !important;
+  }
 }
 

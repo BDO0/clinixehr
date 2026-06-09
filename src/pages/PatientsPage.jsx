@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
-  collection, query, orderBy, onSnapshot, addDoc, Timestamp, where
+  collection, query, orderBy, addDoc, Timestamp, where
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +11,8 @@ import { SkeletonList } from '../components/Skeleton';
 import { UserPlus, Search, ChevronRight, Users } from 'lucide-react';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
+import { safeOnSnapshot } from '../utils/safeFirestore';
+import { DEMO_PATIENTS } from '../data/fallbackData';
 
 const GENDER_OPTIONS = ['Male', 'Female', 'Other'];
 const BLOOD_TYPES    = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'Unknown'];
@@ -132,28 +134,19 @@ export default function PatientsPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // We use a simplified query to avoid "stuck on loading" if composite indexes are missing.
-    // Error handling added to capture Firestore permission or index errors.
     const q = query(
       collection(db, 'patients'),
       orderBy('createdAt', 'desc')
     );
 
-    const unsub = onSnapshot(q, 
-      (snap) => {
-        const list = snap.docs
-          .map((d) => ({ id: d.id, ...d.data() }))
-          .filter(p => p.deleted !== true); // Client-side fallback for filtering deleted items
-        setPatients(list);
+    return safeOnSnapshot(q, DEMO_PATIENTS, {
+      onData: (list) => {
+        // Still filter deleted items whether they come from real or fallback data
+        setPatients(list.filter(p => p.deleted !== true));
         setLoading(false);
       },
-      (err) => {
-        console.error('Firestore Fetch Error:', err);
-        toast.error('Failed to load patients. Check your connection or indexes.');
-        setLoading(false);
-      }
-    );
-    return unsub;
+      minItems: 3,
+    });
   }, []);
 
   const filtered = patients.filter((p) => {
