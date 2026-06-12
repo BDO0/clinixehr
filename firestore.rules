@@ -18,9 +18,24 @@ service cloud.firestore {
       allow delete: if signedIn();
     }
 
-    // ── Patient Examinations (subcollection) ──
-    // Required for automatic exam note creation during appointment completion
+    // ── Patient Subcollections ──
+    // All subcollections require authentication for read/write
     match /patients/{patientId}/examinations/{examId} {
+      allow read, write: if signedIn();
+    }
+    match /patients/{patientId}/vitals/{docId} {
+      allow read, write: if signedIn();
+    }
+    match /patients/{patientId}/prescriptions/{docId} {
+      allow read, write: if signedIn();
+    }
+    match /patients/{patientId}/orders/{docId} {
+      allow read, write: if signedIn();
+    }
+    match /patients/{patientId}/immunizations/{docId} {
+      allow read, write: if signedIn();
+    }
+    match /patients/{patientId}/dischargePlans/{docId} {
       allow read, write: if signedIn();
     }
 

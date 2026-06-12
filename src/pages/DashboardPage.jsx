@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { collection, query, where, orderBy, limit, Timestamp } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import { signOut } from 'firebase/auth';
@@ -45,6 +45,7 @@ export default function DashboardPage() {
   const [upcoming,    setUpcoming]    = useState([]);
   const [recentPts,   setRecentPts]   = useState([]);
   const [loading,     setLoading]     = useState(true);
+  const statsReady    = useRef(0);
 
   async function handleLogout() {
     if (!window.confirm('Are you sure you want to sign out?')) return;
@@ -58,14 +59,29 @@ export default function DashboardPage() {
     }
   }
 
+  // Determine how many stat sources need to load before we stop showing skeletons
+  const isClinicalRole = ['admin', 'doctor', 'nurse'].includes(profile?.role);
+  // Patients + Appointments + RecentPts = 3 always; Labs + Prescriptions = 2 more for clinical roles
+  const TOTAL_STAT_SOURCES = isClinicalRole ? 5 : 3;
+
+  function markSourceReady() {
+    statsReady.current += 1;
+    if (statsReady.current >= TOTAL_STAT_SOURCES) {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
     const unsubs = [];
+    statsReady.current = 0;
+    setLoading(true);
 
     // Total patients count — safe with fallback
     const fetchPatientCount = async () => {
       const patientsQ = query(collection(db, 'patients'), where('deleted', '!=', true));
       const { count } = await safeGetCountFromServer(patientsQ, DEMO_DASHBOARD_KPIS.patients);
       setStats((s) => ({ ...s, patients: count }));
+      markSourceReady();
     };
     fetchPatientCount();
 
@@ -82,13 +98,14 @@ export default function DashboardPage() {
         onData: (data) => {
           setUpcoming(data);
           setStats((s) => ({ ...s, appointments: data.length }));
+          markSourceReady();
         },
         minItems: 3,
       })
     );
 
     // Clinical Data (Restricted to clinical roles) — safe with fallback
-    if (['admin', 'doctor', 'nurse'].includes(profile?.role)) {
+    if (isClinicalRole) {
       const labQ = query(collection(db, 'labResults'), orderBy('resultedAt', 'desc'));
       unsubs.push(
         safeOnSnapshot(labQ, [], {
@@ -110,6 +127,7 @@ export default function DashboardPage() {
               ...s,
               abnormalLabs: snapData.length > 0 ? activeAbnormalCount : DEMO_DASHBOARD_KPIS.abnormalLabs,
             }));
+            markSourceReady();
           },
         })
       );
@@ -130,6 +148,7 @@ export default function DashboardPage() {
               ...s,
               activeMeds: snapData.length > 0 ? activeCount : DEMO_DASHBOARD_KPIS.activeMeds,
             }));
+            markSourceReady();
           },
         })
       );
@@ -141,7 +160,7 @@ export default function DashboardPage() {
       safeOnSnapshot(recentQ, DEMO_PATIENTS.slice(0, 5), {
         onData: (data) => {
           setRecentPts(data);
-          setLoading(false);
+          markSourceReady();
         },
         minItems: 3,
       })

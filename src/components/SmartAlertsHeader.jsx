@@ -23,15 +23,26 @@ export default function SmartAlertsHeader({ patient, labs = [], appointments = [
   // Build alert list
   const alerts = [];
 
+  // Known high-risk allergens that commonly cause anaphylaxis or severe reactions
+  const CRITICAL_ALLERGENS = new Set([
+    'penicillin', 'sulfa', 'sulfonamide', 'aspirin', 'nsaid', 'ibuprofen',
+    'latex', 'contrast', 'iodine', 'shellfish', 'peanut', 'tree nut',
+    'bee sting', 'wasp sting', 'cephalosporin', 'codeine', 'morphine',
+  ]);
+
   // 1. Allergies
   if (patient.allergies?.length > 0) {
     patient.allergies.forEach(allergy => {
+      const allergyLower = (allergy || '').toLowerCase().trim();
+      const isCritical = CRITICAL_ALLERGENS.has(allergyLower);
       alerts.push({
         id: `allergy-${allergy}`,
-        severity: 'critical',
-        title: 'Allergy Alert',
+        severity: isCritical ? 'critical' : 'warning',
+        title: isCritical ? 'Allergy Alert' : 'Mild Allergy',
         message: `Patient has documented allergy to ${allergy}`,
-        detail: `Review all prescriptions for ${allergy} cross-reactivity before ordering.`,
+        detail: isCritical
+          ? `Review all prescriptions for ${allergy} cross-reactivity before ordering.`
+          : `Allergy to ${allergy} recorded — verify tolerance if clinical intervention involves ${allergy}.`,
       });
     });
   }
