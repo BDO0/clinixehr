@@ -42,6 +42,7 @@ function DemographicsTab({ patient, immunizations = [], vitals, labs, appointmen
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [form, setForm] = useState({});
 
   // Initialize form when patient data loads or editing starts
@@ -106,11 +107,12 @@ function DemographicsTab({ patient, immunizations = [], vitals, labs, appointmen
     }
   }
 
-  async function handleDelete() {
-    const confirmed = window.confirm(
-      `Are you sure you want to permanently delete ${patient.firstName} ${patient.lastName}?\n\nThis cannot be undone. All records, appointments, labs, prescriptions, and history for this patient will be lost.`
-    );
-    if (!confirmed) return;
+  function handleDelete() {
+    setShowConfirm(true);
+  }
+
+  async function confirmDelete() {
+    setShowConfirm(false);
     setDeleting(true);
     try {
       await deleteDoc(doc(db, 'patients', patient.id));
@@ -125,6 +127,64 @@ function DemographicsTab({ patient, immunizations = [], vitals, labs, appointmen
 
   return (
     <div>
+      {/* Delete Confirmation Modal */}
+      {showConfirm && (
+        <div className="modal-overlay" onClick={() => setShowConfirm(false)} style={{ zIndex: 1000 }}>
+          <div className="modal-sheet" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '420px', padding: '1.75rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+              <div style={{
+                width: 56, height: 56, borderRadius: '50%',
+                background: 'var(--color-danger-bg)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 1rem',
+              }}>
+                <Trash2 size={26} color="var(--color-danger)" />
+              </div>
+              <h3 style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 800, fontSize: '1.1rem', margin: '0 0 0.5rem', color: 'var(--color-text-main)' }}>
+                Delete Patient
+              </h3>
+              <p style={{ margin: 0, fontSize: '0.88rem', color: 'var(--color-text-sub)', lineHeight: 1.5 }}>
+                Are you sure you want to permanently delete{' '}
+                <strong style={{ color: 'var(--color-text-main)' }}>{patient.firstName} {patient.lastName}</strong>?
+              </p>
+              <div style={{
+                marginTop: '0.75rem', padding: '0.75rem',
+                background: 'var(--color-danger-bg)',
+                borderRadius: 8, fontSize: '0.8rem',
+                color: 'var(--color-danger)', fontWeight: 600,
+                textAlign: 'left', lineHeight: 1.5,
+              }}>
+                <AlertTriangle size={14} style={{ verticalAlign: 'middle', marginRight: 6 }} />
+                This cannot be undone. All records, appointments, labs, prescriptions, and history for this patient will be lost.
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button
+                className="btn-secondary"
+                style={{ flex: 1 }}
+                onClick={() => setShowConfirm(false)}
+                disabled={deleting}
+              >
+                Cancel
+              </button>
+              <button
+                style={{
+                  flex: 1, padding: '0.6rem', fontSize: '0.88rem',
+                  fontWeight: 700, border: 'none', borderRadius: 8,
+                  background: 'var(--color-danger)', color: 'white',
+                  cursor: deleting ? 'not-allowed' : 'pointer',
+                  opacity: deleting ? 0.6 : 1,
+                }}
+                onClick={confirmDelete}
+                disabled={deleting}
+              >
+                {deleting ? 'Deleting…' : 'Delete Forever'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Patient Summary Card */}
       <PatientSummaryCard
         patient={patient}
