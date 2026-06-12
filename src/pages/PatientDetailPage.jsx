@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
-  collection, query, orderBy, addDoc, Timestamp, where, doc, updateDoc, setDoc
+  collection, query, orderBy, addDoc, Timestamp, where, doc, updateDoc, setDoc, onSnapshot, deleteDoc
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -37,8 +37,11 @@ const GENDER_OPTIONS_DEMO = ['Male', 'Female', 'Other'];
 const BLOOD_TYPES_DEMO    = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'Unknown'];
 
 function DemographicsTab({ patient, immunizations = [], vitals, labs, appointments, prescriptions }) {
+  const profile = useAuthStore((s) => s.profile);
+  const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [form, setForm] = useState({});
 
   // Initialize form when patient data loads or editing starts
@@ -100,6 +103,23 @@ function DemographicsTab({ patient, immunizations = [], vitals, labs, appointmen
       toast.error('Failed to update patient profile.');
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleDelete() {
+    const confirmed = window.confirm(
+      `Are you sure you want to permanently delete ${patient.firstName} ${patient.lastName}?\n\nThis cannot be undone. All records, appointments, labs, prescriptions, and history for this patient will be lost.`
+    );
+    if (!confirmed) return;
+    setDeleting(true);
+    try {
+      await deleteDoc(doc(db, 'patients', patient.id));
+      toast.success('Patient deleted successfully.');
+      navigate('/patients', { replace: true });
+    } catch (err) {
+      console.error('Failed to delete patient:', err);
+      toast.error('Failed to delete patient.');
+      setDeleting(false);
     }
   }
 
@@ -175,6 +195,24 @@ function DemographicsTab({ patient, immunizations = [], vitals, labs, appointmen
             )}
           </div>
         </div>
+
+        {/* Admin Actions */}
+        {profile?.role === 'admin' && !editing && (
+          <div style={{ marginBottom: '1.5rem', paddingTop: '1rem', borderTop: '1px solid rgba(196,139,40,0.15)' }}>
+            <button
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6,
+                padding: '0.5rem 1rem', fontSize: '0.82rem',
+                color: 'var(--color-danger)', background: 'var(--color-danger-bg)',
+                borderRadius: 8, border: '1px solid rgba(239,68,68,0.2)',
+              }}
+              onClick={handleDelete}
+              disabled={deleting}
+            >
+              <Trash2 size={16} /> {deleting ? 'Deleting…' : 'Delete Patient'}
+            </button>
+          </div>
+        )}
 
         {editing ? (
           /* ─── EDIT MODE ─── */
