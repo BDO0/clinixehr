@@ -25,4 +25,9 @@ dist-ssr
 
 # Auto-generated directories
 .agent/
-graphify-out/cache/
+.agents/
+graphify-out/
+AGENTS.md
+SYSTEM_REPORT.md
+skills-lock.json
+.gemini/
